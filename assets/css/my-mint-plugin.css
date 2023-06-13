@@ -1,0 +1,169 @@
+/* Styles for Connect Wallet button */
+.connect-wallet-button {
+  color: #fb007c !important;
+  border-width: 3px !important;
+  border-color: #40fb89;
+  border-radius: 60px;
+  font-size: 28px;
+  font-family: "Montserrat", Helvetica, Arial, Lucida, sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  background-color: #40fb89;
+}
+
+.connect-wallet-button :hover {
+  border-color: #7ffb7f !important;
+  border-width: 3px !important;
+  background-image: initial;
+  background-color: #ffffff;
+}
+
+/* Styles for Mint button */
+.mint-button {
+  color: #ffffff !important;
+  border-color: #292929;
+  border-radius: 60px;
+  font-size: 24px;
+  font-family: "Montserrat", Helvetica, Arial, Lucida, sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  background-color: #292929;
+  display: inline-block;
+  padding: 0.3em 1em !important;
+}
+
+.mint-button:hover {
+  color: black;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.wallet-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-dropdown div {
+  margin-bottom: 5px;
+}
+
+.wallet-dropdown button {
+  display: block;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.wallet-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+  z-index: 10;
+}
+
+.wallet-option {
+  margin-bottom: 10px;
+}
+
+.wallets-dialog {
+  z-index: 10000;
+  background-color: rgb(22, 22, 24);
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100vw - 40px);
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 24px 24px 32px;
+  animation: 200ms ease 0s 1 normal none running animation-1ykkuzb;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
+  line-height: 1;
+}
+.wallet-title {
+  margin: 0px;
+  font-weight: 600;
+  font-size: 20px;
+  color: rgb(237, 237, 239);
+  text-align: left;
+}
+.dialog {
+  background-color: rgba(0, 0, 0, 0.74);
+  z-index: 9999;
+  position: fixed;
+  inset: 0px;
+  animation: 400ms cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal none running
+    animation-1age5br;
+}
+.dialog-list {
+  all: unset;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 8px;
+}
+.wallet-button {
+  all: unset;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;
+  color: rgb(237, 237, 239);
+  padding: 12px 16px;
+  border-radius: 6px;
+  gap: 16px;
+  background: rgb(35, 35, 38);
+  transition: all 100ms ease 0s;
+}
+.wallet-button img {
+  height: 32px;
+  width: 32px;
+}
+.help-btn:hover {
+  color: rgb(237, 237, 239);
+  text-decoration: none;
+}
+
+.help-btn {
+  all: unset;
+  cursor: pointer;
+  color: rgb(0, 144, 255);
+  font-size: 14px;
+  display: block;
+  text-decoration: none;
+}
+
+.close-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  color: rgb(112, 111, 120);
+  border-radius: 6px;
+  padding: 2px;
+  transition: background 0.2s ease 0s, color 0.2s ease 0s;
+}
