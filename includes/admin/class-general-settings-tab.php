@@ -27,6 +27,7 @@ class General_Settings_Tab
         </div>
         <?php
     }
+
     public static function register_settings()
     {
         // Register a settings section.
@@ -41,14 +42,21 @@ class General_Settings_Tab
         register_setting(
             'general_settings_fields_tab',
             'my_mint_plugin_contract_address',
-            array(' ' => 'sanitize_text_field')
+            'sanitize_text_field'
         );
 
         // Register a settings field for contract ABI.
         register_setting(
             'general_settings_fields_tab',
             'my_mint_plugin_contract_abi',
-            array('sanitize_callback' => array(__CLASS__, 'sanitize_contract_abi_field'))
+            array(__CLASS__, 'sanitize_contract_abi_field')
+        );
+
+        // Register a settings field for active chain.
+        register_setting(
+            'general_settings_fields_tab',
+            'my_mint_plugin_active_chain',
+            'sanitize_text_field'
         );
 
         // Add a field for contract address.
@@ -67,7 +75,7 @@ class General_Settings_Tab
             array(__CLASS__, 'render_contract_abi_field'),
             'general_settings_tab',
             'my_mint_plugin_general',
-            array('label_for' => 'my_mint_plugin_contract_abi') // Add the label_for key
+            array('label_for' => 'my_mint_plugin_contract_abi')
         );
 
         // Add a field for active chain selection.
@@ -79,6 +87,7 @@ class General_Settings_Tab
             'my_mint_plugin_general'
         );
     }
+
     /**
      * Render the general settings section.
      */

@@ -82,6 +82,7 @@ class My_Mint_Admin
         wp_localize_script('my-mint-admin-script', 'myMintPluginSettings', $my_mint_plugin_settings);
         // Enqueue your custom admin styles
         wp_enqueue_style('my-mint-admin-style', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/css/my-mint-admin.css', array(), '0.0.1');
+        
     }
 
     public function my_mint_plugin_activate()

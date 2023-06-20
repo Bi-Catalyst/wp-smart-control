@@ -160,34 +160,19 @@ jQuery(document).ready(async function ($) {
     .catch((error) => {
       console.log("Error:", error);
     });
-
+  // const connectButton = document.querySelector(
+  //   myMintPluginSettings.connectButtonIdOrClass
+  // );
+  // Add listener for connect button
   document
-    .querySelector(myMintPluginSettings.connectButtonIdOrClass)
-    .addEventListener("click", function () {
-      displayPop("fontend-wallet", myMintPluginSettings.connectButtonIdOrClass);
+    .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
+    .forEach((link) => {
+      link.addEventListener("click", connectButtonListener);
     });
 
-  // Add listener for connect button
-  // document
-  //   .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
-  //   .forEach((link) => {
-  //     link.addEventListener("click", async (e) => {
-  //       e.preventDefault();
-  //       await ConnectWallet(
-  //         "walletconnected",
-  //         myMintPluginSettings.connectButtonIdOrClass
-  //       );
-  //     });
-  //   });
-
-  // Check if the user has connected wallet
-  if (window.localStorage.getItem("walletconnected") === "true") {
-    await ConnectWallet(
-      "walletconnected",
-      myMintPluginSettings.connectButtonIdOrClass
-    );
+  if (web3Modal && web3Modal.cachedProvider) {
+    await web3Modal.connect();
   }
-
   // Add listener for mint button
   $(document).on(
     "click",

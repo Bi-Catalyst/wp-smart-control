@@ -2,7 +2,7 @@ async function setMintPrice(nftPrice) {
   try {
     // Signer
     const signer = await etherPovider.getSigner();
-    
+
     // Instantiate contract
     const contractInstance = ContractInstance(signer);
 
@@ -78,7 +78,7 @@ async function setMaxQuantity(quantity) {
       document.querySelectorAll(".connect-wallet-button").forEach((link) => {
         link.addEventListener("click", async (e) => {
           e.preventDefault();
-          ConnectWallet("walletconnected-admin", ".connect-wallet-button");
+          displayPop("walletconnected-admin", ".connect-wallet-button");
         });
       });
       // Get public contract data
@@ -86,14 +86,17 @@ async function setMaxQuantity(quantity) {
       getDiscount("#mint_discount_input");
       getMaxQuantity("#max_quantity_input");
       // Check if the user has already connected wallet
-      if (window.localStorage.getItem("walletconnected-admin") === "true") {
-        ConnectWallet("walletconnected-admin", ".connect-wallet-button")
-          .then((v) => {
-            console.log(v);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      // if (window.localStorage.getItem("walletconnected-admin") === "true") {
+      //   ConnectWallet("walletconnected-admin", ".connect-wallet-button")
+      //     .then((v) => {
+      //       console.log(v);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // }
+      if (web3Modal && web3Modal.cachedProvider) {
+        await web3Modal.connect();
       }
       // Add listener to NFT price button
       $(document).on("click", "#nft_price_button", async function (e) {

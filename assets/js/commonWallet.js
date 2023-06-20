@@ -61,16 +61,23 @@ function getWalletFromWindow(walletName) {
     return null;
   }
 
-  // The wallet was injected into window.ethereum.
-  if (isWallet(window.ethereum, walletName)) {
-    return window.ethereum;
-  }
+  // // The wallet was injected into window.ethereum.
+  // if (isWallet(window.ethereum, walletName)) {
+  //   return window.ethereum;
+  // }
 
   // The wallet provider might be replaced by another injected provider, check the providers array.
-  if (window.ethereum?.providers) {
+  if (window.ethereum.providers) {
+    const _provider = window.ethereum.providers.find(function (provider) {
+      return provider.isMetaMask ? provider : false;
+    });
     // ethereum.providers array is a non-standard way to preserve multiple injected providers.
     // Eventually, EIP-5749 will become a living standard, and we will have to update this.
-    return window.ethereum.providers.find(isWallet) ?? null;
+    return _provider ? _provider : null;
+  }
+  // The wallet was injected into window.ethereum.
+  if (window.ethereum && isWallet(window.ethereum, walletName)) {
+    return window.ethereum;
   }
 
   // The wallet injected provider is available in the global scope.

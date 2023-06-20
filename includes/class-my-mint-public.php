@@ -92,7 +92,7 @@ class My_Mint_Public
         ob_start();
         ?>
         <button id="<?php echo $id; ?>" class="<?php echo $class; ?>">Connect Wallet</button>
-        <div class="wallet-balance"></div>
+        <div class="wallet-dropdown" style="display: none;"></div>
         <?php
         return ob_get_clean();
     }

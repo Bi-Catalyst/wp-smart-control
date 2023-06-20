@@ -92,13 +92,13 @@ function init() {
         infuraId: "REDACTED_INFURA_KEY",
       },
     },
-    coinbasewallet: {
-      package: CoinbaseWalletSDK,
-      options: {
-        // Moh's test key - don't copy as your mileage may vary
-        infuraId: "REDACTED_INFURA_KEY",
-      },
-    },
+    // coinbasewallet: {
+    //   package: CoinbaseWalletSDK,
+    //   options: {
+    //     // Moh's test key - don't copy as your mileage may vary
+    //     infuraId: "REDACTED_INFURA_KEY",
+    //   },
+    // },
     // fortmatic: {
     //   package: Fortmatic,
     //   options: {
@@ -109,7 +109,8 @@ function init() {
   };
 
   web3Modal = new Web3Modal({
-    cacheProvider: true, // very important
+    cacheProvider: false,
+    disableInjectedProvider: false,
     providerOptions, // required
   });
 }
@@ -127,7 +128,11 @@ function ContractInstance(signer) {
 
 function handleError(error) {
   if (typeof error.data !== "undefined") {
-    alert("Transaction failed: " + error.data.message);
+    if (typeof error.reason !== "undefined") {
+      alert("Transaction failed: " + error.reason);
+    } else {
+      alert("Transaction failed: " + error.data.message);
+    }
   } else {
     alert("Transaction failed: " + error.message);
   }
@@ -274,11 +279,15 @@ function checkIfMetamask() {
   }
   return false;
 }
+const connectButtonListener = async function (e) {
+  e.preventDefault();
+  displayPop("fontend-wallet", myMintPluginSettings.connectButtonIdOrClass);
+};
 
 // https://docs.cloud.coinbase.com/wallet-sdk/docs/web3modal
-async function disconnectWallet() {
+async function disconnectWallet(key) {
   // Clear the wallet connection status in local storage
-  window.localStorage.removeItem("walletconnected");
+  window.localStorage.removeItem(key);
   if (provider.close) {
     await provider.close();
     // If the cached provider is not cleared,
@@ -289,18 +298,19 @@ async function disconnectWallet() {
   await web3Modal.clearCachedProvider();
   provider = null;
   // Remove the wallet dropdown from the document body
-  const dropdown = document.querySelector(".wallet-dropdown");
-  if (dropdown) {
-    dropdown.remove();
-  }
+  document.querySelectorAll(".wallet-dropdown").forEach((link) => {
+    link.textContent = "";
+    link.style.display = "none";
+  });
 
   // Update connect button text to "Connect Wallet"
-  const connectButton = document.querySelector(
-    myMintPluginSettings.connectButtonIdOrClass
-  );
-  if (connectButton) {
-    connectButton.textContent = "Connect Wallet";
-  }
+
+  document
+    .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
+    .forEach((link) => {
+      link.textContent = "Connect Wallet";
+      link.addEventListener("click", connectButtonListener);
+    });
 }
 
 async function Contract(_provider) {
@@ -352,43 +362,32 @@ async function getDiscount(classInput) {
   }
 }
 
-async function showWalletSelectionPopup() {
-  return new Promise((resolve) => {
-    const popupContainer = document.createElement("div");
-    popupContainer.classList.add("wallet-popup-container");
+function disconnectButton() {
+  const disconnectBtn = document.createElement("button");
+  disconnectBtn.type = "button";
+  disconnectBtn.classList.add("disconnect-btn");
+  const disconnectIcon = document.createElement("svg");
+  disconnectIcon.width = 24;
+  disconnectIcon.height = 24;
+  disconnectIcon.setAttribute("viewBox", "0 0 24 24");
+  disconnectIcon.setAttribute("fill", "none");
+  disconnectIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  disconnectIcon.style.width = "24px";
+  disconnectIcon.style.height = "24px";
+  disconnectIcon.style.color = "inherit";
 
-    const popupContent = document.createElement("div");
-    popupContent.classList.add("wallet-popup-content");
+  const disconnectIconPath = document.createElement("path");
+  disconnectIconPath.setAttribute(
+    "d",
+    "M10.79 16.29C11.18 16.68 11.81 16.68 12.2 16.29L15.79 12.7C15.8827 12.6075 15.9563 12.4976 16.0064 12.3766C16.0566 12.2557 16.0824 12.126 16.0824 11.995C16.0824 11.864 16.0566 11.7343 16.0064 11.6134C15.9563 11.4924 15.8827 11.3825 15.79 11.29L12.2 7.7C12.013 7.51302 11.7594 7.40798 11.495 7.40798C11.2306 7.40798 10.977 7.51302 10.79 7.7C10.603 7.88698 10.498 8.14057 10.498 8.405C10.498 8.66943 10.603 8.92302 10.79 9.11L12.67 11H4C3.45 11 3 11.45 3 12C3 12.55 3.45 13 4 13H12.67L10.79 14.88C10.4 15.27 10.41 15.91 10.79 16.29ZM19 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V8C3 8.55 3.45 9 4 9C4.55 9 5 8.55 5 8V6C5 5.45 5.45 5 6 5H18C18.55 5 19 5.45 19 6V18C19 18.55 18.55 19 18 19H6C5.45 19 5 18.55 5 18V16C5 15.45 4.55 15 4 15C3.45 15 3 15.45 3 16V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z"
+  );
+  disconnectIconPath.setAttribute("fill", "currentColor");
+  disconnectIconPath.setAttribute("fill-rule", "evenodd");
+  disconnectIconPath.setAttribute("clip-rule", "evenodd");
 
-    const heading = document.createElement("h3");
-    heading.textContent = "Connect Wallet";
-
-    const metamaskButton = document.createElement("button");
-    metamaskButton.textContent = "MetaMask";
-    metamaskButton.classList.add("wallet-option");
-    metamaskButton.addEventListener("click", () => resolve("MetaMask"));
-
-    const coinbaseWalletButton = document.createElement("button");
-    coinbaseWalletButton.textContent = "CoinbaseWallet";
-    coinbaseWalletButton.classList.add("wallet-option");
-    coinbaseWalletButton.addEventListener("click", () =>
-      resolve("CoinbaseWallet")
-    );
-
-    const trustWalletButton = document.createElement("button");
-    trustWalletButton.textContent = "TrustWallet";
-    trustWalletButton.classList.add("wallet-option");
-    trustWalletButton.addEventListener("click", () => resolve("TrustWallet"));
-
-    popupContent.appendChild(heading);
-    popupContent.appendChild(metamaskButton);
-    popupContent.appendChild(coinbaseWalletButton);
-    popupContent.appendChild(trustWalletButton);
-
-    popupContainer.appendChild(popupContent);
-
-    document.body.appendChild(popupContainer);
-  });
+  disconnectIcon.appendChild(disconnectIconPath);
+  disconnectBtn.appendChild(disconnectIcon);
+  return disconnectBtn;
 }
 
 async function displayPop(key, buttonClass) {
@@ -479,12 +478,12 @@ async function displayPop(key, buttonClass) {
   helpButton.textContent = "Need help getting started?";
 
   const closeButtonContainer = document.createElement("div");
-  closeButtonContainer.classList.add("close-btn");
+  closeButtonContainer.classList.add("close-btn-ctn");
 
   const closeButton = document.createElement("button");
   closeButton.type = "button";
   closeButton.setAttribute("aria-label", "Close");
-  closeButton.classList.add("css-101rlmy");
+  closeButton.classList.add("close-btn");
 
   const closeIcon = document.createElement("svg");
   closeIcon.width = 15;
@@ -513,11 +512,18 @@ async function displayPop(key, buttonClass) {
   popupContent.appendChild(walletList);
   popupContent.appendChild(helpButton);
   popupContent.appendChild(closeButtonContainer);
+  //
+  closeButton.addEventListener("click", async () => {
+    popupContainer.remove();
+    popupContent.remove();
+  });
 
   // popupContainer.appendChild(popupContent);
   document.body.appendChild(popupContainer);
   document.body.appendChild(popupContent);
-
+  // if (assertWindowEthereum(globalThis.window)) {
+  //   return window.ethereum.isMetaMask;
+  // }
   // Event listeners for wallet selection
   metamaskButton.addEventListener("click", async () => {
     await ConnectWallet("metamask", key, buttonClass);
@@ -526,7 +532,7 @@ async function displayPop(key, buttonClass) {
   });
 
   coinbaseButton.addEventListener("click", async () => {
-    await ConnectWallet("coinbase", key, buttonClass);
+    await ConnectWallet("coinbasewallet", key, buttonClass);
     popupContainer.remove();
     popupContent.remove();
   });
@@ -557,43 +563,53 @@ async function ConnectWallet(wallet, key, buttonClass) {
     )}`;
 
     // Update connect button text with the wallet address
-    const connectButton = document.querySelector(buttonClass);
-    connectButton.textContent = shortenedAddress;
+    // const connectButton = document.querySelector(buttonClass);
+    document
+      .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
+      .forEach((link) => {
+        link.textContent = shortenedAddress;
 
-    const dropdown = document.querySelector(".wallet-dropdown");
-    if (dropdown) {
-      // Dropdown already exists, toggle its display
-      dropdown.style.display =
-        dropdown.style.display === "none" ? "block" : "none";
-    } else {
-      // Create the dropdown element
-      const dropdown = document.createElement("div");
-      dropdown.classList.add("wallet-dropdown");
+        const dropdown = link.parentNode.querySelector(".wallet-dropdown");
 
-      const maticBalanceElement = document.createElement("div");
-      maticBalanceElement.textContent = `Matic: ${maticBalance}`;
+        const maticBalanceElement = document.createElement("div");
+        maticBalanceElement.textContent = `Matic: ${parseFloat(
+          maticBalance
+        ).toFixed(2)}`;
 
-      const disconnectButton = document.createElement("button");
-      disconnectButton.textContent = "Disconnect";
-      disconnectButton.addEventListener("click", disconnectWallet);
-      dropdown.appendChild(maticBalanceElement);
-      dropdown.appendChild(disconnectButton);
+        const disconnectBtn = document.createElement("button");
+        disconnectBtn.appendChild(disconnectButton());
 
-      // Append the dropdown to the connect button's parent element
-      const connectButtonParent = connectButton.parentNode;
-      connectButtonParent.appendChild(dropdown);
-    }
-    window.localStorage.setItem(key, true);
+        // disconnectButton.textContent = "Disconnect";
+        disconnectBtn.addEventListener("click", async () => {
+          await disconnectWallet(key);
+        });
+        if (dropdown) {
+          dropdown.style.display = "block";
+          dropdown.appendChild(maticBalanceElement);
+          dropdown.appendChild(disconnectBtn);
+        }
+        window.localStorage.setItem(key, true);
+        link.removeEventListener("click", connectButtonListener);
+      });
   } catch (error) {
     console.error(error);
   }
 }
 
 async function getProvider(wallet) {
-  if (typeof etherPovider === "undefined" || typeof provider === "undefined") {
+  if (
+    typeof etherPovider === "undefined" ||
+    typeof provider === "undefined" ||
+    !etherPovider ||
+    !provider
+  ) {
     init();
-    provider = await web3Modal.connect(wallet);
-    addListeners(provider);
+    if (wallet === "metamask") {
+      provider = getWalletInjectedProvider();
+    } else {
+      provider = await web3Modal.connectTo(wallet);
+      addListeners(provider);
+    }
     // v6:
     etherPovider = new ethers.BrowserProvider(provider);
   }
