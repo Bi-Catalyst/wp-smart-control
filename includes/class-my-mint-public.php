@@ -19,6 +19,8 @@ class My_Mint_Public
     {
         // Enqueue necessary scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('wp_footer', array($this, 'script_web3modal'));
+        add_filter('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 1, 2);
 
         // Register shortcodes
         add_shortcode('connect_wallet', array($this, 'connect_wallet_shortcode'));
@@ -26,24 +28,59 @@ class My_Mint_Public
         add_shortcode('mint_box', array($this, 'mint_box_shortcode'));
         add_shortcode('crossmint_payment_button', array($this, 'crossmint_shortcode'));
     }
+    public function add_logo_nav_menu($items, $args)
+    {
+        $newitems = '<li class="cstm-m-cnct-wlt"><button title="Connect Wallet" type="button" class="nav-connect-wallet">Connect Wallet</a></li>';
+        $newitems .= $items;
+        return $newitems;
+    }
+    public function script_web3modal()
+    {
+        // This will work on browsers that support newer Javascript syntax
+        echo '<script type="module">
+                import {
+                    EthereumClient,
+                    w3mConnectors,
+                    w3mProvider,
+                    WagmiCore,
+                    WagmiCoreChains,
+                    WagmiCoreConnectors
+                } from "https://unpkg.com/@web3modal/ethereum";
 
+                import { Web3Modal } from "https://unpkg.com/@web3modal/html";
+
+                // 0. Import wagmi dependencies
+                const { mainnet, polygon, avalanche, arbitrum } = WagmiCoreChains;
+                const { configureChains, createConfig } = WagmiCore;
+
+                // 1. Define chains
+                const chains = [mainnet, polygon, avalanche, arbitrum];
+
+                const projectId = "REDACTED_WALLETCONNECT_ID"
+
+                const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+                const wagmiConfig = createConfig({
+                    autoConnect: true,
+                    connectors: w3mConnectors({ projectId, version: 1, chains }),
+                    publicClient
+                })
+                const ethereumClient = new EthereumClient(wagmiConfig, chains)
+                const web3modal = new Web3Modal({ projectId }, ethereumClient)
+                // Add your own implementation code here
+                document.querySelectorAll(".nav-connect-wallet")
+                .forEach((link) => {
+                    link.addEventListener("click", () => {
+                        web3modal.openModal()
+                    });
+                });
+            </script>';
+
+    }
     public function enqueue_scripts()
     {
         // Enqueue ethers script from the CDN
-        wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
-        // wp_enqueue_script('ethers', 'https://cdn.ethers.io/lib/ethers-5.2.umd.min.js', array(), '5.2', true);
-        wp_enqueue_script('web3modal', 'https://unpkg.com/web3modal', array(), '1.9.12', true);
-        wp_enqueue_script('walletconnect', 'https://unpkg.com/@walletconnect/web3-provider', array(), '1.9.12', true);
+        // Add script tag with type="module"
 
-
-
-        // wp_enqueue_script('ethers', 'https://www.unpkg.com/browse/walletconnect@1.7.8/dist/umd/index.min.js', array(), '2.4.0', true);
-        // wp_enqueue_script('ethers', 'https://unpkg.com/browse/@web3modal/ui@2.4.0/dist/index.js', array(), '2.4.0', true);
-
-        // Enqueue Web3.js
-        // wp_enqueue_script('web3', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/web3.min.js', array(), '1.3.6', true);
-
-        // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
             'contractAddress' => get_option('my_mint_plugin_contract_address'),
             'contractABI' => get_option('my_mint_plugin_contract_abi'),
@@ -54,15 +91,8 @@ class My_Mint_Public
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
-        wp_enqueue_script('commonWallet', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/commonWallet.js', array('jquery', 'ethers', 'web3modal', 'walletconnect'), '0.0.1', true);
-
-        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'commonWallet'), '0.0.1', true);
-
-        // Enqueue your custom script file that contains the wallet connection logic
-        wp_enqueue_script('my-mint-plugin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'commonWallet', 'core'), '0.0.1', true);
-
         // Enqueue crossmint script
-        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'commonWallet', 'core', 'my-mint-plugin-script'), '0.1.0', true);
+        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery'), '0.1.0', true);
 
 
         // Localize the script with the plugin settings
@@ -92,7 +122,7 @@ class My_Mint_Public
         ob_start();
         ?>
         <button id="<?php echo $id; ?>" class="<?php echo $class; ?>">Connect Wallet</button>
-        <div class="wallet-dropdown" style="display: none;"></div>
+        <!-- <div class="wallet-dropdown" style="display: none;"></div> -->
         <?php
         return ob_get_clean();
     }
