@@ -56,10 +56,6 @@ class My_Mint_Admin
     {
         // Enqueue ethers script from the CDN
         wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
-        wp_enqueue_script('web3modal', 'https://unpkg.com/web3modal', array(), '1.9.12', true);
-        wp_enqueue_script('walletconnect', 'https://unpkg.com/@walletconnect/web3-provider', array(), '1.9.12', true);
-        wp_enqueue_script('coinbase', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/coinbase-wallet-js', array(), '1.1.0', true);
-
 
         // Enqueue your custom admin script file
         // Define the data to be passed to the JavaScript file
@@ -73,16 +69,14 @@ class My_Mint_Admin
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
-        wp_enqueue_script('commonWallet', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/commonWallet.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'coinbase'), '0.0.1', true);
+        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers'), '0.0.1', true);
 
-        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'coinbase', 'commonWallet'), '0.0.1', true);
-
-        wp_enqueue_script('my-mint-admin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-admin.js', array('jquery', 'ethers', 'web3modal', 'walletconnect', 'walletconnect', 'coinbase', 'commonWallet', 'core'), '0.0.1', true);
+        wp_enqueue_script('my-mint-admin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-admin.js', array('jquery', 'ethers', 'core'), '0.0.1', true);
         // Localize the script with the plugin settings
         wp_localize_script('my-mint-admin-script', 'myMintPluginSettings', $my_mint_plugin_settings);
         // Enqueue your custom admin styles
         wp_enqueue_style('my-mint-admin-style', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/css/my-mint-admin.css', array(), '0.0.1');
-        
+
     }
 
     public function my_mint_plugin_activate()

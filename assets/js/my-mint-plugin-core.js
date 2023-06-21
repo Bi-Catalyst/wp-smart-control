@@ -63,14 +63,6 @@ async function getMaticPrice(currency) {
     return null;
   }
 }
-// Unpkg imports
-const Web3Modal = window.Web3Modal.default;
-const WalletConnectProvider = window.WalletConnectProvider.default;
-// const EvmChains = window.EvmChains;
-// const Fortmatic = window.Fortmatic;
-
-// Web3modal instance
-let web3Modal;
 
 let etherPovider;
 // Chosen wallet provider given by the dialog window
@@ -80,39 +72,7 @@ let provider;
  * Setup the orchestra
  */
 function init() {
-  if (web3Modal) return;
-  // Tell Web3modal what providers we have available.
-  // Built-in web browser provider (only one can exist as a time)
-  // like MetaMask, Brave or Opera is added automatically by Web3modal
-  const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider,
-      options: {
-        // Moh's test key - don't copy as your mileage may vary
-        infuraId: "REDACTED_INFURA_KEY",
-      },
-    },
-    // coinbasewallet: {
-    //   package: CoinbaseWalletSDK,
-    //   options: {
-    //     // Moh's test key - don't copy as your mileage may vary
-    //     infuraId: "REDACTED_INFURA_KEY",
-    //   },
-    // },
-    // fortmatic: {
-    //   package: Fortmatic,
-    //   options: {
-    //     // Moh's TESTNET api key
-    //     key: "pk_test_391E26A3B43A3350"
-    //   }
-    // }
-  };
 
-  web3Modal = new Web3Modal({
-    cacheProvider: false,
-    disableInjectedProvider: false,
-    providerOptions, // required
-  });
 }
 // ≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖≖
 //  Create contract instance
@@ -272,47 +232,6 @@ async function getTransactionPropertiesViaInfuraRPC() {
   return transactionProperties;
 }
 
-function checkIfMetamask() {
-  const { ethereum } = window;
-  if (typeof ethereum !== "undefined" && ethereum.isMetaMask) {
-    return true;
-  }
-  return false;
-}
-const connectButtonListener = async function (e) {
-  e.preventDefault();
-  displayPop("fontend-wallet", myMintPluginSettings.connectButtonIdOrClass);
-};
-
-// https://docs.cloud.coinbase.com/wallet-sdk/docs/web3modal
-async function disconnectWallet(key) {
-  // Clear the wallet connection status in local storage
-  window.localStorage.removeItem(key);
-  if (provider.close) {
-    await provider.close();
-    // If the cached provider is not cleared,
-    // WalletConnect will default to the existing session
-    // and does not allow to re-scan the QR code with a new wallet.
-    // Depending on your use case you may want or want not his behavir.
-  }
-  await web3Modal.clearCachedProvider();
-  provider = null;
-  // Remove the wallet dropdown from the document body
-  document.querySelectorAll(".wallet-dropdown").forEach((link) => {
-    link.textContent = "";
-    link.style.display = "none";
-  });
-
-  // Update connect button text to "Connect Wallet"
-
-  document
-    .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
-    .forEach((link) => {
-      link.textContent = "Connect Wallet";
-      link.addEventListener("click", connectButtonListener);
-    });
-}
-
 async function Contract(_provider) {
   if (typeof _provider !== "undefined") {
     return ContractInstance(_provider);
@@ -362,268 +281,24 @@ async function getDiscount(classInput) {
   }
 }
 
-function disconnectButton() {
-  const disconnectBtn = document.createElement("button");
-  disconnectBtn.type = "button";
-  disconnectBtn.classList.add("disconnect-btn");
-  const disconnectIcon = document.createElement("svg");
-  disconnectIcon.width = 24;
-  disconnectIcon.height = 24;
-  disconnectIcon.setAttribute("viewBox", "0 0 24 24");
-  disconnectIcon.setAttribute("fill", "none");
-  disconnectIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  disconnectIcon.style.width = "24px";
-  disconnectIcon.style.height = "24px";
-  disconnectIcon.style.color = "inherit";
-
-  const disconnectIconPath = document.createElement("path");
-  disconnectIconPath.setAttribute(
-    "d",
-    "M10.79 16.29C11.18 16.68 11.81 16.68 12.2 16.29L15.79 12.7C15.8827 12.6075 15.9563 12.4976 16.0064 12.3766C16.0566 12.2557 16.0824 12.126 16.0824 11.995C16.0824 11.864 16.0566 11.7343 16.0064 11.6134C15.9563 11.4924 15.8827 11.3825 15.79 11.29L12.2 7.7C12.013 7.51302 11.7594 7.40798 11.495 7.40798C11.2306 7.40798 10.977 7.51302 10.79 7.7C10.603 7.88698 10.498 8.14057 10.498 8.405C10.498 8.66943 10.603 8.92302 10.79 9.11L12.67 11H4C3.45 11 3 11.45 3 12C3 12.55 3.45 13 4 13H12.67L10.79 14.88C10.4 15.27 10.41 15.91 10.79 16.29ZM19 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V8C3 8.55 3.45 9 4 9C4.55 9 5 8.55 5 8V6C5 5.45 5.45 5 6 5H18C18.55 5 19 5.45 19 6V18C19 18.55 18.55 19 18 19H6C5.45 19 5 18.55 5 18V16C5 15.45 4.55 15 4 15C3.45 15 3 15.45 3 16V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z"
-  );
-  disconnectIconPath.setAttribute("fill", "currentColor");
-  disconnectIconPath.setAttribute("fill-rule", "evenodd");
-  disconnectIconPath.setAttribute("clip-rule", "evenodd");
-
-  disconnectIcon.appendChild(disconnectIconPath);
-  disconnectBtn.appendChild(disconnectIcon);
-  return disconnectBtn;
-}
-
-async function displayPop(key, buttonClass) {
-  const popupContainer = document.createElement("div");
-  popupContainer.classList.add("dialog");
-  popupContainer.dataset.state = "open";
-  popupContainer.style.pointerEvents = "auto";
-
-  const popupContent = document.createElement("div");
-  popupContent.setAttribute("role", "dialog");
-  popupContent.id = "radix-:R8h6plaqk:";
-  popupContent.dataset.state = "open";
-  popupContent.tabIndex = "-1";
-  popupContent.classList.add("wallets-dialog");
-  popupContent.style.maxWidth = "480px";
-  popupContent.style.pointerEvents = "auto";
-
-  const heading = document.createElement("h2");
-  heading.id = "radix-:R8h6plaqkH1:";
-  heading.classList.add("modal-title");
-  heading.textContent = "Choose your wallet";
-
-  const walletList = document.createElement("ul");
-  walletList.classList.add("dialog-list");
-
-  const createWalletButton = (id, logoSrc, name, installed) => {
-    const button = document.createElement("button");
-    button.id = id;
-    button.type = "button";
-    button.classList.add("wallet-button");
-
-    const logoImg = document.createElement("img");
-    logoImg.width = 32;
-    logoImg.height = 32;
-    logoImg.src = logoSrc;
-    logoImg.alt = "";
-    logoImg.loading = "eager";
-    logoImg.decoding = "async";
-    logoImg.style.height = "32px";
-    logoImg.style.width = "32px";
-
-    const walletName = document.createElement("span");
-    walletName.classList.add("wallet-name");
-    walletName.textContent = name;
-
-    const isInstalled = document.createElement("span");
-    isInstalled.classList.add("wallet-is-installed");
-    isInstalled.textContent = installed ? "Installed" : "";
-
-    button.appendChild(logoImg);
-    button.appendChild(walletName);
-    button.appendChild(isInstalled);
-
-    return button;
-  };
-
-  const metamaskButton = createWalletButton(
-    "metamask",
-    "https://ipfs.thirdwebcdn.com/ipfs/QmZZHcw7zcXursywnLDAyY6Hfxzqop5GKgwoq8NB9jjrkN/metamask.svg",
-    "MetaMask",
-    true
-  );
-
-  const coinbaseButton = createWalletButton(
-    "coinbase",
-    "https://ipfs.thirdwebcdn.com/ipfs/QmcJBHopbwfJcLqJpX2xEufSS84aLbF7bHavYhaXUcrLaH/coinbase.svg",
-    "Coinbase Wallet",
-    true
-  );
-
-  const walletConnectButton = createWalletButton(
-    "wallet-connect",
-    "https://ipfs.thirdwebcdn.com/ipfs/QmX58KPRaTC9JYZ7KriuBzeoEaV2P9eZcA3qbFnTHZazKw/wallet-connect.svg",
-    "WalletConnect",
-    true
-  );
-
-  walletList.appendChild(metamaskButton);
-  walletList.appendChild(coinbaseButton);
-  walletList.appendChild(walletConnectButton);
-
-  const helpButton = document.createElement("button");
-  helpButton.type = "button";
-  helpButton.classList.add("help-btn");
-  helpButton.style.display = "block";
-  helpButton.style.width = "100%";
-  helpButton.style.textAlign = "center";
-  helpButton.textContent = "Need help getting started?";
-
-  const closeButtonContainer = document.createElement("div");
-  closeButtonContainer.classList.add("close-btn-ctn");
-
-  const closeButton = document.createElement("button");
-  closeButton.type = "button";
-  closeButton.setAttribute("aria-label", "Close");
-  closeButton.classList.add("close-btn");
-
-  const closeIcon = document.createElement("svg");
-  closeIcon.width = 15;
-  closeIcon.height = 15;
-  closeIcon.setAttribute("viewBox", "0 0 15 15");
-  closeIcon.setAttribute("fill", "none");
-  closeIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  closeIcon.style.width = "24px";
-  closeIcon.style.height = "24px";
-  closeIcon.style.color = "inherit";
-
-  const closeIconPath = document.createElement("path");
-  closeIconPath.setAttribute(
-    "d",
-    "M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-  );
-  closeIconPath.setAttribute("fill", "currentColor");
-  closeIconPath.setAttribute("fill-rule", "evenodd");
-  closeIconPath.setAttribute("clip-rule", "evenodd");
-
-  closeIcon.appendChild(closeIconPath);
-  closeButton.appendChild(closeIcon);
-  closeButtonContainer.appendChild(closeButton);
-
-  popupContent.appendChild(heading);
-  popupContent.appendChild(walletList);
-  popupContent.appendChild(helpButton);
-  popupContent.appendChild(closeButtonContainer);
-  //
-  closeButton.addEventListener("click", async () => {
-    popupContainer.remove();
-    popupContent.remove();
-  });
-
-  // popupContainer.appendChild(popupContent);
-  document.body.appendChild(popupContainer);
-  document.body.appendChild(popupContent);
-  // if (assertWindowEthereum(globalThis.window)) {
-  //   return window.ethereum.isMetaMask;
-  // }
-  // Event listeners for wallet selection
-  metamaskButton.addEventListener("click", async () => {
-    await ConnectWallet("metamask", key, buttonClass);
-    popupContainer.remove();
-    popupContent.remove();
-  });
-
-  coinbaseButton.addEventListener("click", async () => {
-    await ConnectWallet("coinbasewallet", key, buttonClass);
-    popupContainer.remove();
-    popupContent.remove();
-  });
-
-  walletConnectButton.addEventListener("click", async () => {
-    await ConnectWallet("walletconnect", key, buttonClass);
-    popupContainer.remove();
-    popupContent.remove();
-  });
-}
-
-async function ConnectWallet(wallet, key, buttonClass) {
-  try {
-    library = await getProvider(wallet);
-
-    switchToNetwork(provider, mumbaiTestnet);
-
-    const accounts = await provider.request({
-      method: "eth_requestAccounts",
-    });
-
-    _address = accounts[0];
-
-    const balance = await library.getBalance(_address);
-    const maticBalance = ethers.formatEther(balance);
-    const shortenedAddress = `${_address.substr(0, 3)}...${_address.substr(
-      -4
-    )}`;
-
-    // Update connect button text with the wallet address
-    // const connectButton = document.querySelector(buttonClass);
-    document
-      .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
-      .forEach((link) => {
-        link.textContent = shortenedAddress;
-
-        const dropdown = link.parentNode.querySelector(".wallet-dropdown");
-
-        const maticBalanceElement = document.createElement("div");
-        maticBalanceElement.textContent = `Matic: ${parseFloat(
-          maticBalance
-        ).toFixed(2)}`;
-
-        const disconnectBtn = document.createElement("button");
-        disconnectBtn.appendChild(disconnectButton());
-
-        // disconnectButton.textContent = "Disconnect";
-        disconnectBtn.addEventListener("click", async () => {
-          await disconnectWallet(key);
-        });
-        if (dropdown) {
-          dropdown.style.display = "block";
-          dropdown.appendChild(maticBalanceElement);
-          dropdown.appendChild(disconnectBtn);
-        }
-        window.localStorage.setItem(key, true);
-        link.removeEventListener("click", connectButtonListener);
-      });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 async function getProvider(wallet) {
-  if (
-    typeof etherPovider === "undefined" ||
-    typeof provider === "undefined" ||
-    !etherPovider ||
-    !provider
-  ) {
-    init();
-    if (wallet === "metamask") {
-      provider = getWalletInjectedProvider();
-    } else {
-      provider = await web3Modal.connectTo(wallet);
-      addListeners(provider);
-    }
-    // v6:
-    etherPovider = new ethers.BrowserProvider(provider);
-  }
+  // if (
+  //   typeof etherPovider === "undefined" ||
+  //   typeof provider === "undefined" ||
+  //   !etherPovider ||
+  //   !provider
+  // ) {
+  //   init();
+  //   if (wallet === "metamask") {
+  //     provider = getWalletInjectedProvider();
+  //   } else {
+  //     provider = await web3Modal.connectTo(wallet);
+  //     addListeners(provider);
+  //   }
+  //   // v6:
+  //   etherPovider = new ethers.BrowserProvider(provider);
+  // }
   return etherPovider;
-}
-
-async function addListeners(web3ModalProvider) {
-  web3ModalProvider.on("accountsChanged", (accounts) => {
-    // window.location.reload();
-  });
-  // Subscribe to chainId change
-  web3ModalProvider.on("chainChanged", (chainId) => {
-    // window.location.reload();
-  });
 }
 
 async function switchToNetwork(wallet, network) {
@@ -664,19 +339,3 @@ function cronMintConfig() {
   $("crossmint-pay-button").attr("mintConfig", JSON.stringify(mintConfig));
 }
 
-// const dic_net = {
-//   name: "Matic Mumbai",
-//   chainId: 80001,
-//   _defaultProvider: (providers) =>
-//     new providers.JsonRpcProvider("https://matic-mumbai.chainstacklabs.com"),
-// };
-// const dic_net = {
-//   name: "Matic Mumbai",
-//   chainId: 80001,
-//   _defaultProvider: (providers) =>
-//     new providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/REDACTED_ALCHEMY_KEY"),
-// };
-// const provider = ethers.getDefaultProvider(dic_net);
-// mainet https://rpc.ankr.com/polygon
-// testnet https://rpc.ankr.com/polygon_mumbai
-// const provider = new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/polygon_mumbai');

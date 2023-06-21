@@ -55,12 +55,12 @@ async function mintWithWallet(quantity) {
       console.log(
         "Transaction is successful!!!" + "\n" + "Transaction Hash:",
         (await signedTxn).hash +
-          "\n" +
-          "Block Number: " +
-          (await reciept).blockNumber +
-          "\n" +
-          "Navigate to https://polygonscan.com/tx/" +
-          (await signedTxn).hash,
+        "\n" +
+        "Block Number: " +
+        (await reciept).blockNumber +
+        "\n" +
+        "Navigate to https://polygonscan.com/tx/" +
+        (await signedTxn).hash,
         "to see your transaction"
       );
     } else {
@@ -144,16 +144,16 @@ jQuery(document).ready(async function ($) {
   );
 
   // Get matic value on Fiat
-  const currency = "usd"; // or 'chf'
+  const currency = "chf"; // or 'chf'
   getMaticPrice(currency)
     .then((price) => {
       if (price !== null) {
         console.log(`Matic price in ${currency.toUpperCase()}: ${price}`);
-        jQuery(".fiat-price").text(
+        jQuery(".fiat-price").text("CHF " +
           (
             Number.parseFloat(myMintPluginSettings.mintPrice) *
             Number.parseFloat(price)
-          ).toFixed(4) + "USD"
+          ).toFixed(4) + ".-"
         );
       }
     })
@@ -163,16 +163,6 @@ jQuery(document).ready(async function ($) {
   // const connectButton = document.querySelector(
   //   myMintPluginSettings.connectButtonIdOrClass
   // );
-  // Add listener for connect button
-  document
-    .querySelectorAll(myMintPluginSettings.connectButtonIdOrClass)
-    .forEach((link) => {
-      link.addEventListener("click", connectButtonListener);
-    });
-
-  if (web3Modal && web3Modal.cachedProvider) {
-    await web3Modal.connect();
-  }
   // Add listener for mint button
   $(document).on(
     "click",
@@ -197,8 +187,3 @@ jQuery(document).ready(async function ($) {
     }
   );
 });
-
-// address = "0x8ba1f109551bD432803012645Ac136ddd64DBA72"
-// signer = new ethers.VoidSigner(address, provider)
-// Get the number of tokens for this account
-// tokens = await contract.balanceOf(signer.getAddress())

@@ -30,7 +30,7 @@ class My_Mint_Public
     }
     public function add_logo_nav_menu($items, $args)
     {
-        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" class="nav-connect-wallet">Connect Wallet</a></li>';
+        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" ><w3m-core-button></w3m-core-button></a></li>';
         return $items;
     }
     public function script_web3modal()
@@ -72,11 +72,13 @@ class My_Mint_Public
             </script>';
 
     }
+
     public function enqueue_scripts()
     {
         // Enqueue ethers script from the CDN
-        // Add script tag with type="module"
+        wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
 
+        // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
             'contractAddress' => get_option('my_mint_plugin_contract_address'),
             'contractABI' => get_option('my_mint_plugin_contract_abi'),
@@ -87,8 +89,14 @@ class My_Mint_Public
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
+
+        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers'), '0.0.1', true);
+
+        // Enqueue your custom script file that contains the wallet connection logic
+        wp_enqueue_script('my-mint-plugin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin.js', array('jquery', 'ethers', 'core'), '0.0.1', true);
+
         // Enqueue crossmint script
-        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery'), '0.1.0', true);
+        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'core', 'my-mint-plugin-script'), '0.1.0', true);
 
 
         // Localize the script with the plugin settings
@@ -117,8 +125,8 @@ class My_Mint_Public
 
         ob_start();
         ?>
-        <button id="<?php echo $id; ?>" class="<?php echo $class; ?>">Connect Wallet</button>
         <!-- <div class="wallet-dropdown" style="display: none;"></div> -->
+        <w3m-core-button></w3m-core-button>
         <?php
         return ob_get_clean();
     }
@@ -133,6 +141,7 @@ class My_Mint_Public
         ob_start();
         ?>
         <button class="mint-button">KAUF MIT WALLET</button>
+        <w3m-core-button icon="hide"></w3m-core-button>
         <?php
         return ob_get_clean();
     }
@@ -147,7 +156,8 @@ class My_Mint_Public
     {
         ob_start();
         ?>
-        <crossmint-pay-button  class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" environment="staging" mintConfig='{
+        <crossmint-pay-button class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" environment="staging"
+            mintConfig='{
             "type": "erc-721",
             "quantity": "1",
             "totalPrice": "0.001"
