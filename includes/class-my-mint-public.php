@@ -20,7 +20,7 @@ class My_Mint_Public
         // Enqueue necessary scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_footer', array($this, 'script_web3modal'));
-        add_filter('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 1, 2);
+        add_action('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 10, 2);
 
         // Register shortcodes
         add_shortcode('connect_wallet', array($this, 'connect_wallet_shortcode'));
@@ -30,9 +30,8 @@ class My_Mint_Public
     }
     public function add_logo_nav_menu($items, $args)
     {
-        $newitems = '<li class="cstm-m-cnct-wlt"><button title="Connect Wallet" type="button" class="nav-connect-wallet">Connect Wallet</a></li>';
-        $newitems .= $items;
-        return $newitems;
+        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" class="nav-connect-wallet">Connect Wallet</a></li>';
+        return $items;
     }
     public function script_web3modal()
     {
@@ -67,12 +66,9 @@ class My_Mint_Public
                 const ethereumClient = new EthereumClient(wagmiConfig, chains)
                 const web3modal = new Web3Modal({ projectId }, ethereumClient)
                 // Add your own implementation code here
-                document.querySelectorAll(".nav-connect-wallet")
-                .forEach((link) => {
-                    link.addEventListener("click", () => {
-                        web3modal.openModal()
-                    });
-                });
+                $(".nav-connect-wallet").click(function(){
+                    web3modal.openModal();
+                  });
             </script>';
 
     }
