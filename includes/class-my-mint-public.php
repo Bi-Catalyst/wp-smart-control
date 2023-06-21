@@ -30,7 +30,7 @@ class My_Mint_Public
     }
     public function add_logo_nav_menu($items, $args)
     {
-        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" ><w3m-core-button></w3m-core-button></a></li>';
+        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" ><w3m-core-button icon="hide"></w3m-core-button></a></li>';
         return $items;
     }
     public function script_web3modal()
