@@ -126,7 +126,7 @@ class My_Mint_Public
         ob_start();
         ?>
         <!-- <div class="wallet-dropdown" style="display: none;"></div> -->
-        <w3m-core-button></w3m-core-button>
+        <w3m-core-button icon='hide'></w3m-core-button>
         <?php
         return ob_get_clean();
     }
