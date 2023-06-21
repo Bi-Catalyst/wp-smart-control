@@ -147,7 +147,7 @@ class My_Mint_Public
     {
         ob_start();
         ?>
-        <crossmint-pay-button clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" environment="staging" mintConfig='{
+        <crossmint-pay-button  class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" environment="staging" mintConfig='{
             "type": "erc-721",
             "quantity": "1",
             "totalPrice": "0.001"
