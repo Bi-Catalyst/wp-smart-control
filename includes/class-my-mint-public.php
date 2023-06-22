@@ -36,41 +36,7 @@ class My_Mint_Public
     public function script_web3modal()
     {
         // This will work on browsers that support newer Javascript syntax
-        echo '<script type="module">
-                import {
-                    EthereumClient,
-                    w3mConnectors,
-                    w3mProvider,
-                    WagmiCore,
-                    WagmiCoreChains,
-                    WagmiCoreConnectors
-                } from "https://unpkg.com/@web3modal/ethereum";
-
-                import { Web3Modal } from "https://unpkg.com/@web3modal/html";
-
-                // 0. Import wagmi dependencies
-                const { mainnet, polygon, avalanche, arbitrum } = WagmiCoreChains;
-                const { configureChains, createConfig } = WagmiCore;
-
-                // 1. Define chains
-                const chains = [mainnet, polygon, avalanche, arbitrum];
-
-                const projectId = "REDACTED_WALLETCONNECT_ID"
-
-                const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
-                const wagmiConfig = createConfig({
-                    autoConnect: true,
-                    connectors: w3mConnectors({ projectId, version: 1, chains }),
-                    publicClient
-                })
-                const ethereumClient = new EthereumClient(wagmiConfig, chains)
-                const web3modal = new Web3Modal({ projectId }, ethereumClient)
-                // Add your own implementation code here
-                $(".nav-connect-wallet").click(function(){
-                    web3modal.openModal();
-                  });
-            </script>';
-
+        echo '<script type="module" src="' . plugin_dir_url(MY_MINT_PLUGIN_FILE) . '/assets/js/web3modal.js"/>';
     }
 
     public function enqueue_scripts()

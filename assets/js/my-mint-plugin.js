@@ -55,12 +55,12 @@ async function mintWithWallet(quantity) {
       console.log(
         "Transaction is successful!!!" + "\n" + "Transaction Hash:",
         (await signedTxn).hash +
-        "\n" +
-        "Block Number: " +
-        (await reciept).blockNumber +
-        "\n" +
-        "Navigate to https://polygonscan.com/tx/" +
-        (await signedTxn).hash,
+          "\n" +
+          "Block Number: " +
+          (await reciept).blockNumber +
+          "\n" +
+          "Navigate to https://polygonscan.com/tx/" +
+          (await signedTxn).hash,
         "to see your transaction"
       );
     } else {
@@ -71,42 +71,42 @@ async function mintWithWallet(quantity) {
   }
 }
 
-async function mint(quantity) {
-  // Create a new ethers provider
+// async function mint(quantity) {
+//   // Create a new ethers provider
 
-  // Instantiate contract
-  // Mint the NFTs
-  try {
-    // Instantiate contract
-    const signer = await etherPovider.getSigner();
-    const contractInstance = ContractInstance(signer);
-    const totalPrice = await contractInstance["MINT_PRICE()"]();
-    // Mint
-    const weiAmount = ethers.parseUnits(
-      (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
-      "ether"
-    );
+//   // Instantiate contract
+//   // Mint the NFTs
+//   try {
+//     // Instantiate contract
+//     const signer = await etherPovider.getSigner();
+//     const contractInstance = ContractInstance(signer);
+//     const totalPrice = await contractInstance["MINT_PRICE()"]();
+//     // Mint
+//     const weiAmount = ethers.parseUnits(
+//       (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
+//       "ether"
+//     );
 
-    console.log("NFT price from smart contract", totalPrice);
-    console.log("NFT price from WP", weiAmount);
+//     console.log("NFT price from smart contract", totalPrice);
+//     console.log("NFT price from WP", weiAmount);
 
-    // Gete nonce
-    const nonce = await getNonce(providerRpc, _address);
-    const tx = await _contractInstance["mint(uint256)"](quantity, {
-      value: weiAmount.toString(),
-      // value: totalPrice,
-      gasLimit: 3000000,
-      nonce: nonce || undefined,
-    });
+//     // Gete nonce
+//     const nonce = await getNonce(providerRpc, _address);
+//     const tx = await _contractInstance["mint(uint256)"](quantity, {
+//       value: weiAmount.toString(),
+//       // value: totalPrice,
+//       gasLimit: 3000000,
+//       nonce: nonce || undefined,
+//     });
 
-    await tx.wait();
+//     await tx.wait();
 
-    alert("Transaction confirmed");
-    // Additional logic after successful minting
-  } catch (error) {
-    handleError(error);
-  }
-}
+//     alert("Transaction confirmed");
+//     // Additional logic after successful minting
+//   } catch (error) {
+//     handleError(error);
+//   }
+// }
 
 function getWallet(library, privateKey) {
   const wallet = new ethers.Wallet(privateKey, library);
@@ -134,14 +134,14 @@ jQuery(document).ready(async function ($) {
   increaseBtn.addEventListener("click", increaseQuantity);
 
   // Set mint price value
-  jQuery(".eth-price").text(myMintPluginSettings.mintPrice + "MATIC");
+  jQuery(".final-nft-price-crypto").text(myMintPluginSettings.mintPrice + " MATIC");
 
   const totalSupply = await getTotalSupply();
   const maxSupply = await getMaxSupply();
 
-  jQuery(myMintPluginSettings.mintercounter).text(
-    totalSupply + "/" + maxSupply
-  );
+  jQuery(myMintPluginSettings.mintercounter).text(totalSupply);
+
+  jQuery(".total-nft-sup").text(maxSupply);
 
   // Get matic value on Fiat
   const currency = "chf"; // or 'chf'
@@ -149,11 +149,13 @@ jQuery(document).ready(async function ($) {
     .then((price) => {
       if (price !== null) {
         console.log(`Matic price in ${currency.toUpperCase()}: ${price}`);
-        jQuery(".fiat-price").text("CHF " +
-          (
-            Number.parseFloat(myMintPluginSettings.mintPrice) *
-            Number.parseFloat(price)
-          ).toFixed(4) + ".-"
+        jQuery(".final-nft-price").text(
+          "CHF " +
+            (
+              Number.parseFloat(myMintPluginSettings.mintPrice) *
+              Number.parseFloat(price)
+            ).toFixed(4) +
+            ".-"
         );
       }
     })
