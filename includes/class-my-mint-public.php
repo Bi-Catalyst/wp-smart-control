@@ -19,13 +19,19 @@ class My_Mint_Public
     {
         // Enqueue necessary scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_action('wp_footer', array($this, 'script_web3modal'));
+        
+        // Add script tag type module on the footer
+        add_action('wp_footer', array($this, 'enqueue_connect_wallet_script'));
+
         add_action('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 10, 2);
 
         // Register shortcodes
         add_shortcode('connect_wallet', array($this, 'connect_wallet_shortcode'));
+
         add_shortcode('mint_button', array($this, 'mint_button_shortcode'));
+
         add_shortcode('mint_box', array($this, 'mint_box_shortcode'));
+
         add_shortcode('crossmint_payment_button', array($this, 'crossmint_shortcode'));
     }
     public function add_logo_nav_menu($items, $args)
@@ -33,10 +39,11 @@ class My_Mint_Public
         $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" ><w3m-core-button icon="hide"></w3m-core-button></a></li>';
         return $items;
     }
-    public function script_web3modal()
+
+    public function enqueue_connect_wallet_script()
     {
         // This will work on browsers that support newer Javascript syntax
-        echo '<script type="module" src="' . plugin_dir_url(MY_MINT_PLUGIN_FILE) . '/assets/js/web3modal.js"/>';
+        echo '<script type="module" src="' . plugin_dir_url(MY_MINT_PLUGIN_FILE) . '/assets/js/connect-wallet-wagmi.js"/>';
     }
 
     public function enqueue_scripts()
@@ -55,18 +62,20 @@ class My_Mint_Public
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
+        // Enqueue non owner write smart contract operatons
+        wp_enqueue_script('sc-write-fe', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
 
-        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers'), '0.0.1', true);
+        // Enqueue read smart contract operations
+        wp_enqueue_script('sc-read', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-read.js', array('jquery', 'ethers', 'sc-write-fe'), '0.0.1', true);
 
-        // Enqueue your custom script file that contains the wallet connection logic
-        wp_enqueue_script('my-mint-plugin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin.js', array('jquery', 'ethers', 'core'), '0.0.1', true);
+        // Enqueue js logic for mint ui component
+        wp_enqueue_script('mint-frontend', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/mint-comp-fe.js', array('jquery', 'ethers', 'sc-write-fe', 'sc-read'), '0.0.1', true);
 
         // Enqueue crossmint script
-        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'core', 'my-mint-plugin-script'), '0.1.0', true);
-
+        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'sc-write-fe', 'sc-read', 'mint-frontend'), '0.1.0', true);
 
         // Localize the script with the plugin settings
-        wp_localize_script('my-mint-plugin-script', 'myMintPluginSettings', $my_mint_plugin_settings);
+        wp_localize_script('mint-frontend', 'myMintPluginSettings', $my_mint_plugin_settings);
 
         // Enqueue your custom styles
         wp_enqueue_style('my-mint-plugin-style', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/css/my-mint-plugin.css', array(), '0.0.1');

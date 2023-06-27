@@ -34,19 +34,18 @@ class My_Mint_Admin
 
         // Add activation hook to set default values.
         register_activation_hook(MY_MINT_PLUGIN_FILE, array($this, 'my_mint_plugin_activate'));
+
+        // Add script tag type module on the footer
+        add_action('admin_footer', array($this, 'enqueue_connect_wallet_script'));
     }
 
+
     /**
-     * Add plugin settings link to the plugin list page.
-     *
-     * @param array $links Array of plugin action links.
-     * @return array Modified array of plugin action links.
+     * Enqueue the connect-wallet-wagmi.js file.
      */
-    public function add_settings_link($links)
+    public function enqueue_connect_wallet_script()
     {
-        $settings_link = '<a href="admin.php?page=my-mint-plugin-settings">' . __('Settings', 'my-mint-plugin') . '</a>';
-        array_push($links, $settings_link);
-        return $links;
+        echo '<script type="module" src="' . plugin_dir_url(MY_MINT_PLUGIN_FILE) . '/assets/js/connect-wallet-wagmi.js"/>';
     }
 
     /**
@@ -69,16 +68,34 @@ class My_Mint_Admin
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
-        wp_enqueue_script('core', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-plugin-core.js', array('jquery', 'ethers'), '0.0.1', true);
+        // Enqueue non owner write smart contract operatons
+        wp_enqueue_script('sc-write', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-write-admin.js', array('jquery', 'ethers'), '0.0.1', true);
 
-        wp_enqueue_script('my-mint-admin-script', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/my-mint-admin.js', array('jquery', 'ethers', 'core'), '0.0.1', true);
+        // Enqueue read smart contract operations
+        wp_enqueue_script('sc-read', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-read.js', array('jquery', 'ethers', 'sc-write'), '0.0.1', true);
+
+        // Enqueue js logic for mint ui component
+        wp_enqueue_script('mint-admin', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/mint-admin-comp', array('jquery', 'ethers', 'sc-write', 'sc-read'), '0.0.1', true);
+
         // Localize the script with the plugin settings
         wp_localize_script('my-mint-admin-script', 'myMintPluginSettings', $my_mint_plugin_settings);
+
         // Enqueue your custom admin styles
         wp_enqueue_style('my-mint-admin-style', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/css/my-mint-admin.css', array(), '0.0.1');
 
     }
-
+    /**
+     * Add plugin settings link to the plugin list page.
+     *
+     * @param array $links Array of plugin action links.
+     * @return array Modified array of plugin action links.
+     */
+    public function add_settings_link($links)
+    {
+        $settings_link = '<a href="admin.php?page=my-mint-plugin-settings">' . __('Settings', 'my-mint-plugin') . '</a>';
+        array_push($links, $settings_link);
+        return $links;
+    }
     public function my_mint_plugin_activate()
     {
         // Check if the options are already set
@@ -166,7 +183,7 @@ class My_Mint_Admin
     public function render_wallet_connect_button()
     {
         ?>
-        <button class="connect-wallet-button">Connect Wallet</button>
+        <w3m-core-button icon='hide'></w3m-core-button>
         <?php
     }
     /**
