@@ -192,3 +192,114 @@
   border-radius: 12px;
   margin-left: auto;
 }
+
+/* Sub Tabs Styles */
+.sub-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.sub-tabs li {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.sub-tabs a {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sub-tabs a.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.sub-tabs-content {
+  margin-top: 20px;
+}
+
+.sub-tab-pane {
+  display: none;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.sub-tab-pane.active {
+  display: block;
+}
+
+.function-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.function-field label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.function-field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.function-field input[type="number"] {
+  width: 80px;
+}
+
+.function-field .function-result {
+  margin-top: 10px;
+  font-weight: bold;
+  padding: 8px;
+}
+
+/* .function-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.function-header h3 {
+  margin: 0;
+  flex-grow: 1;
+}  */
+
+.function-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.function-inputs label {
+  margin-right: 5px;
+}
+
+.function-actions {
+  display: flex;
+  align-items: center;
+  /* margin-top: 10px; */
+}
+
+.function-actions button {
+  margin-right: 10px;
+}
+
+.function-result {
+  margin-top: 10px;
+}
+
+.function-list {
+  margin-top: 20px;
+}

@@ -19,7 +19,7 @@ class My_Mint_Public
     {
         // Enqueue necessary scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        
+
         // Add script tag type module on the footer
         add_action('wp_footer', array($this, 'enqueue_connect_wallet_script'));
 
@@ -56,23 +56,26 @@ class My_Mint_Public
             'contractAddress' => get_option('my_mint_plugin_contract_address'),
             'contractABI' => get_option('my_mint_plugin_contract_abi'),
             'mintPrice' => get_option('my_mint_plugin_nft_price'),
+            'maxQuantity' => get_option('my_mint_plugin_max_quantity'),
+            'discount' => get_option('my_mint_plugin_discount_percentage'),
             'connectButtonIdOrClass' => get_option('my_mint_plugin_connect_button'),
+            'activeChain' => get_option('my_mint_plugin_active_chain'),
             'mintButtonIdOrClass' => get_option('my_mint_plugin_mint_button'),
             'mintQuantityIdOrClass' => get_option('my_mint_plugin_mint_quantity'),
             'mintercounter' => get_option('my_mint_plugin_minter_counter')
         );
 
         // Enqueue non owner write smart contract operatons
-        wp_enqueue_script('sc-write-fe', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
+        // wp_enqueue_script('sc-write-fe', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
 
         // Enqueue read smart contract operations
-        wp_enqueue_script('sc-read', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-read.js', array('jquery', 'ethers', 'sc-write-fe'), '0.0.1', true);
+        wp_enqueue_script('sc-read', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-read.js', array('jquery', 'ethers'), '0.0.1', true);
 
         // Enqueue js logic for mint ui component
-        wp_enqueue_script('mint-frontend', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/mint-comp-fe.js', array('jquery', 'ethers', 'sc-write-fe', 'sc-read'), '0.0.1', true);
+        wp_enqueue_script('mint-frontend', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/mint-comp-fe.js', array('jquery', 'ethers', 'sc-read'), '0.0.1', true);
 
         // Enqueue crossmint script
-        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'sc-write-fe', 'sc-read', 'mint-frontend'), '0.1.0', true);
+        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'sc-read', 'mint-frontend'), '0.1.0', true);
 
         // Localize the script with the plugin settings
         wp_localize_script('mint-frontend', 'myMintPluginSettings', $my_mint_plugin_settings);

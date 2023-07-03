@@ -16,11 +16,11 @@
       });
       
       getDiscountPercentage(function (data) {
-        jQuery("#mint_discount_input").text(data);
+        jQuery("#mint_discount_input").val(data);
       });
 
       getMaxQuantity(function (data) {
-        jQuery("#max_quantity_input").text(data);
+        jQuery("#max_quantity_input").val(data);
       });
 
       // Add listener to NFT price button

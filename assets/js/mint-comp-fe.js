@@ -69,14 +69,23 @@ jQuery(document).ready(async function ($) {
   jQuery(".final-nft-price-crypto").text(
     myMintPluginSettings.mintPrice + " MATIC"
   );
-  
-  await getTotalSupply(function (data) {
-    jQuery(myMintPluginSettings.mintercounter).text(data);
-  });
 
-  await getMaxSupply(function (data) {
-    jQuery("#total-nft-sup").text(data);
-  });
+  try {
+    await getTotalSupply(function (data) {
+      jQuery(myMintPluginSettings.mintercounter).text(data);
+    });
+  } catch (error) {
+    console.log(error);
+    // jQuery(myMintPluginSettings.mintercounter).text(data);
+  }
+
+  try {
+    await getMaxSupply(function (data) {
+      jQuery("#total-nft-sup").text(data);
+    });
+  } catch (error) {
+    jQuery("#total-nft-sup").text("3000");
+  }
 
   // Get matic value on Fiat
   const currency = "chf"; // or 'chf'
@@ -103,21 +112,24 @@ jQuery(document).ready(async function ($) {
     "click",
     myMintPluginSettings.mintButtonIdOrClass,
     async function () {
-      // Get the user's selected quantity from the input field
-      let quantity = parseInt(
-        $(myMintPluginSettings.mintQuantityIdOrClass).val()
-      );
+      if (
+        window.localStorage.getItem("wagmi.connected") === null ||
+        window.localStorage.getItem("wagmi.connected") === "false"
+      ) {
+        window.localStorage.setItem("TIGGER_MINT", true);
+        await web3modal.openModal();
+      } else {
+        // Get the user's selected quantity from the input field
+        let quantity = parseInt(
+          $(myMintPluginSettings.mintQuantityIdOrClass).val()
+        );
 
-      // Set quantity to 1 if it's not a valid number or less than or equal to zero
-      if (isNaN(quantity) || quantity <= 0) {
-        quantity = 1;
+        // Set quantity to 1 if it's not a valid number or less than or equal to zero
+        if (isNaN(quantity) || quantity <= 0) {
+          quantity = 1;
+        }
+        mint(quantity);
       }
-
-      // Confirm the minting action with the user
-      if (!confirm("Are you sure you want to mint " + quantity + " NFT(s)?")) {
-        return;
-      }
-      mint(quantity);
     }
   );
 });

@@ -4,7 +4,7 @@ import {
   w3mProvider,
   WagmiCore,
   WagmiCoreChains,
-  WagmiCoreConnectors,
+  // WagmiCoreConnectors
   // alchemyProvider,
   // infuraProvider
 } from "https://unpkg.com/@web3modal/ethereum";
@@ -23,6 +23,7 @@ const {
   writeContract,
   readContract,
   switchNetwork,
+  getNetwork,
 } = WagmiCore;
 
 // 1. Define chains
@@ -47,19 +48,66 @@ const web3modal = new Web3Modal(
   ethereumClient
 );
 
+window.mint = async function mint(quantity) {
+  const weiAmount = ethers.parseUnits(
+    (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
+    "ether"
+  );
+  const { request } = await prepareWriteContract({
+    address: myMintPluginSettings.contractAddress,
+    abi: myMintPluginSettings.contractABI,
+    functionName: "mint",
+    args: [quantity],
+    gas: 3000000n,
+    value: weiAmount,
+  });
+  const { hash } = await writeContract(request);
+};
+
+function checkIsMint() {
+  if (
+    window.localStorage.getItem("TIGGER_MINT") !== null ||
+    window.localStorage.getItem("TIGGER_MINT") === "true"
+  ) {
+    window.localStorage.getItem("TIGGER_MINT") === "false";
+    let quantity = parseInt(
+      $(myMintPluginSettings.mintQuantityIdOrClass).val()
+    );
+
+    // Set quantity to 1 if it's not a valid number or less than or equal to zero
+    if (isNaN(quantity) || quantity <= 0) {
+      quantity = 1;
+    }
+    mint(quantity);
+  }
+}
+
 web3modal.subscribeModal((newState) => {
-  console.log(newState);
-  //   console.log(wagmiConfig.store.getStore());
+  const { open } = newState;
+  if (
+    open === false &&
+    window.localStorage.getItem("wagmi.connected") === null
+  ) {
+    window.localStorage.setItem("TIGGER_MINT", false);
+  }
+  // check if modal close and window.localStorage.getItem("wagmi.connected") === "false"
+  // console.log(wagmiConfig.store.getStore());
 });
 
 web3modal.subscribeEvents((newState) => {
   const { name } = newState;
-  if (name === "ACCOUNT_CONNECTED") {
+  console.log(myMintPluginSettings.activeChain);
+  const { chain } = getNetwork();
+  if (
+    name === "ACCOUNT_CONNECTED" &&
+    chain.id !== Number.parseInt(myMintPluginSettings.activeChain)
+  ) {
     switchNetwork({
       chainId: 80001,
     })
       .then((chain) => {
         console.log(chain);
+        checkIsMint();
       })
       .catch((e) => {
         console.log(e);
@@ -75,10 +123,13 @@ web3modal.subscribeEvents((newState) => {
         //   console.error(addError);
         // }
       });
+  } else if (name === "ACCOUNT_CONNECTED") {
+    checkIsMint();
   }
   console.log(newState);
 });
 
+window.web3modal = web3modal;
 window.prepareWriteContract = prepareWriteContract;
 window.writeContract = writeContract;
 window.readContract = readContract;

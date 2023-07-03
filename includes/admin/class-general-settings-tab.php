@@ -149,8 +149,8 @@ class General_Settings_Tab
         $active_chain = get_option('my_mint_plugin_active_chain');
         ?>
         <select name="my_mint_plugin_active_chain">
-            <option value="mumbai" <?php selected($active_chain, 'mumbai'); ?>>Mumbai</option>
-            <option value="polygon_mainnet" <?php selected($active_chain, 'polygon_mainnet'); ?>>Polygon Mainnet</option>
+            <option value="80001" <?php selected($active_chain, '80001'); ?>>Mumbai</option>
+            <option value="137" <?php selected($active_chain, '137'); ?>>Polygon Mainnet</option>
         </select>
         <p class="description">
             <?php _e('Select the active chain for your plugin.', 'my-mint-plugin'); ?>
