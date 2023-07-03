@@ -67,6 +67,7 @@ class Admin_Functions_Tab
         // Register settings to be stored.
         register_setting('admin_settings_tab', 'my_mint_plugin_nft_price');
         register_setting('admin_settings_tab', 'my_mint_plugin_discount_percentage');
+        register_setting('admin_settings_tab', 'my_mint_plugin_max_quantity');
     }
 
 
