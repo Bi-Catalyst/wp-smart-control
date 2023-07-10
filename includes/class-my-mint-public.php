@@ -9,6 +9,8 @@
  * @subpackage My_Mint_Plugin/public
  */
 
+require_once 'constants.php';
+
 class My_Mint_Public
 {
 
@@ -53,16 +55,23 @@ class My_Mint_Public
 
         // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
-            'contractAddress' => get_option('my_mint_plugin_contract_address'),
-            'contractABI' => get_option('my_mint_plugin_contract_abi'),
+            'contractAddress' => get_option(ADMIN_CONTRACT_ADDRESS_FIELD),
+            'contractABI' => get_option(ADMIN_CONTRACT_ABI_FIELD),
             'mintPrice' => get_option('my_mint_plugin_nft_price'),
             'maxQuantity' => get_option('my_mint_plugin_max_quantity'),
             'discount' => get_option('my_mint_plugin_discount_percentage'),
-            'connectButtonIdOrClass' => get_option('my_mint_plugin_connect_button'),
-            'activeChain' => get_option('my_mint_plugin_active_chain'),
-            'mintButtonIdOrClass' => get_option('my_mint_plugin_mint_button'),
-            'mintQuantityIdOrClass' => get_option('my_mint_plugin_mint_quantity'),
-            'mintercounter' => get_option('my_mint_plugin_minter_counter')
+            'connectButtonIdOrClass' => get_option(MY_MINT_PLUGIN_CONNECT_BUTTON),
+            'activeChain' => get_option(ADMIN_ACTIVE_CHAIN_FIELD),
+            'mintButtonIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_BUTTON),
+            'mintQuantityIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_QUANTITY),
+            'mintercounter' => get_option(MY_MINT_PLUGIN_MINTER_COUNTER),
+            'popup' => array(
+                'successMessage' => __('Mint successful!', PLUGIN_NAME),
+                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', PLUGIN_NAME),
+                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', PLUGIN_NAME),
+                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', PLUGIN_NAME),
+                'errorMessage' => __('An error occurred.', PLUGIN_NAME)
+            )
         );
 
         // Enqueue non owner write smart contract operatons

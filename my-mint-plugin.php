@@ -14,6 +14,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once dirname(__FILE__) . '/includes/constants.php';
+
 define('MY_MINT_PLUGIN_FILE', __FILE__);
 
 /**
@@ -33,7 +35,7 @@ class My_Mint_Plugin
      */
     public function __construct()
     {
-        $this->plugin_text_domain = 'my-mint-plugin';
+        $this->plugin_text_domain = PLUGIN_NAME;
 
         // Load plugin text domain for translations.
         add_action('plugins_loaded', array($this, 'load_plugin_textdomain'));

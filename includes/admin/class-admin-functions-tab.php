@@ -1,4 +1,7 @@
 <?php
+
+require_once dirname(__FILE__) . '/../constants.php';
+
 // class-admin-functions-tab.php
 /**
  * Admin functions settings tab
@@ -11,7 +14,8 @@ class Admin_Functions_Tab
      */
     public static function render()
     {
-        $default_sub_tab = 'my_mint_plugin_admin_functions_nonpayable';
+        $default_sub_tab = ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
+
         $active_sub_tab = isset($_GET['sub_tab']) ? $_GET['sub_tab'] : $default_sub_tab;
         $tab_groups = self::get_tab_groups();
         ?>
@@ -22,7 +26,7 @@ class Admin_Functions_Tab
                 // Render the tab navigation
                 foreach ($tab_groups as $group) {
                     $active_class = ($group['id'] === $active_sub_tab) ? 'nav-tab-active' : '';
-                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=my-mint-plugin-settings&tab=admin_functions'));
+                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . ADMIN_MENU_SLUG . '&tab=admin_functions'));
                     echo '<a href="' . esc_url($url) . '" class="nav-tab ' . $active_class . '">' . $group['label'] . '</a>';
                 }
                 ?>
@@ -66,7 +70,7 @@ class Admin_Functions_Tab
         }
 
         // Retrieve the contract ABI
-        $contract_abi = get_option('my_mint_plugin_contract_abi');
+        $contract_abi = get_option(ADMIN_CONTRACT_ABI_FIELD);
         if (!empty($contract_abi)) {
             // Group the functions based on stateMutability
             $functions_by_state = array(
@@ -100,7 +104,7 @@ class Admin_Functions_Tab
                 }
 
                 // Add the group title
-                $group_id = 'my_mint_plugin_admin_functions_' . $state;
+                $group_id = ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_title = self::get_state_mutability_title($state);
 
                 // Loop through the functions and add the fields
@@ -109,12 +113,13 @@ class Admin_Functions_Tab
                     if (!isset($function['name'])) {
                         continue;
                     }
-                    $field_id = 'my_mint_plugin_function_' . $function['name'];
+                    $field_id = ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
+                    $readable_function_name = self::get_readable_function_name($function['name']);
 
                     // Add a field for the function
                     add_settings_field(
                         $field_id,
-                        $function['name'],
+                        __($readable_function_name, PLUGIN_NAME),
                         array(__CLASS__, 'render_function_field'),
                         $group_id,
                         $group_id,
@@ -142,15 +147,15 @@ class Admin_Functions_Tab
     {
         switch ($state) {
             case 'nonpayable':
-                return __('Nonpayable Functions', 'my-mint-plugin');
+                return __('Nonpayable Functions', PLUGIN_NAME);
             case 'payable':
-                return __('Payable Functions', 'my-mint-plugin');
+                return __('Payable Functions', PLUGIN_NAME);
             case 'view':
-                return __('View Functions', 'my-mint-plugin');
+                return __('View Functions', PLUGIN_NAME);
             case 'event':
-                return __('Events', 'my-mint-plugin');
+                return __('Events', PLUGIN_NAME);
             default:
-                return __('Other Functions', 'my-mint-plugin');
+                return __('Other Functions', PLUGIN_NAME);
         }
     }
 
@@ -159,22 +164,23 @@ class Admin_Functions_Tab
      *
      * @param array $args The field arguments.
      */
-    public static function render_function_field($args) {
+    public static function render_function_field($args)
+    {
         $function = $args['function'];
-    
+
         if (isset($function['name'])) {
-            $field_id = 'my_mint_plugin_function_' . $function['name'];
+            $field_id = ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
             $field_value = get_option($field_id);
             $has_inputs = !empty($function['inputs']);
             $has_outputs = !empty($function['outputs']);
-    
+
             echo '<div class="function-field">';
             // echo '<div class="function-header">';
             // echo '<h3>' . $function['name'] . '</h3>';
             // echo '</div>'; // close function-header
-    
+
             echo '<div class="function-actions">';
-            
+
             if ($has_inputs) {
                 echo '<div class="function-inputs">';
                 foreach ($function['inputs'] as $input) {
@@ -183,19 +189,20 @@ class Admin_Functions_Tab
                 }
                 echo '</div>'; // close function-inputs
             }
-    
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', 'my-mint-plugin') . '</button>';
-    
+
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', PLUGIN_NAME) . '</button>';
+
             if ($has_outputs) {
                 echo '<div class="function-result" id="' . esc_attr($field_id) . '_result"></div>';
             }
-    
+
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
         } else {
-            echo '<p class="description">' . __('Invalid function', 'my-mint-plugin') . '</p>';
+            echo '<p class="description">' . __('Invalid function', PLUGIN_NAME) . '</p>';
         }
     }
+
     /**
      * Sanitize the field value for a smart contract function.
      *
@@ -214,7 +221,7 @@ class Admin_Functions_Tab
      */
     private static function get_tab_groups()
     {
-        $contract_abi = get_option('my_mint_plugin_contract_abi');
+        $contract_abi = get_option(ADMIN_CONTRACT_ABI_FIELD);
         $tab_groups = array();
 
         if (!empty($contract_abi)) {
@@ -229,7 +236,7 @@ class Admin_Functions_Tab
                 if ($state === '') {
                     $state = 'event';
                 }
-                $group_id = 'my_mint_plugin_admin_functions_' . $state;
+                $group_id = ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_label = self::get_state_mutability_title($state);
                 $active = ($state === 'nonpayable'); // Set the first tab as active
 
@@ -243,5 +250,25 @@ class Admin_Functions_Tab
 
         return $tab_groups;
     }
+    /**
+     * Get the user-readable function name.
+     *
+     * @param string $functionName The raw function name.
+     * @return string The user-readable function name.
+     */
+    private static function get_readable_function_name($functionName)
+    {
+        // Split the function name based on camel case, Pascal case, or underscore
+        $words = preg_split('/(?<=[a-z])(?=[A-Z])|_/', $functionName);
+
+        // Capitalize the first letter of each word
+        $words = array_map('ucfirst', $words);
+
+        // Join the words with spaces to form the readable function name
+        $readableName = implode(' ', $words);
+
+        return $readableName;
+    }
 }
+
 ?>

@@ -242,38 +242,26 @@
   margin-bottom: 20px;
 }
 
-.function-field label {
+.pwrap .function-field label {
   display: block;
   margin-bottom: 5px;
 }
 
-.function-field input {
+
+.pwrap .function-field input[type="text"],
+.pwrap .function-field input[type="number"] {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
-.function-field input[type="number"] {
-  width: 80px;
-}
-
-.function-field .function-result {
+.pwrap .function-field .function-result {
   margin-top: 10px;
   font-weight: bold;
   padding: 8px;
 }
-
-/* .function-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.function-header h3 {
-  margin: 0;
-  flex-grow: 1;
-}  */
 
 .function-inputs {
   display: flex;

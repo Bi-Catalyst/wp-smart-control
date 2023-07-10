@@ -13,8 +13,7 @@ import { Web3Modal } from "https://unpkg.com/@web3modal/html";
 
 const projectId = "REDACTED_WALLETCONNECT_ID";
 
-const { mainnet, polygon, polygonMumbai, avalanche, arbitrum } =
-  WagmiCoreChains;
+const { polygon, polygonMumbai } = WagmiCoreChains;
 
 const {
   configureChains,
@@ -27,7 +26,7 @@ const {
 } = WagmiCore;
 
 // 1. Define chains
-const chains = [mainnet, polygon, polygonMumbai, avalanche, arbitrum];
+const chains = [polygon, polygonMumbai];
 
 const { publicClient } = configureChains(chains, [
   // alchemyProvider({ apiKey: "REDACTED_ALCHEMY_KEY" }),
@@ -49,27 +48,60 @@ const web3modal = new Web3Modal(
 );
 
 window.mint = async function mint(quantity) {
-  const weiAmount = ethers.parseUnits(
-    (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
-    "ether"
-  );
-  const { request } = await prepareWriteContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
-    functionName: "mint",
-    args: [quantity],
-    gas: 3000000n,
-    value: weiAmount,
-  });
-  const { hash } = await writeContract(request);
+  try {
+    const { chain } = getNetwork();
+    if (chain.id !== Number.parseInt(myMintPluginSettings.activeChain)) {
+      for (const _chain of chains) {
+        if (_chain.id === Number.parseInt(myMintPluginSettings.activeChain)) {
+          showPopup(
+            "error",
+            "Please switch to active chain ".concat(" ", _chain.name)
+          );
+          break;
+        }
+      }
+      return;
+    }
+    const weiAmount = ethers.parseUnits(
+      (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
+      "ether"
+    );
+    const { request } = await prepareWriteContract({
+      address: myMintPluginSettings.contractAddress,
+      abi: myMintPluginSettings.contractABI,
+      functionName: "mint",
+      args: [quantity],
+      gas: 3000000n,
+      value: weiAmount,
+    });
+    const { hash } = await writeContract(request);
+
+    var explorerURL = "";
+    if (myMintPluginSettings.activeChain === "80001") {
+      explorerURL = "https://mumbai.polygonscan.com/tx/" + hash;
+    } else if (myMintPluginSettings.activeChain === "137") {
+      explorerURL = "https://polygonscan.com/tx/" + hash;
+    }
+
+    if (explorerURL) {
+      var popupHTML = `
+      <div class="popup-content">
+        <p>Transaction submitted successfully. Check it <a href="${explorerURL}" target="_blank">here</a>.</p>
+      </div>
+      `;
+      showPopup("success", popupHTML);
+    }
+  } catch (error) {
+    showPopup("error", error.shortMessage ? error.shortMessage : error.message);
+  }
 };
 
-function checkIsMint() {
+function triggerMint() {
   if (
-    window.localStorage.getItem("TIGGER_MINT") !== null ||
-    window.localStorage.getItem("TIGGER_MINT") === "true"
+    window.localStorage.getItem("TRIGGER_MINT") !== null ||
+    window.localStorage.getItem("TRIGGER_MINT") === "true"
   ) {
-    window.localStorage.getItem("TIGGER_MINT") === "false";
+    window.localStorage.getItem("TRIGGER_MINT") === "false";
     let quantity = parseInt(
       $(myMintPluginSettings.mintQuantityIdOrClass).val()
     );
@@ -88,7 +120,7 @@ web3modal.subscribeModal((newState) => {
     open === false &&
     window.localStorage.getItem("wagmi.connected") === null
   ) {
-    window.localStorage.setItem("TIGGER_MINT", false);
+    window.localStorage.setItem("TRIGGER_MINT", false);
   }
   // check if modal close and window.localStorage.getItem("wagmi.connected") === "false"
   // console.log(wagmiConfig.store.getStore());
@@ -107,7 +139,7 @@ web3modal.subscribeEvents((newState) => {
     })
       .then((chain) => {
         console.log(chain);
-        checkIsMint();
+        triggerMint();
       })
       .catch((e) => {
         console.log(e);
@@ -124,7 +156,7 @@ web3modal.subscribeEvents((newState) => {
         // }
       });
   } else if (name === "ACCOUNT_CONNECTED") {
-    checkIsMint();
+    triggerMint();
   }
   console.log(newState);
 });
@@ -133,3 +165,26 @@ window.web3modal = web3modal;
 window.prepareWriteContract = prepareWriteContract;
 window.writeContract = writeContract;
 window.readContract = readContract;
+
+// Automatically hide the popup after 3 seconds
+$(document).ready(function () {
+  setTimeout(() => {
+    const desktopBtn = document
+      .querySelector("#header-btn-col > div > div > w3m-core-button")
+      .shadowRoot.querySelector("w3m-connect-button")
+      .shadowRoot.querySelector("w3m-button-big")
+      .shadowRoot.querySelector("button");
+    if (desktopBtn) {
+      $(desktopBtn).addClass("w3m-custom-btn");
+    }
+    const mobileBtn = document
+      .querySelector("#mobile_menu1 > li.cstm-m-cnct-wlt > a > w3m-core-button")
+      .shadowRoot.querySelector("w3m-connect-button")
+      .shadowRoot.querySelector("w3m-button-big")
+      .shadowRoot.querySelector("button");
+    if (mobileBtn) {
+      $(mobileBtn).addClass("w3m-custom-btn-mobile");
+      $(mobileBtn).css("height", "60px");
+    }
+  }, 2000);
+});

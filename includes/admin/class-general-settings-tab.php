@@ -4,6 +4,9 @@
  * Admin General settings tab
  * This tab will be containing the general setting for the smart contract
  */
+
+ require_once dirname(__FILE__) . '/../constants.php';
+
 class General_Settings_Tab
 {
     /**
@@ -17,9 +20,9 @@ class General_Settings_Tab
 
                 <?php
                 // Output security fields.
-                settings_fields('general_settings_fields_tab');
+                settings_fields(ADMIN_GENERAL_FIELDS);
                 // Output setting sections.
-                do_settings_sections('general_settings_tab');
+                do_settings_sections(ADMIN_GENERAL_PAGE);
                 // Output submit button.
                 submit_button();
                 ?>
@@ -32,59 +35,59 @@ class General_Settings_Tab
     {
         // Register a settings section.
         add_settings_section(
-            'my_mint_plugin_general',
-            __('General Settings', 'my-mint-plugin'),
+            ADMIN_GENERAL_SECTION_TITLE,
+            __('General Settings', PLUGIN_NAME),
             array(__CLASS__, 'render_general_settings_section'),
-            'general_settings_tab'
+            ADMIN_GENERAL_PAGE
         );
 
         // Register settings fields.
         register_setting(
-            'general_settings_fields_tab',
-            'my_mint_plugin_contract_address',
+            ADMIN_GENERAL_FIELDS,
+            ADMIN_CONTRACT_ADDRESS_FIELD,
             'sanitize_text_field'
         );
 
         // Register a settings field for contract ABI.
         register_setting(
-            'general_settings_fields_tab',
-            'my_mint_plugin_contract_abi',
+            ADMIN_GENERAL_FIELDS,
+            ADMIN_CONTRACT_ABI_FIELD,
             array(__CLASS__, 'sanitize_contract_abi_field')
         );
 
         // Register a settings field for active chain.
         register_setting(
-            'general_settings_fields_tab',
-            'my_mint_plugin_active_chain',
+            ADMIN_GENERAL_FIELDS,
+            ADMIN_ACTIVE_CHAIN_FIELD,
             'sanitize_text_field'
         );
 
         // Add a field for contract address.
         add_settings_field(
-            'my_mint_plugin_contract_address',
-            __('Contract Address', 'my-mint-plugin'),
+            ADMIN_CONTRACT_ADDRESS_FIELD,
+            __('Contract Address', PLUGIN_NAME),
             array(__CLASS__, 'render_contract_address_field'),
-            'general_settings_tab',
-            'my_mint_plugin_general'
+            ADMIN_GENERAL_PAGE,
+            ADMIN_GENERAL_SECTION_TITLE
         );
 
         // Add a field for contract ABI.
         add_settings_field(
-            'my_mint_plugin_contract_abi',
-            __('Contract ABI', 'my-mint-plugin'),
+            ADMIN_CONTRACT_ABI_FIELD,
+            __('Contract ABI', PLUGIN_NAME),
             array(__CLASS__, 'render_contract_abi_field'),
-            'general_settings_tab',
-            'my_mint_plugin_general',
-            array('label_for' => 'my_mint_plugin_contract_abi')
+            ADMIN_GENERAL_PAGE,
+            ADMIN_GENERAL_SECTION_TITLE,
+            array('label_for' => ADMIN_CONTRACT_ABI_FIELD)
         );
 
         // Add a field for active chain selection.
         add_settings_field(
-            'my_mint_plugin_active_chain',
-            __('Active Chain', 'my-mint-plugin'),
+            ADMIN_ACTIVE_CHAIN_FIELD,
+            __('Active Chain', PLUGIN_NAME),
             array(__CLASS__, 'render_active_chain_field'),
-            'general_settings_tab',
-            'my_mint_plugin_general'
+            ADMIN_GENERAL_PAGE,
+            ADMIN_GENERAL_SECTION_TITLE
         );
     }
 
@@ -93,7 +96,7 @@ class General_Settings_Tab
      */
     public static function render_general_settings_section()
     {
-        echo '<p>' . esc_html__('Smart contract and network settings.', 'my-mint-plugin') . '</p>';
+        echo '<p>' . esc_html__('Smart contract and network settings.', PLUGIN_NAME) . '</p>';
     }
 
     /**
@@ -101,12 +104,12 @@ class General_Settings_Tab
      */
     public static function render_contract_address_field()
     {
-        $contract_address = get_option('my_mint_plugin_contract_address');
+        $contract_address = get_option(ADMIN_CONTRACT_ADDRESS_FIELD);
         ?>
-        <input type="text" name="my_mint_plugin_contract_address" value="<?php echo esc_attr($contract_address); ?>"
-            class="regular-text" />
+        <input type="text" name="<?php echo ADMIN_CONTRACT_ADDRESS_FIELD; ?>"
+            value="<?php echo esc_attr($contract_address); ?>" class="regular-text" />
         <p class="description">
-            <?php _e('Enter the contract address for your NFTs.', 'my-mint-plugin'); ?>
+            <?php _e('Enter the contract address for your NFTs.', PLUGIN_NAME); ?>
         </p>
         <?php
     }
@@ -146,16 +149,17 @@ class General_Settings_Tab
      */
     public static function render_active_chain_field()
     {
-        $active_chain = get_option('my_mint_plugin_active_chain');
+        $active_chain = get_option(ADMIN_ACTIVE_CHAIN_FIELD);
         ?>
-        <select name="my_mint_plugin_active_chain">
+        <select name="<?php echo ADMIN_ACTIVE_CHAIN_FIELD; ?>">
             <option value="80001" <?php selected($active_chain, '80001'); ?>>Mumbai</option>
             <option value="137" <?php selected($active_chain, '137'); ?>>Polygon Mainnet</option>
         </select>
         <p class="description">
-            <?php _e('Select the active chain for your plugin.', 'my-mint-plugin'); ?>
+            <?php _e('Select the active chain for your plugin.', PLUGIN_NAME); ?>
         </p>
         <?php
     }
 }
+
 ?>
