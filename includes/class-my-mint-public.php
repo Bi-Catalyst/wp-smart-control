@@ -57,9 +57,8 @@ class My_Mint_Public
         $my_mint_plugin_settings = array(
             'contractAddress' => get_option(ADMIN_CONTRACT_ADDRESS_FIELD),
             'contractABI' => get_option(ADMIN_CONTRACT_ABI_FIELD),
-            'mintPrice' => get_option('my_mint_plugin_nft_price'),
-            'maxQuantity' => get_option('my_mint_plugin_max_quantity'),
-            'discount' => get_option('my_mint_plugin_discount_percentage'),
+            'mintPrice' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MINT_PRICE'),
+            'maxQuantity' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX .'maxQuantity'),
             'connectButtonIdOrClass' => get_option(MY_MINT_PLUGIN_CONNECT_BUTTON),
             'activeChain' => get_option(ADMIN_ACTIVE_CHAIN_FIELD),
             'mintButtonIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_BUTTON),

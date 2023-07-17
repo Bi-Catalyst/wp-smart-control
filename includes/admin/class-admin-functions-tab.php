@@ -184,17 +184,18 @@ class Admin_Functions_Tab
             if ($has_inputs) {
                 echo '<div class="function-inputs">';
                 foreach ($function['inputs'] as $input) {
-                    echo '<label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . $input['name'] . '</label>';
-                    echo '<input type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) . '_' . $input['name'] . '" class="regular-text" data-type="' . esc_attr($input['type']) . '" />';
+                    echo '<div><label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . $input['name'] . '</label>';
+                    echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) .'" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
                 }
                 echo '</div>'; // close function-inputs
             }
 
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', PLUGIN_NAME) . '</button>';
-
+            $f_r = empty($field_value) ? 'no value' : esc_attr($field_value);
             if ($has_outputs) {
-                echo '<div class="function-result" id="' . esc_attr($field_id) . '_result"></div>';
+                echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id)  . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
             }
+
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', PLUGIN_NAME) . '</button>';
 
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field

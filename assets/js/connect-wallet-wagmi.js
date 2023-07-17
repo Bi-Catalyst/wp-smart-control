@@ -4,6 +4,7 @@ import {
   w3mProvider,
   WagmiCore,
   WagmiCoreChains,
+  WagmiCoreProviders,
   // WagmiCoreConnectors
   // alchemyProvider,
   // infuraProvider
@@ -11,9 +12,16 @@ import {
 
 import { Web3Modal } from "https://unpkg.com/@web3modal/html";
 
+window.process = {
+  env: {
+    NODE_ENV: "production",
+  },
+};
 const projectId = "REDACTED_WALLETCONNECT_ID";
 
 const { polygon, polygonMumbai } = WagmiCoreChains;
+const { publicProvider, jsonRpcProvider, alchemyProvider, infuraProvider } =
+  WagmiCoreProviders;
 
 const {
   configureChains,
@@ -26,10 +34,11 @@ const {
 } = WagmiCore;
 
 // 1. Define chains
-const chains = [polygon, polygonMumbai];
+const chains = [polygonMumbai, polygon];
 
 const { publicClient } = configureChains(chains, [
-  // alchemyProvider({ apiKey: "REDACTED_ALCHEMY_KEY" }),
+  publicProvider(),
+  alchemyProvider({ apiKey: "REDACTED_ALCHEMY_KEY" }),
   // infuraProvider({ apiKey: "REDACTED_INFURA_KEY" }),
   w3mProvider({ projectId }),
 ]);
@@ -47,6 +56,8 @@ const web3modal = new Web3Modal(
   ethereumClient
 );
 
+web3modal.setDefaultChain(polygonMumbai);
+
 window.mint = async function mint(quantity) {
   try {
     const { chain } = getNetwork();
@@ -62,10 +73,7 @@ window.mint = async function mint(quantity) {
       }
       return;
     }
-    const weiAmount = ethers.parseUnits(
-      (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
-      "ether"
-    );
+    const weiAmount = myMintPluginSettings.mintPrice;
     const { request } = await prepareWriteContract({
       address: myMintPluginSettings.contractAddress,
       abi: myMintPluginSettings.contractABI,
@@ -167,24 +175,30 @@ window.writeContract = writeContract;
 window.readContract = readContract;
 
 // Automatically hide the popup after 3 seconds
-$(document).ready(function () {
+jQuery(document).ready(function () {
   setTimeout(() => {
-    const desktopBtn = document
-      .querySelector("#header-btn-col > div > div > w3m-core-button")
-      .shadowRoot.querySelector("w3m-connect-button")
-      .shadowRoot.querySelector("w3m-button-big")
-      .shadowRoot.querySelector("button");
-    if (desktopBtn) {
-      $(desktopBtn).addClass("w3m-custom-btn");
-    }
-    const mobileBtn = document
-      .querySelector("#mobile_menu1 > li.cstm-m-cnct-wlt > a > w3m-core-button")
-      .shadowRoot.querySelector("w3m-connect-button")
-      .shadowRoot.querySelector("w3m-button-big")
-      .shadowRoot.querySelector("button");
-    if (mobileBtn) {
-      $(mobileBtn).addClass("w3m-custom-btn-mobile");
-      $(mobileBtn).css("height", "60px");
+    try {
+      const desktopBtn = document
+        .querySelector("#header-btn-col > div > div > w3m-core-button")
+        .shadowRoot.querySelector("w3m-connect-button")
+        .shadowRoot.querySelector("w3m-button-big")
+        .shadowRoot.querySelector("button");
+      if (desktopBtn) {
+        $(desktopBtn).addClass("w3m-custom-btn");
+      }
+      const mobileBtn = document
+        .querySelector(
+          "#mobile_menu1 > li.cstm-m-cnct-wlt > a > w3m-core-button"
+        )
+        .shadowRoot.querySelector("w3m-connect-button")
+        .shadowRoot.querySelector("w3m-button-big")
+        .shadowRoot.querySelector("button");
+      if (mobileBtn) {
+        $(mobileBtn).addClass("w3m-custom-btn-mobile");
+        $(mobileBtn).css("height", "60px");
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, 2000);
 });

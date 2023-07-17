@@ -11,8 +11,23 @@ jQuery(document).ready(function ($) {
 
     // Get the state mutability from the data attribute
     var stateMutability = $(this).data("state-mutability");
-
+    // TODO show error pop up
     // Prepare the function call based on the state mutability
+    var args = [];
+    var $functionContainer = $(this).closest(".function-field");
+    $functionContainer
+      .find('.function-inputs input[id^="' + settingKey + '_"]')
+      .each(function () {
+        let inputValue = $(this).val();
+        const inputType = $(this).data("type");
+
+        // Convert the input value based on the input type
+        if (inputType === "uint256") {
+          inputValue = Number(inputValue);
+        }
+
+        args.push(inputValue);
+      });
     switch (stateMutability) {
       case "view":
         // Read contract function call
@@ -21,15 +36,17 @@ jQuery(document).ready(function ($) {
           abi: contractABI,
           functionName: functionName,
         };
-
+        if (args.length > 0) {
+          request.args = args;
+        }
         // Call readContract and handle the response
         readContract(request)
           .then(function (response) {
             // Example: Update the input field value with the data
-            $("#" + settingKey).val(response);
+            // $("#" + settingKey).val(response);
 
             // Example: Display the result in a separate element
-            $("#" + settingKey + "_result").text(response);
+            $("#" + settingKey + "_result").val(response);
           })
           .catch(function (error) {
             console.log(error);
@@ -40,21 +57,7 @@ jQuery(document).ready(function ($) {
       case "nonpayable":
         // Prepare the writeContract request
         var value = ""; // Initialize the value as an empty string
-        var args = [];
-        var $functionContainer = $(this).closest(".function-field");
-        $functionContainer
-          .find('input[id^="' + settingKey + '_"]')
-          .each(function () {
-            let inputValue = $(this).val();
-            const inputType = $(this).data("type");
 
-            // Convert the input value based on the input type
-            if (inputType === "uint256") {
-              inputValue = Number(inputValue);
-            }
-
-            args.push(inputValue);
-          });
         if (stateMutability === "payable") {
           value = ethers.parseUnits(
             (
@@ -131,46 +134,3 @@ jQuery(document).ready(function ($) {
     }
   });
 });
-
-window.setMintPrice = async function setMintPrice(nftPrice) {
-  // Convert the price to wei (1 MATIC = 10^18 wei)
-  const newNFTPrice = ethers.parseUnits(nftPrice, "ether");
-  const { request } = await prepareWriteContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
-    functionName: "setMintPrice",
-    args: [1],
-    gas: 3000000n,
-    value: newNFTPrice,
-  });
-  const { hash } = await writeContract(request);
-  console.log(hash);
-};
-
-window.setDiscountPercentage = async function setDiscountPercentage(discount) {
-  // Convert the price to wei (1 MATIC = 10^18 wei)
-  const { request } = await prepareWriteContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
-    functionName: "setDiscountPercentage",
-    args: [1],
-    gas: 3000000n,
-    value: discount,
-  });
-  const { hash } = await writeContract(request);
-  console.log(hash);
-};
-
-window.setMaxQuantity = async function setMaxQuantity(discount) {
-  // Convert the price to wei (1 MATIC = 10^18 wei)
-  const { request } = await prepareWriteContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
-    functionName: "setmaxQuantity",
-    args: [1],
-    gas: 3000000n,
-    value: quantity,
-  });
-  const { hash } = await writeContract(request);
-  console.log(hash);
-};

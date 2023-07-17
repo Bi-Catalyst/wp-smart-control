@@ -63,14 +63,20 @@ class My_Mint_Admin
         $my_mint_plugin_settings = array(
             'contractAddress' => get_option(ADMIN_CONTRACT_ADDRESS_FIELD),
             'contractABI' => get_option(ADMIN_CONTRACT_ABI_FIELD),
-            'mintPrice' => get_option('my_mint_plugin_nft_price'),
-            'maxQuantity' => get_option('my_mint_plugin_max_quantity'),
-            'discount' => get_option('my_mint_plugin_discount_percentage'),
+            'mintPrice' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MINT_PRICE'),
+            'maxQuantity' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX .'maxQuantity'),
             'connectButtonIdOrClass' => get_option(MY_MINT_PLUGIN_CONNECT_BUTTON),
             'activeChain' => get_option(ADMIN_ACTIVE_CHAIN_FIELD),
             'mintButtonIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_BUTTON),
             'mintQuantityIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_QUANTITY),
-            'mintercounter' => get_option(MY_MINT_PLUGIN_MINTER_COUNTER)
+            'mintercounter' => get_option(MY_MINT_PLUGIN_MINTER_COUNTER),
+            'popup' => array(
+                'successMessage' => __('Mint successful!', PLUGIN_NAME),
+                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', PLUGIN_NAME),
+                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', PLUGIN_NAME),
+                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', PLUGIN_NAME),
+                'errorMessage' => __('An error occurred.', PLUGIN_NAME)
+            )
         );
 
         // Enqueue non owner write smart contract operatons

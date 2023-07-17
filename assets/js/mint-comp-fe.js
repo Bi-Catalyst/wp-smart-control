@@ -66,7 +66,7 @@ async function getMaticPrice(currency) {
 function crossMintConfig() {
   let quantity = parseInt($(myMintPluginSettings.mintQuantityIdOrClass).val());
   let totalPrice = (
-    quantity * parseFloat(myMintPluginSettings.mintPrice)
+    quantity * parseFloat(ethers.formatEther(myMintPluginSettings.mintPrice))
   ).toFixed(3);
   let type = "erc-721";
 
@@ -125,8 +125,9 @@ jQuery(document).ready(async function ($) {
   increaseBtn.addEventListener("click", increaseQuantity);
 
   // Set mint price value
+  
   jQuery(".final-nft-price-crypto").text(
-    myMintPluginSettings.mintPrice + " MATIC"
+    ethers.formatEther(myMintPluginSettings.mintPrice) + " MATIC"
   );
 
   try {
@@ -156,7 +157,7 @@ jQuery(document).ready(async function ($) {
         jQuery(".final-nft-price").text(
           "CHF " +
             (
-              Number.parseFloat(myMintPluginSettings.mintPrice) *
+              Number.parseFloat(ethers.formatEther(myMintPluginSettings.mintPrice)) *
               Number.parseFloat(price)
             ).toFixed(4) +
             ".-"

@@ -247,7 +247,6 @@
   margin-bottom: 5px;
 }
 
-
 .pwrap .function-field input[type="text"],
 .pwrap .function-field input[type="number"] {
   width: 100%;
@@ -261,6 +260,11 @@
   margin-top: 10px;
   font-weight: bold;
   padding: 8px;
+  width: 80%;
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  /* overflow: hidden; */
+  whitespace: no-wrap;
 }
 
 .function-inputs {
@@ -268,9 +272,13 @@
   flex-wrap: wrap;
   align-items: center;
   margin-right: 10px;
+  width: 80%;
+  padding: 8px;
 }
-
-.function-inputs label {
+.function-inputs div {
+  width: 100%;
+}
+.function-inputs div label {
   margin-right: 5px;
 }
 
