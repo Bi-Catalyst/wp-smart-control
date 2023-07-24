@@ -2,8 +2,8 @@ jQuery(document).ready(function ($) {
   // Trigger function button click event
   $(".trigger-function").on("click", function (e) {
     e.preventDefault();
-    var settingKey = $(this).data("setting-key");
-    var functionName = settingKey.replace("my_mint_plugin_function_", "");
+    const settingKey = $(this).data("setting-key");
+    var functionName = settingKey.replace("mint-craft-function_", "");
 
     // Get the contract address and ABI from the myMintPluginSettings object
     var contractAddress = myMintPluginSettings.contractAddress;

@@ -1,32 +1,35 @@
 <?php
 
-require_once dirname(__FILE__) . '/../constants.php';
+// mint-craft-admin-functions-tab.php
 
-// class-admin-functions-tab.php
 /**
- * Admin functions settings tab
+ * Mint Craft Admin functions settings tab
  * This tab will be responsible for calling smart contract functions that require the owner
  */
-class Admin_Functions_Tab
+
+require_once dirname(__FILE__) . '/../constants.php';
+
+
+class Mint_Craft_Admin_Functions_Tab
 {
     /**
      * Render the content of the admin functions tab.
      */
     public static function render()
     {
-        $default_sub_tab = ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
+        $default_sub_tab = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
 
         $active_sub_tab = isset($_GET['sub_tab']) ? $_GET['sub_tab'] : $default_sub_tab;
         $tab_groups = self::get_tab_groups();
         ?>
 
-        <div class="pwrap">
+        <div class="mint-craft">
             <h2 class="nav-tab-wrapper">
                 <?php
                 // Render the tab navigation
                 foreach ($tab_groups as $group) {
                     $active_class = ($group['id'] === $active_sub_tab) ? 'nav-tab-active' : '';
-                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . ADMIN_MENU_SLUG . '&tab=admin_functions'));
+                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . MC_ADMIN_MENU_SLUG . '&tab=admin_functions'));
                     echo '<a href="' . esc_url($url) . '" class="nav-tab ' . $active_class . '">' . $group['label'] . '</a>';
                 }
                 ?>
@@ -70,7 +73,7 @@ class Admin_Functions_Tab
         }
 
         // Retrieve the contract ABI
-        $contract_abi = get_option(ADMIN_CONTRACT_ABI_FIELD);
+        $contract_abi = get_option(MC_ADMIN_CONTRACT_ABI_FIELD);
         if (!empty($contract_abi)) {
             // Group the functions based on stateMutability
             $functions_by_state = array(
@@ -104,7 +107,7 @@ class Admin_Functions_Tab
                 }
 
                 // Add the group title
-                $group_id = ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
+                $group_id = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_title = self::get_state_mutability_title($state);
 
                 // Loop through the functions and add the fields
@@ -113,13 +116,13 @@ class Admin_Functions_Tab
                     if (!isset($function['name'])) {
                         continue;
                     }
-                    $field_id = ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
+                    $field_id = MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
                     $readable_function_name = self::get_readable_function_name($function['name']);
 
                     // Add a field for the function
                     add_settings_field(
                         $field_id,
-                        __($readable_function_name, PLUGIN_NAME),
+                        __($readable_function_name, MC_PLUGIN_NAME),
                         array(__CLASS__, 'render_function_field'),
                         $group_id,
                         $group_id,
@@ -147,15 +150,15 @@ class Admin_Functions_Tab
     {
         switch ($state) {
             case 'nonpayable':
-                return __('Nonpayable Functions', PLUGIN_NAME);
+                return __('Nonpayable Functions', MC_PLUGIN_NAME);
             case 'payable':
-                return __('Payable Functions', PLUGIN_NAME);
+                return __('Payable Functions', MC_PLUGIN_NAME);
             case 'view':
-                return __('View Functions', PLUGIN_NAME);
+                return __('View Functions', MC_PLUGIN_NAME);
             case 'event':
-                return __('Events', PLUGIN_NAME);
+                return __('Events', MC_PLUGIN_NAME);
             default:
-                return __('Other Functions', PLUGIN_NAME);
+                return __('Other Functions', MC_PLUGIN_NAME);
         }
     }
 
@@ -169,7 +172,7 @@ class Admin_Functions_Tab
         $function = $args['function'];
 
         if (isset($function['name'])) {
-            $field_id = ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
+            $field_id = MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
             $field_value = get_option($field_id);
             $has_inputs = !empty($function['inputs']);
             $has_outputs = !empty($function['outputs']);
@@ -185,22 +188,22 @@ class Admin_Functions_Tab
                 echo '<div class="function-inputs">';
                 foreach ($function['inputs'] as $input) {
                     echo '<div><label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . $input['name'] . '</label>';
-                    echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) .'" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
+                    echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) . '" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
                 }
                 echo '</div>'; // close function-inputs
             }
 
             $f_r = empty($field_value) ? 'no value' : esc_attr($field_value);
             if ($has_outputs) {
-                echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id)  . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
+                echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id) . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
             }
 
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', PLUGIN_NAME) . '</button>';
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', MC_PLUGIN_NAME) . '</button>';
 
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
         } else {
-            echo '<p class="description">' . __('Invalid function', PLUGIN_NAME) . '</p>';
+            echo '<p class="description">' . __('Invalid function', MC_PLUGIN_NAME) . '</p>';
         }
     }
 
@@ -222,7 +225,7 @@ class Admin_Functions_Tab
      */
     private static function get_tab_groups()
     {
-        $contract_abi = get_option(ADMIN_CONTRACT_ABI_FIELD);
+        $contract_abi = get_option(MC_ADMIN_CONTRACT_ABI_FIELD);
         $tab_groups = array();
 
         if (!empty($contract_abi)) {
@@ -237,7 +240,7 @@ class Admin_Functions_Tab
                 if ($state === '') {
                     $state = 'event';
                 }
-                $group_id = ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
+                $group_id = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_label = self::get_state_mutability_title($state);
                 $active = ($state === 'nonpayable'); // Set the first tab as active
 

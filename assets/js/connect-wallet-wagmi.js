@@ -23,6 +23,10 @@ const { polygon, polygonMumbai } = WagmiCoreChains;
 const { publicProvider, jsonRpcProvider, alchemyProvider, infuraProvider } =
   WagmiCoreProviders;
 
+// let _polygonMumbai = polygonMumbai
+// _polygonMumbai.rpcUrls.default.https = ['https://rpc-mumbai.maticvigil.com/']
+// _polygonMumbai.rpcUrls.public.https = ['https://rpc-mumbai.maticvigil.com/']
+
 const {
   configureChains,
   createConfig,

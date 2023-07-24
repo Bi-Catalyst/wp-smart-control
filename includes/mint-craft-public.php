@@ -5,13 +5,13 @@
  * @link       https://yourwebsite.com
  * @since      0.0.1
  *
- * @package    My_Mint_Plugin
- * @subpackage My_Mint_Plugin/public
+ * @package    Min_Craft
+ * @subpackage Min_Craft/public
  */
 
 require_once 'constants.php';
 
-class My_Mint_Public
+class Min_Craft_Public
 {
 
     /**
@@ -45,7 +45,7 @@ class My_Mint_Public
     public function enqueue_connect_wallet_script()
     {
         // This will work on browsers that support newer Javascript syntax
-        echo '<script type="module" src="' . plugin_dir_url(MY_MINT_PLUGIN_FILE) . '/assets/js/connect-wallet-wagmi.js"/>';
+        echo '<script type="module" src="' . plugin_dir_url(PLUGIN_ROOT_PATH) . '/assets/js/connect-wallet-wagmi.js"/>';
     }
 
     public function enqueue_scripts()
@@ -55,32 +55,32 @@ class My_Mint_Public
 
         // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
-            'contractAddress' => get_option(ADMIN_CONTRACT_ADDRESS_FIELD),
-            'contractABI' => get_option(ADMIN_CONTRACT_ABI_FIELD),
-            'mintPrice' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MINT_PRICE'),
-            'maxQuantity' => get_option(ADMIN_FUNCTIONS_FIELDS_PREFIX .'maxQuantity'),
-            'connectButtonIdOrClass' => get_option(MY_MINT_PLUGIN_CONNECT_BUTTON),
-            'activeChain' => get_option(ADMIN_ACTIVE_CHAIN_FIELD),
-            'mintButtonIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_BUTTON),
-            'mintQuantityIdOrClass' => get_option(MY_MINT_PLUGIN_MINT_QUANTITY),
-            'mintercounter' => get_option(MY_MINT_PLUGIN_MINTER_COUNTER),
+            'contractAddress' => get_option(MC_ADMIN_CONTRACT_ADDRESS_FIELD),
+            'contractABI' => get_option(MC_ADMIN_CONTRACT_ABI_FIELD),
+            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX .'maxQuantity'),
+            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
+            'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
+            'mintButtonIdOrClass' => get_option(MC_PLUGIN_MINT_BUTTON),
+            'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
+            'mintercounter' => get_option(MC_PLUGIN_MINTER_COUNTER),
             'popup' => array(
-                'successMessage' => __('Mint successful!', PLUGIN_NAME),
-                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', PLUGIN_NAME),
-                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', PLUGIN_NAME),
-                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', PLUGIN_NAME),
-                'errorMessage' => __('An error occurred.', PLUGIN_NAME)
+                'successMessage' => __('Mint successful!', MC_PLUGIN_NAME),
+                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', MC_PLUGIN_NAME),
+                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', MC_PLUGIN_NAME),
+                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', MC_PLUGIN_NAME),
+                'errorMessage' => __('An error occurred.', MC_PLUGIN_NAME)
             )
         );
 
         // Enqueue non owner write smart contract operatons
-        // wp_enqueue_script('sc-write-fe', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
+        // wp_enqueue_script('sc-write-fe', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
 
         // Enqueue read smart contract operations
-        wp_enqueue_script('sc-read', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/sc-read.js', array('jquery', 'ethers'), '0.0.1', true);
+        wp_enqueue_script('sc-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-read.js', array('jquery', 'ethers'), '0.0.1', true);
 
         // Enqueue js logic for mint ui component
-        wp_enqueue_script('mint-frontend', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/js/mint-comp-fe.js', array('jquery', 'ethers', 'sc-read'), '0.0.1', true);
+        wp_enqueue_script('mint-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/mint-craft-frontend.js', array('jquery', 'ethers', 'sc-read'), '0.0.1', true);
 
         // Enqueue crossmint script
         wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'sc-read', 'mint-frontend'), '0.1.0', true);
@@ -89,7 +89,7 @@ class My_Mint_Public
         wp_localize_script('mint-frontend', 'myMintPluginSettings', $my_mint_plugin_settings);
 
         // Enqueue your custom styles
-        wp_enqueue_style('my-mint-plugin-style', plugin_dir_url(MY_MINT_PLUGIN_FILE) . 'assets/css/my-mint-plugin.css', array(), '0.0.1');
+        wp_enqueue_style('mint-craft-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/mint-craft-frontend.css', array(), '0.0.1');
     }
     /**
      * Connect wallet shortcode.
@@ -203,4 +203,4 @@ class My_Mint_Public
 }
 
 // Instantiate the public class.
-new My_Mint_Public();
+new Min_Craft_Public();

@@ -2,28 +2,28 @@
 // constants.php
 
 // Constant for plugin name
-define('PLUGIN_NAME', 'my-mint-plugin');
+define('MC_PLUGIN_NAME', 'mint-craft');
 // MENU SLUG
-define('ADMIN_MENU_SLUG', 'my-mint-plugin-settings');
+define('MC_ADMIN_MENU_SLUG', 'mint-craft-settings');
 
 // Constants for contract settings
-define('ADMIN_CONTRACT_ADDRESS_FIELD', 'my_mint_plugin_contract_address');
-define('ADMIN_CONTRACT_ABI_FIELD', 'my_mint_plugin_contract_abi');
+define('MC_ADMIN_CONTRACT_ADDRESS_FIELD', 'mint-craft-contract_address');
+define('MC_ADMIN_CONTRACT_ABI_FIELD', 'mint-craft-contract_abi');
 // Constants for general settings tab
-define('ADMIN_ACTIVE_CHAIN_FIELD', 'my_mint_plugin_active_chain');
-define('ADMIN_GENERAL_PAGE', 'general_settings_tab');
-define('ADMIN_GENERAL_SECTION_TITLE', 'my_mint_plugin_general');
-define('ADMIN_GENERAL_FIELDS', 'general_settings_fields_tab');
+define('MC_ADMIN_ACTIVE_CHAIN_FIELD', 'mint-craft-active_chain');
+define('MC_ADMIN_GENERAL_PAGE', 'general-settings-tab');
+define('MC_ADMIN_GENERAL_SECTION_TITLE', 'mint-craft-general');
+define('MC_ADMIN_GENERAL_FIELDS', 'mint-craft-general-settings-fields');
 // Constants for style settings tab
-define('MY_MINT_PLUGIN_CONNECT_BUTTON', 'my_mint_plugin_connect_button');
-define('MY_MINT_PLUGIN_MINT_BUTTON', 'my_mint_plugin_mint_button');
-define('MY_MINT_PLUGIN_MINT_QUANTITY', 'my_mint_plugin_mint_quantity');
-define('MY_MINT_PLUGIN_MINTER_COUNTER', 'my_mint_plugin_minter_counter');
-define('ADMIN_STYLE_TAB', 'admin_style_tab');
-define('ADMIN_STYLE_SECTION_TITLE', 'my_mint_plugin_admin_styles');
+define('MC_PLUGIN_CONNECT_BUTTON', 'mint-craft-connect_button');
+define('MC_PLUGIN_MINT_BUTTON', 'mint-craft-mint_button');
+define('MC_PLUGIN_MINT_QUANTITY', 'mint-craft-mint_quantity');
+define('MC_PLUGIN_MINTER_COUNTER', 'mint-craft-minter_counter');
+define('MC_ADMIN_STYLE_TAB', 'mint-craft-admin-style-tab');
+define('MC_ADMIN_STYLE_SECTION_TITLE', 'mint-craft-admin_styles');
 // Constants for functions settings tab
-define('ADMIN_FUNCTIONS_SECTION_PREFIX', 'my_mint_plugin_admin_functions_');
-define('ADMIN_FUNCTIONS_FIELDS_PREFIX', 'my_mint_plugin_function_');
+define('MC_ADMIN_FUNCTIONS_SECTION_PREFIX', 'mint-craft-admin_functions_');
+define('MC_ADMIN_FUNCTIONS_FIELDS_PREFIX', 'mint-craft-function_');
 
 
 

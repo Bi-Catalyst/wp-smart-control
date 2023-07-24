@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Plugin Name: My Mint Plugin
- * Description: WordPress plugin for connecting wallets and minting NFTs.
+ * Plugin Name: Mint Craft
+ * Description: WordPress plugin to execute any smart contract function from the admin and mint NFTs on frontend
  * Version: 0.0.1
  * Author: Mohamed Habbat
  *
- * @package My_Mint_Plugin
+ * @package Min_Craft
  */
 
 // Exit if accessed directly.
@@ -16,12 +16,12 @@ if (!defined('ABSPATH')) {
 
 require_once dirname(__FILE__) . '/includes/constants.php';
 
-define('MY_MINT_PLUGIN_FILE', __FILE__);
+define('PLUGIN_ROOT_PATH', __FILE__);
 
 /**
  * The main class that initializes the plugin.
  */
-class My_Mint_Plugin
+class Min_Craft
 {
     /**
      * Plugin text domain.
@@ -35,7 +35,7 @@ class My_Mint_Plugin
      */
     public function __construct()
     {
-        $this->plugin_text_domain = PLUGIN_NAME;
+        $this->plugin_text_domain = MC_PLUGIN_NAME;
 
         // Load plugin text domain for translations.
         add_action('plugins_loaded', array($this, 'load_plugin_textdomain'));
@@ -50,10 +50,10 @@ class My_Mint_Plugin
     private function load_dependencies()
     {
         // Include the admin functionality.
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-my-mint-admin.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/mint-craft-admin.php';
 
         // Include the public functionality.
-        require_once plugin_dir_path(__FILE__) . 'includes/class-my-mint-public.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/mint-craft-public.php';
     }
 
     /**
@@ -78,10 +78,10 @@ class My_Mint_Plugin
     {
         // Instantiate the admin class.
         if (is_admin()) {
-            $admin = new My_Mint_Admin();
+            $admin = new Mint_Craft_Admin();
         }
     }
 }
 
 // Instantiate the main plugin class.
-new My_Mint_Plugin();
+new Min_Craft();

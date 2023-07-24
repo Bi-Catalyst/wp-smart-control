@@ -4,7 +4,7 @@ window.getMintPrice = async function getMintPrice(fn) {
   const data = await readContract({
     address: myMintPluginSettings.contractAddress,
     abi: myMintPluginSettings.contractABI,
-    functionName: "MINT_PRICE",
+    functionName: "mintPrice",
   });
   console.log(data);
   const maticAmount = ethers.formatUnits(data, "ether");
