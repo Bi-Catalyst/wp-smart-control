@@ -20,7 +20,10 @@ jQuery(document).ready(function ($) {
       .each(function () {
         let inputValue = $(this).val();
         const inputType = $(this).data("type");
-
+        const name = $(this).attr("name");
+        if(name.includes('Price')){
+          inputValue = ethers.parseUnits(inputValue, 18);
+        }
         // Convert the input value based on the input type
         if (inputType === "uint256") {
           inputValue = Number(inputValue);
@@ -46,7 +49,11 @@ jQuery(document).ready(function ($) {
             // $("#" + settingKey).val(response);
 
             // Example: Display the result in a separate element
-            $("#" + settingKey + "_result").val(response);
+            if (settingKey.includes("Price")) {
+              $("#" + settingKey + "_result").val(ethers.formatEther(response));
+            } else {
+              $("#" + settingKey + "_result").val(response);
+            }
           })
           .catch(function (error) {
             console.log(error);

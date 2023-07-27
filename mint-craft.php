@@ -38,7 +38,7 @@ class Min_Craft
         $this->plugin_text_domain = MC_PLUGIN_NAME;
 
         // Load plugin text domain for translations.
-        add_action('plugins_loaded', array($this, 'load_plugin_textdomain'));
+        add_action('init', array($this, 'load_plugin_textdomain'));
 
         $this->load_dependencies();
         $this->initialize();

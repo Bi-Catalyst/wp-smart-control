@@ -36,7 +36,7 @@ class Mint_Craft_General_Settings_Tab
         // Register a settings section.
         add_settings_section(
             MC_ADMIN_GENERAL_SECTION_TITLE,
-            __('General Settings', MC_PLUGIN_NAME),
+            __('General Settings', 'mint-craft'),
             array(__CLASS__, 'render_general_settings_section'),
             MC_ADMIN_GENERAL_PAGE
         );
@@ -65,7 +65,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for contract address.
         add_settings_field(
             MC_ADMIN_CONTRACT_ADDRESS_FIELD,
-            __('Contract Address', MC_PLUGIN_NAME),
+            __('Contract Address', 'mint-craft'),
             array(__CLASS__, 'render_contract_address_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -74,7 +74,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for contract ABI.
         add_settings_field(
             MC_ADMIN_CONTRACT_ABI_FIELD,
-            __('Contract ABI', MC_PLUGIN_NAME),
+            __('Smart Contract ABI', 'mint-craft'),
             array(__CLASS__, 'render_contract_abi_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE,
@@ -84,7 +84,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for active chain selection.
         add_settings_field(
             MC_ADMIN_ACTIVE_CHAIN_FIELD,
-            __('Active Chain', MC_PLUGIN_NAME),
+            __('Active Chain', 'mint-craft'),
             array(__CLASS__, 'render_active_chain_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -96,7 +96,7 @@ class Mint_Craft_General_Settings_Tab
      */
     public static function render_general_settings_section()
     {
-        echo '<p>' . esc_html__('Smart contract and network settings.', MC_PLUGIN_NAME) . '</p>';
+        echo '<p>' . esc_html__('Smart contract and network settings.', 'mint-craft') . '</p>';
     }
 
     /**
@@ -109,13 +109,13 @@ class Mint_Craft_General_Settings_Tab
         <input type="text" name="<?php echo MC_ADMIN_CONTRACT_ADDRESS_FIELD; ?>"
             value="<?php echo esc_attr($contract_address); ?>" class="regular-text" />
         <p class="description">
-            <?php _e('Enter the contract address for your NFTs.', MC_PLUGIN_NAME); ?>
+            <?php __('Enter the contract address for your NFTs.', MC_PLUGIN_NAME); ?>
         </p>
         <?php
     }
 
     /**
-     * Render the contract ABI field.
+     * Render the Smart contract ABI field.
      *
      * @param array $args The field arguments.
      */
@@ -130,10 +130,10 @@ class Mint_Craft_General_Settings_Tab
     }
 
     /**
-     * Sanitize the contract ABI field.
+     * Sanitize the smart contract ABI field.
      *
      * @param mixed $input The input value to sanitize.
-     * @return array The sanitized contract ABI array.
+     * @return array The sanitized smart contract ABI array.
      */
     public static function sanitize_contract_abi_field($input)
     {
@@ -156,7 +156,7 @@ class Mint_Craft_General_Settings_Tab
             <option value="137" <?php selected($active_chain, '137'); ?>>Polygon Mainnet</option>
         </select>
         <p class="description">
-            <?php _e('Select the active chain for your plugin.', MC_PLUGIN_NAME); ?>
+            <?php __('Select the active chain for your plugin.', MC_PLUGIN_NAME); ?>
         </p>
         <?php
     }

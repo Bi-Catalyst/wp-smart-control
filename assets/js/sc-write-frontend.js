@@ -1,4 +1,3 @@
-
 window.mint = async function mint(quantity) {
   const weiAmount = ethers.parseUnits(
     (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),

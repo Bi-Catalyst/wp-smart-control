@@ -61,22 +61,30 @@ class Mint_Craft_Admin
 
         // Enqueue your custom admin script file
         // Define the data to be passed to the JavaScript file
+        // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
+            'pluginName' => MC_PLUGIN_NAME,
+            // mint-craft-function_MAX_SUPPLY
+            'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MAX_SUPPLY'),
+            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
+            'totalSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
             'contractAddress' => get_option(MC_ADMIN_CONTRACT_ADDRESS_FIELD),
             'contractABI' => get_option(MC_ADMIN_CONTRACT_ABI_FIELD),
-            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MINT_PRICE'),
-            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
-            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
             'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
+            // styles
+            'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
+            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
             'mintButtonIdOrClass' => get_option(MC_PLUGIN_MINT_BUTTON),
             'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
-            'mintercounter' => get_option(MC_PLUGIN_MINTER_COUNTER),
+            // 
             'popup' => array(
-                'successMessage' => __('Mint successful!', MC_PLUGIN_NAME),
-                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', MC_PLUGIN_NAME),
-                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', MC_PLUGIN_NAME),
-                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', MC_PLUGIN_NAME),
-                'errorMessage' => __('An error occurred.', MC_PLUGIN_NAME)
+                'errorQuantity' => __('Maximum quantity allowed is', 'mint-craft'),
+                'errorChain' => __('Please switch to active chain', 'mint-craft'),
+                'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'mint-craft'),
+                'errorFunds' => __('Not enough funds in the wallet.', 'mint-craft'),
+                'generalError' => __('An error occurred.', 'mint-craft'),
+                'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'mint-craft'),
             )
         );
 
@@ -137,8 +145,8 @@ class Mint_Craft_Admin
     public function add_menu_page()
     {
         add_menu_page(
-            __('Mint Craft' . ' Settings', MC_PLUGIN_NAME),
-            __('Mint Craft', MC_PLUGIN_NAME),
+            __('Mint Craft' . ' Settings', 'mint-craft'),
+            __('Mint Craft', 'mint-craft'),
             'manage_options',
             MC_ADMIN_MENU_SLUG,
             array($this, 'render_settings_page'),
@@ -155,7 +163,7 @@ class Mint_Craft_Admin
         ?>
         <div class="mint-craft">
             <h1>
-                <?php echo esc_html__('Mint Craft' . ' Settings', MC_PLUGIN_NAME); ?>
+                <?php echo esc_html__('Mint Craft', 'mint-craft'); ?>
 
             </h1>
             <?php
@@ -164,15 +172,15 @@ class Mint_Craft_Admin
             <h2 class="nav-tab-wrapper">
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>" class="nav-tab <?php if (!isset($_GET['tab']) || $_GET['tab'] === 'general')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('General Settings', MC_PLUGIN_NAME); ?>
+                    <?php echo esc_html__('General Settings', 'mint-craft'); ?>
                 </a>
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=admin_functions" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Admin Functions', MC_PLUGIN_NAME); ?>
+                    <?php echo esc_html__('Admin Operations', 'mint-craft'); ?>
                 </a>
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Buttons Style', MC_PLUGIN_NAME); ?>
+                    <?php echo esc_html__('Buttons Style', 'mint-craft'); ?>
                 </a>
             </h2>
             <?php

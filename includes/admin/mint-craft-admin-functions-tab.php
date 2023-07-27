@@ -122,7 +122,7 @@ class Mint_Craft_Admin_Functions_Tab
                     // Add a field for the function
                     add_settings_field(
                         $field_id,
-                        __($readable_function_name, MC_PLUGIN_NAME),
+                        '<div class="function-header"><h4>' . $readable_function_name . '</h4></div>',
                         array(__CLASS__, 'render_function_field'),
                         $group_id,
                         $group_id,
@@ -150,15 +150,15 @@ class Mint_Craft_Admin_Functions_Tab
     {
         switch ($state) {
             case 'nonpayable':
-                return __('Nonpayable Functions', MC_PLUGIN_NAME);
+                return __('Non Payable Operations', 'mint-craft');
             case 'payable':
-                return __('Payable Functions', MC_PLUGIN_NAME);
+                return __('Payable Operations', 'mint-craft');
             case 'view':
-                return __('View Functions', MC_PLUGIN_NAME);
+                return __('View Operations','mint-craft');
             case 'event':
-                return __('Events', MC_PLUGIN_NAME);
+                return __('Events', 'mint-craft');
             default:
-                return __('Other Functions', MC_PLUGIN_NAME);
+                return __('Other Operations', 'mint-craft');
         }
     }
 
@@ -179,7 +179,7 @@ class Mint_Craft_Admin_Functions_Tab
 
             echo '<div class="function-field">';
             // echo '<div class="function-header">';
-            // echo '<h3>' . $function['name'] . '</h3>';
+            // echo '<h3>' . self::get_readable_function_name($function['name']) . '</h3>';
             // echo '</div>'; // close function-header
 
             echo '<div class="function-actions">';
@@ -187,7 +187,7 @@ class Mint_Craft_Admin_Functions_Tab
             if ($has_inputs) {
                 echo '<div class="function-inputs">';
                 foreach ($function['inputs'] as $input) {
-                    echo '<div><label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . $input['name'] . '</label>';
+                    echo '<div><label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . self::get_readable_function_name($input['name']) . '</label>';
                     echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) . '" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
                 }
                 echo '</div>'; // close function-inputs
@@ -203,7 +203,7 @@ class Mint_Craft_Admin_Functions_Tab
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
         } else {
-            echo '<p class="description">' . __('Invalid function', MC_PLUGIN_NAME) . '</p>';
+            echo '<p class="description">' . __('Invalid smart contract opeartion', 'mint-craft') . '</p>';
         }
     }
 

@@ -299,3 +299,11 @@
 .function-list {
   margin-top: 20px;
 }
+
+.function-header {
+  display: flex;
+  justify-content: left; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  height: 100%; /* Make the div take the full height of its parent */
+  width: 100%;
+}

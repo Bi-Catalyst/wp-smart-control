@@ -55,21 +55,28 @@ class Min_Craft_Public
 
         // Define the data to be passed to the JavaScript file
         $my_mint_plugin_settings = array(
+            'pluginName' => MC_PLUGIN_NAME,
+            // mint-craft-function_MAX_SUPPLY
+            'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MAX_SUPPLY'),
+            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
+            'totalSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
             'contractAddress' => get_option(MC_ADMIN_CONTRACT_ADDRESS_FIELD),
             'contractABI' => get_option(MC_ADMIN_CONTRACT_ABI_FIELD),
-            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
-            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX .'maxQuantity'),
-            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
             'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
+            // styles
+            'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
+            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
             'mintButtonIdOrClass' => get_option(MC_PLUGIN_MINT_BUTTON),
             'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
-            'mintercounter' => get_option(MC_PLUGIN_MINTER_COUNTER),
+            // 
             'popup' => array(
-                'successMessage' => __('Mint successful!', MC_PLUGIN_NAME),
-                'termAndcondition' => __('Error: Please accept T&C to mint TokyBird NFT.', MC_PLUGIN_NAME),
-                'walletNotConnectedMessage' => __('Error: Wallet is not connected.', MC_PLUGIN_NAME),
-                'insufficientFundsMessage' => __('Error: Not enough funds in the wallet.', MC_PLUGIN_NAME),
-                'errorMessage' => __('An error occurred.', MC_PLUGIN_NAME)
+                'errorQuantity' => __('Maximum quantity allowed is', 'mint-craft'),
+                'errorChain' => __('Please switch to active chain', 'mint-craft'),
+                'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'mint-craft'),
+                'errorFunds' => __('Not enough funds in the wallet.', 'mint-craft'),
+                'generalError' => __('An error occurred.', 'mint-craft'),
+                'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'mint-craft'),
             )
         );
 
@@ -138,19 +145,19 @@ class Min_Craft_Public
      * @return string The shortcode output.
      */
 
-    public function crossmint_shortcode()
-    {
-        ob_start();
-        ?>
-        <crossmint-pay-button class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" environment="staging"
-            mintConfig='{
-            "type": "erc-721",
-            "quantity": "1",
-            "totalPrice": "0.001"
-        }' />
-        <?php
-        return ob_get_clean();
-    }
+     public function crossmint_shortcode()
+     {
+         ob_start();
+         ?>
+         <crossmint-pay-button class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989" collectionId="41d23af9-b8c0-4930-8306-3471ce7b153b"
+             projectId="d053727b-90ce-45fb-bb65-ba9c833009d0" environment="staging" mintConfig='<?php echo json_encode([
+                 "type" => "erc-721",
+                 "quantity" => "1",
+                 "totalPrice" => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
+             ]); ?>' />
+         <?php
+         return ob_get_clean();
+     }
 
     /**
      * Mint button shortcode.

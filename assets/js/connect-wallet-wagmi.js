@@ -41,7 +41,7 @@ const {
 const chains = [polygonMumbai, polygon];
 
 const { publicClient } = configureChains(chains, [
-  publicProvider(),
+  // publicProvider(),
   alchemyProvider({ apiKey: "REDACTED_ALCHEMY_KEY" }),
   // infuraProvider({ apiKey: "REDACTED_INFURA_KEY" }),
   w3mProvider({ projectId }),
@@ -70,14 +70,18 @@ window.mint = async function mint(quantity) {
         if (_chain.id === Number.parseInt(myMintPluginSettings.activeChain)) {
           showPopup(
             "error",
-            "Please switch to active chain ".concat(" ", _chain.name)
+            myMintPluginSettings.popup.errorChain.concat(" ", _chain.name)
           );
           break;
         }
       }
       return;
     }
-    const weiAmount = myMintPluginSettings.mintPrice;
+    // const weiAmount = myMintPluginSettings.mintPrice;
+    const weiAmount = ethers.parseUnits(
+      (quantity * Number.parseFloat(myMintPluginSettings.mintPrice)).toString(),
+      "ether"
+    );
     const { request } = await prepareWriteContract({
       address: myMintPluginSettings.contractAddress,
       abi: myMintPluginSettings.contractABI,
@@ -98,7 +102,7 @@ window.mint = async function mint(quantity) {
     if (explorerURL) {
       var popupHTML = `
       <div class="popup-content">
-        <p>Transaction submitted successfully. Check it <a href="${explorerURL}" target="_blank">here</a>.</p>
+        <p>${myMintPluginSettings.popup.sucessMint} <a href="${explorerURL}" target="_blank">here</a>.</p>
       </div>
       `;
       showPopup("success", popupHTML);
@@ -114,7 +118,7 @@ function triggerMint() {
     window.localStorage.getItem("TRIGGER_MINT") === "true"
   ) {
     window.localStorage.getItem("TRIGGER_MINT") === "false";
-    let quantity = parseInt(
+    let quantity = Number.parseInt(
       $(myMintPluginSettings.mintQuantityIdOrClass).val()
     );
 
@@ -167,7 +171,10 @@ web3modal.subscribeEvents((newState) => {
         //   console.error(addError);
         // }
       });
-  } else if (name === "ACCOUNT_CONNECTED") {
+  } else if (
+    name === "ACCOUNT_CONNECTED" &&
+    window.localStorage.getItem("TRIGGER_MINT") === "true"
+  ) {
     triggerMint();
   }
   console.log(newState);

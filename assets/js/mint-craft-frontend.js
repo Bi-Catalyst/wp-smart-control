@@ -64,19 +64,30 @@ async function getMaticPrice(currency) {
 }
 
 function crossMintConfig() {
-  let quantity = parseInt($(myMintPluginSettings.mintQuantityIdOrClass).val());
-  let totalPrice = (
-    quantity * parseFloat(ethers.formatEther(myMintPluginSettings.mintPrice))
+  const quantity = Number.parseInt(
+    document.querySelector(myMintPluginSettings.mintQuantityIdOrClass).value
+  );
+  // if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
+  //   showPopup(
+  //     "error",
+  //     "Maximum quantity allowed is " + myMintPluginSettings.maxQuantity
+  //   );
+  //   return;
+  // }
+  const totalPrice = (
+    quantity * Number.parseFloat(myMintPluginSettings.mintPrice)
   ).toFixed(3);
-  let type = "erc-721";
+  const type = "erc-721";
 
-  let mintConfig = {
+  const mintConfig = {
     type: type,
     quantity: quantity,
     totalPrice: totalPrice.toString(),
   };
   // Update mintConfig attribute with the new JSON value
-  $("crossmint-pay-button").attr("mintConfig", JSON.stringify(mintConfig));
+  document
+    .querySelector("crossmint-pay-button")
+    .setAttribute("mintConfig", JSON.stringify(mintConfig));
 }
 
 // Function to handle the "decrease" button click
@@ -84,7 +95,7 @@ function decreaseQuantity() {
   var quantityInput = document.querySelector(
     myMintPluginSettings.mintQuantityIdOrClass
   );
-  var currentValue = parseInt(quantityInput.value);
+  var currentValue = Number.parseInt(quantityInput.value);
 
   if (currentValue > 1) {
     quantityInput.value = currentValue - 1;
@@ -97,16 +108,24 @@ function increaseQuantity() {
   var quantityInput = document.querySelector(
     myMintPluginSettings.mintQuantityIdOrClass
   );
-  var currentValue = parseInt(quantityInput.value);
-
-  if (currentValue < 5) {
+  var currentValue = Number.parseInt(quantityInput.value);
+  if (currentValue + 1 > myMintPluginSettings.maxQuantity) {
+    showPopup(
+      "error",
+      myMintPluginSettings.pupup.errorQuantity + ' ' + myMintPluginSettings.maxQuantity
+    );
+    return;
+  } else {
     quantityInput.value = currentValue + 1;
+    crossMintConfig();
   }
-  crossMintConfig();
 }
 
 jQuery(document).ready(async function ($) {
   // Add popup
+  document
+    .querySelector(myMintPluginSettings.mintQuantityIdOrClass)
+    .setAttribute("max", Number.parseInt(myMintPluginSettings.maxQuantity) + 1);
   if ($("#popup").length === 0) {
     // Create the popup element
     var popup = $(
@@ -125,26 +144,30 @@ jQuery(document).ready(async function ($) {
   increaseBtn.addEventListener("click", increaseQuantity);
 
   // Set mint price value
-  
+
   jQuery(".final-nft-price-crypto").text(
-    ethers.formatEther(myMintPluginSettings.mintPrice) + " MATIC"
+    myMintPluginSettings.mintPrice + " MATIC"
   );
 
   try {
+    jQuery(myMintPluginSettings.minterCounterIdOrClass).text(
+      myMintPluginSettings.totalSupply
+    );
     await getTotalSupply(function (data) {
-      jQuery(myMintPluginSettings.mintercounter).text(data);
+      jQuery(myMintPluginSettings.minterCounterIdOrClass).text(data);
     });
   } catch (error) {
     console.log(error);
-    // jQuery(myMintPluginSettings.mintercounter).text(data);
+    // jQuery(myMintPluginSettings.minterCounterIdOrClass).text(data);
   }
 
   try {
+    jQuery("#total-nft-sup").text(myMintPluginSettings.maxSupply);
     await getMaxSupply(function (data) {
       jQuery("#total-nft-sup").text(data);
     });
   } catch (error) {
-    jQuery("#total-nft-sup").text("3000");
+    console.log(error);
   }
 
   // Get matic value on Fiat
@@ -157,7 +180,7 @@ jQuery(document).ready(async function ($) {
         jQuery(".final-nft-price").text(
           "CHF " +
             (
-              Number.parseFloat(ethers.formatEther(myMintPluginSettings.mintPrice)) *
+              Number.parseFloat(myMintPluginSettings.mintPrice) *
               Number.parseFloat(price)
             ).toFixed(4) +
             ".-"
@@ -167,7 +190,7 @@ jQuery(document).ready(async function ($) {
     .catch((error) => {
       console.log("Error:", error);
     });
-
+  crossMintConfig();
   $(document).on(
     "click",
     myMintPluginSettings.mintButtonIdOrClass,
@@ -180,7 +203,7 @@ jQuery(document).ready(async function ($) {
         await web3modal.openModal();
       } else {
         // Get the user's selected quantity from the input field
-        let quantity = parseInt(
+        const quantity = parseInt(
           $(myMintPluginSettings.mintQuantityIdOrClass).val()
         );
 
@@ -188,10 +211,17 @@ jQuery(document).ready(async function ($) {
         if (isNaN(quantity) || quantity <= 0) {
           quantity = 1;
         }
+        if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
+          showPopup(
+            "error",
+            myMintPluginSettings.maxQuantity + myMintPluginSettings.maxQuantity
+          );
+          return;
+        }
         // Check if the terms checkbox is checked
         if (!$(".terms-checkbox").is(":checked")) {
           // Display the popup with the appropriate message
-          showPopup("error", "Please accept the terms and conditions.");
+          showPopup("error", myMintPluginSettings.popup.errorTermAndCondition);
         } else {
           // Call the mint function
           mint(quantity);
