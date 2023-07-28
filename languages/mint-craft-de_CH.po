@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 15:45+0200\n"
-"PO-Revision-Date: 2023-07-28 18:30+0200\n"
+"PO-Revision-Date: 2023-07-28 18:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_CH\n"
@@ -19,12 +19,10 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:153
-#, fuzzy
 msgid "Non Payable Operations"
 msgstr "Nicht zahlbare Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:155
-#, fuzzy
 msgid "Payable Operations"
 msgstr "Zahlungspflichtige Vorgänge"
 
@@ -33,17 +31,14 @@ msgid "View Operations"
 msgstr "Vorgänge anzeigen"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:159
-#, fuzzy
 msgid "Events"
 msgstr "Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:161
-#, fuzzy
 msgid "Other Operations"
 msgstr "Andere Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:201
-#, fuzzy
 msgid "Trigger"
 msgstr "Auslöser"
 
@@ -56,17 +51,14 @@ msgid "Maximum quantity allowed is"
 msgstr "Die maximal zulässige Menge beträgt"
 
 #: includes/admin/mint-craft-admin.php:83 includes/mint-craft-public.php:75
-#, fuzzy
 msgid "Please switch to active chain"
 msgstr "Bitte wechsle zur aktiven Blockchain"
 
 #: includes/admin/mint-craft-admin.php:84 includes/mint-craft-public.php:76
-#, fuzzy
 msgid "Please accept the terms and conditions to buy NFT."
 msgstr "Bitte akzeptier die Allgemeinen Geschäftsbedingungen um den Kauf zu tätigen."
 
 #: includes/admin/mint-craft-admin.php:85 includes/mint-craft-public.php:77
-#, fuzzy
 msgid "Not enough funds in the wallet."
 msgstr "Du hast nicht genügend Geld in deiner Wallet."
 
@@ -75,7 +67,6 @@ msgid "An error occurred."
 msgstr "Ein Fehler ist aufgetreten."
 
 #: includes/admin/mint-craft-admin.php:87 includes/mint-craft-public.php:79
-#, fuzzy
 msgid "Mint transaction is submitted successfully, you can view it"
 msgstr "Der Kauf wurde erfolgreich übermittelt, du kannst die Transaktion einsehen"
 
@@ -96,7 +87,6 @@ msgid "Admin Functions"
 msgstr "Admin-Funktionen"
 
 #: includes/admin/mint-craft-admin-style-tab.php:45
-#, fuzzy
 msgid "Connect button"
 msgstr "Connect button"
 
@@ -109,7 +99,6 @@ msgid "Mint Quantity"
 msgstr "Mint Menge"
 
 #: includes/admin/mint-craft-admin-style-tab.php:72
-#, fuzzy
 msgid "Minter Counter"
 msgstr "Mint-Zähler"
 
@@ -142,17 +131,14 @@ msgid "Smart Contract ABI"
 msgstr "Smart Contract ABI"
 
 #: includes/admin/mint-craft-general-settings-tab.php:87
-#, fuzzy
 msgid "Active Chain"
 msgstr "Aktive Blockchain"
 
 #: includes/admin/mint-craft-general-settings-tab.php:112
-#, fuzzy
 msgid "Enter the contract address for your NFTs."
 msgstr "Gib die Vertragsadresse für die NFTs ein."
 
 #: includes/admin/mint-craft-general-settings-tab.php:159
-#, fuzzy
 msgid "Select the active chain for your plugin."
 msgstr "Wählen Sie die aktive Blockchain für das Plugin aus."
 
