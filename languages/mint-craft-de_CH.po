@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 15:45+0200\n"
-"PO-Revision-Date: 2023-07-27 16:14+0200\n"
+"PO-Revision-Date: 2023-07-28 17:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_CH\n"
@@ -16,31 +16,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:153
+#, fuzzy
 msgid "Non Payable Operations"
-msgstr "Nicht zahlbare Operationen"
+msgstr "Nicht zahlbare Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:155
+#, fuzzy
 msgid "Payable Operations"
-msgstr "Zahlbare Operationen"
+msgstr "Zahlungspflichtige Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:157
 msgid "View Operations"
 msgstr "Vorgänge anzeigen"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:159
+#, fuzzy
 msgid "Events"
-msgstr "Veranstaltungen"
+msgstr "Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:161
+#, fuzzy
 msgid "Other Operations"
-msgstr "Andere Operationen"
+msgstr "Andere Vorgänge"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:201
+#, fuzzy
 msgid "Trigger"
-msgstr "Abzug"
+msgstr "Auslöser"
 
 #: includes/admin/mint-craft-admin-functions-tab.php:206
 msgid "Invalid smart contract opeartion"
@@ -51,24 +56,28 @@ msgid "Maximum quantity allowed is"
 msgstr "Die maximal zulässige Menge beträgt"
 
 #: includes/admin/mint-craft-admin.php:83 includes/mint-craft-public.php:75
+#, fuzzy
 msgid "Please switch to active chain"
-msgstr "Bitte wechseln Sie zur aktiven Kette"
+msgstr "Bitte wechsle zur aktiven Blockchain"
 
 #: includes/admin/mint-craft-admin.php:84 includes/mint-craft-public.php:76
+#, fuzzy
 msgid "Please accept the terms and conditions to buy NFT."
-msgstr "Bitte akzeptieren Sie die Allgemeinen Geschäftsbedingungen zum Kauf von NFT."
+msgstr "Bitte akzeptier die Allgemeinen Geschäftsbedingungen um den Kauf zu tätigen."
 
 #: includes/admin/mint-craft-admin.php:85 includes/mint-craft-public.php:77
+#, fuzzy
 msgid "Not enough funds in the wallet."
-msgstr "Nicht genügend Geld im Portemonnaie."
+msgstr "Du hast nicht genügend Geld in deiner Wallet."
 
 #: includes/admin/mint-craft-admin.php:86 includes/mint-craft-public.php:78
 msgid "An error occurred."
 msgstr "Ein Fehler ist aufgetreten."
 
 #: includes/admin/mint-craft-admin.php:87 includes/mint-craft-public.php:79
+#, fuzzy
 msgid "Mint transaction is submitted successfully, you can view it"
-msgstr "Die Mint-Transaktion wurde erfolgreich übermittelt, Sie können sie einsehen"
+msgstr "Der Kauf wurde erfolgreich übermittelt, du kannst die Transaktion einsehen"
 
 #: includes/admin/mint-craft-admin.php:115
 msgid "Settings"
@@ -87,8 +96,9 @@ msgid "Admin Functions"
 msgstr "Admin-Funktionen"
 
 #: includes/admin/mint-craft-admin-style-tab.php:45
+#, fuzzy
 msgid "Connect button"
-msgstr "Verbinden-Taste"
+msgstr "Connect button"
 
 #: includes/admin/mint-craft-admin-style-tab.php:54
 msgid "Mint Button"
@@ -99,8 +109,9 @@ msgid "Mint Quantity"
 msgstr "Mint Menge"
 
 #: includes/admin/mint-craft-admin-style-tab.php:72
+#, fuzzy
 msgid "Minter Counter"
-msgstr "Münzzähler"
+msgstr "Mint-Zähler"
 
 #: includes/admin/mint-craft-admin-style-tab.php:102
 msgid "Enter the mint button class or id (ex: #connect-button or .connect-button)"
@@ -131,16 +142,19 @@ msgid "Smart Contract ABI"
 msgstr "Smart Contract ABI"
 
 #: includes/admin/mint-craft-general-settings-tab.php:87
+#, fuzzy
 msgid "Active Chain"
-msgstr "Aktive Ethereum-Kette"
+msgstr "Aktive Blockchain"
 
 #: includes/admin/mint-craft-general-settings-tab.php:112
+#, fuzzy
 msgid "Enter the contract address for your NFTs."
-msgstr "Geben Sie die Vertragsadresse für Ihre NFTs ein."
+msgstr "Gib die Vertragsadresse für die NFTs ein."
 
 #: includes/admin/mint-craft-general-settings-tab.php:159
+#, fuzzy
 msgid "Select the active chain for your plugin."
-msgstr "Wählen Sie die aktive Kette für Ihr Plugin aus."
+msgstr "Wählen Sie die aktive Blockchain für das Plugin aus."
 
 #: mint-craft.php:71
 msgid "Connect Wallet"
