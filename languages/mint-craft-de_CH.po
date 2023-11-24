@@ -75,12 +75,12 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: includes/admin/mint-craft-admin.php:148
-msgid "Mint Craft Settings"
-msgstr "Mint-Craft-Einstellungen"
+msgid "Settings"
+msgstr "Einstellungen"
 
 #: includes/admin/mint-craft-admin.php:149
-msgid "Mint Craft"
-msgstr "Mint Craft"
+msgid "SmartCtrl"
+msgstr "SmartCtrl"
 
 #: includes/admin/mint-craft-admin-style-tab.php:37
 msgid "Admin Functions"

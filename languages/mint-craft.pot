@@ -74,11 +74,11 @@ msgid "Settings"
 msgstr ""
 
 #: includes/admin/mint-craft-admin.php:148
-msgid "Mint Craft Settings"
+msgid "Settings"
 msgstr ""
 
 #: includes/admin/mint-craft-admin.php:149
-msgid "Mint Craft"
+msgid "SmartCtrl"
 msgstr ""
 
 #: includes/admin/mint-craft-admin-style-tab.php:37

@@ -8,6 +8,11 @@ define('MC_ADMIN_MENU_SLUG', 'mint-craft-settings');
 
 // Constants for contract settings
 define('MC_ADMIN_CONTRACT_ADDRESS_FIELD', 'mint-craft-contract_address');
+define('MC_ADMIN_SLUGS_FIELD', 'mint-craft-slugs');
+
+define('MC_ADMIN_WALLETCONNECT_FIELD', 'mint-craft-walletconnect');
+define('MC_ADMIN_ALCHEMYPROVIDER_FIELD', 'mint-craft-alchempy-provider');
+
 define('MC_ADMIN_CONTRACT_ABI_FIELD', 'mint-craft-contract_abi');
 // Constants for general settings tab
 define('MC_ADMIN_ACTIVE_CHAIN_FIELD', 'mint-craft-active_chain');

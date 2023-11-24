@@ -5,7 +5,7 @@
  * This tab will be containing the general setting for the smart contract
  */
 
- require_once dirname(__FILE__) . '/../constants.php';
+require_once dirname(__FILE__) . '/../constants.php';
 
 class Mint_Craft_General_Settings_Tab
 {
@@ -47,7 +47,26 @@ class Mint_Craft_General_Settings_Tab
             MC_ADMIN_CONTRACT_ADDRESS_FIELD,
             'sanitize_text_field'
         );
+        // Register slug settings fields.
+        register_setting(
+            MC_ADMIN_GENERAL_FIELDS,
+            MC_ADMIN_SLUGS_FIELD,
+            'sanitize_text_field'
+        );
 
+        // Register walletconnect settings fields.
+        register_setting(
+            MC_ADMIN_GENERAL_FIELDS,
+            MC_ADMIN_WALLETCONNECT_FIELD,
+            'sanitize_text_field'
+        );
+
+        // Register alchemyprovider settings fields.
+        register_setting(
+            MC_ADMIN_GENERAL_FIELDS,
+            MC_ADMIN_ALCHEMYPROVIDER_FIELD,
+            'sanitize_text_field'
+        );
         // Register a settings field for contract ABI.
         register_setting(
             MC_ADMIN_GENERAL_FIELDS,
@@ -70,7 +89,14 @@ class Mint_Craft_General_Settings_Tab
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
         );
-
+        // Add a field for Slugs
+        add_settings_field(
+            MC_ADMIN_SLUGS_FIELD,
+            __('Page Slugs', 'mint-craft'),
+            array(__CLASS__, 'render_slugs_field'),
+            MC_ADMIN_GENERAL_PAGE,
+            MC_ADMIN_GENERAL_SECTION_TITLE
+        );
         // Add a field for contract ABI.
         add_settings_field(
             MC_ADMIN_CONTRACT_ABI_FIELD,
@@ -89,6 +115,24 @@ class Mint_Craft_General_Settings_Tab
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
         );
+
+        // Add a field for Slugs
+        add_settings_field(
+            MC_ADMIN_WALLETCONNECT_FIELD,
+            __('Wallet connect Project ID ', 'mint-craft'),
+            array(__CLASS__, 'render_walletconnect_field'),
+            MC_ADMIN_GENERAL_PAGE,
+            MC_ADMIN_GENERAL_SECTION_TITLE
+        );
+
+        // Add a field for Slugs
+        add_settings_field(
+            MC_ADMIN_ALCHEMYPROVIDER_FIELD,
+            __('Alchemy provider project id ', 'mint-craft'),
+            array(__CLASS__, 'render_alchemyprovider_field'),
+            MC_ADMIN_GENERAL_PAGE,
+            MC_ADMIN_GENERAL_SECTION_TITLE
+        );
     }
 
     /**
@@ -99,6 +143,52 @@ class Mint_Craft_General_Settings_Tab
         echo '<p>' . esc_html__('Smart contract and network settings.', 'mint-craft') . '</p>';
     }
 
+
+
+    /**
+     * Render wallet connect project id field
+     */
+    public static function render_walletconnect_field()
+    {
+        $project_id = get_option(MC_ADMIN_WALLETCONNECT_FIELD);
+        ?>
+        <input type="text" name="<?php echo MC_ADMIN_WALLETCONNECT_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
+            class="regular-text" />
+        <p class="description">
+            <?php __('Enter wallet connect project id', MC_PLUGIN_NAME); ?>
+        </p>
+        <?php
+    }
+
+
+    /**
+     * Render alchemy provider project id field
+     */
+    public static function render_alchemyprovider_field()
+    {
+        $project_id = get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD);
+        ?>
+        <input type="text" name="<?php echo MC_ADMIN_ALCHEMYPROVIDER_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
+            class="regular-text" />
+        <p class="description">
+            <?php __('Enter wallet connect project id', MC_PLUGIN_NAME); ?>
+        </p>
+        <?php
+    }
+    /**
+     * Render slug field
+     */
+    public static function render_slugs_field()
+    {
+        $slugs = get_option(MC_ADMIN_SLUGS_FIELD);
+        ?>
+        <input type="text" name="<?php echo MC_ADMIN_SLUGS_FIELD; ?>" value="<?php echo esc_attr($slugs); ?>"
+            class="regular-text" />
+        <p class="description">
+            <?php __('Enter the slugs like this ex: slug1, slug2, slug3,.', MC_PLUGIN_NAME); ?>
+        </p>
+        <?php
+    }
     /**
      * Render the contract address field.
      */
@@ -160,6 +250,7 @@ class Mint_Craft_General_Settings_Tab
         </p>
         <?php
     }
+
 }
 
 ?>

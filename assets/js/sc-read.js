@@ -43,3 +43,18 @@ window.getMaxSupply = async function getMaxSupply(fn) {
   console.log(data);
   fn(data)
 };
+
+
+window.mint = async function mint(quantity,value,gas,fn) {
+  // Convert the price to wei (1 MATIC = 10^18 wei)
+  const { request } = await prepareWriteContract({
+    address: myMintPluginSettings.contractAddress,
+    abi: myMintPluginSettings.contractABI,
+    functionName: "mint",
+    args: [quantity],
+    // gas: gas,
+    value: value,
+  });
+  const { hash } = await writeContract(request);
+  fn(hash)
+};

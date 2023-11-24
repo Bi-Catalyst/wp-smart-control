@@ -112,7 +112,9 @@ function increaseQuantity() {
   if (currentValue + 1 > myMintPluginSettings.maxQuantity) {
     showPopup(
       "error",
-      myMintPluginSettings.pupup.errorQuantity + ' ' + myMintPluginSettings.maxQuantity
+      myMintPluginSettings.pupup.errorQuantity +
+        " " +
+        myMintPluginSettings.maxQuantity
     );
     return;
   } else {
@@ -122,10 +124,18 @@ function increaseQuantity() {
 }
 
 jQuery(document).ready(async function ($) {
+  if (
+    !document.querySelector(myMintPluginSettings.mintQuantityIdOrClass) ||
+    typeof document.querySelector(
+      myMintPluginSettings.mintQuantityIdOrClass
+    ) === "undefined"
+  )
+    return;
   // Add popup
   document
     .querySelector(myMintPluginSettings.mintQuantityIdOrClass)
     .setAttribute("max", Number.parseInt(myMintPluginSettings.maxQuantity) + 1);
+
   if ($("#popup").length === 0) {
     // Create the popup element
     var popup = $(
@@ -143,25 +153,21 @@ jQuery(document).ready(async function ($) {
   var increaseBtn = document.querySelector(".increase-btn");
   increaseBtn.addEventListener("click", increaseQuantity);
 
-  // Set mint price value
-
-  jQuery(".final-nft-price-crypto").text(
-    myMintPluginSettings.mintPrice + " MATIC"
-  );
-
   try {
+    // Set mint price value
+    jQuery(".final-nft-price-crypto").text(
+      myMintPluginSettings.mintPrice + " MATIC"
+    );
+
+    // Total supply
     jQuery(myMintPluginSettings.minterCounterIdOrClass).text(
       myMintPluginSettings.totalSupply
     );
     await getTotalSupply(function (data) {
       jQuery(myMintPluginSettings.minterCounterIdOrClass).text(data);
     });
-  } catch (error) {
-    console.log(error);
-    // jQuery(myMintPluginSettings.minterCounterIdOrClass).text(data);
-  }
 
-  try {
+    // Max Supply
     jQuery("#total-nft-sup").text(myMintPluginSettings.maxSupply);
     await getMaxSupply(function (data) {
       jQuery("#total-nft-sup").text(data);
@@ -170,7 +176,7 @@ jQuery(document).ready(async function ($) {
     console.log(error);
   }
 
-  // Get matic value on Fiat
+  // Matic value on fiat
   const currency = "chf"; // or 'chf'
 
   getMaticPrice(currency)
@@ -190,43 +196,72 @@ jQuery(document).ready(async function ($) {
     .catch((error) => {
       console.log("Error:", error);
     });
-  crossMintConfig();
-  $(document).on(
-    "click",
-    myMintPluginSettings.mintButtonIdOrClass,
-    async function () {
-      if (
-        window.localStorage.getItem("wagmi.connected") === null ||
-        window.localStorage.getItem("wagmi.connected") === "false"
-      ) {
-        window.localStorage.setItem("TRIGGER_MINT", true);
-        await web3modal.openModal();
-      } else {
-        // Get the user's selected quantity from the input field
-        const quantity = parseInt(
-          $(myMintPluginSettings.mintQuantityIdOrClass).val()
-        );
 
-        // Set quantity to 1 if it's not a valid number or less than or equal to zero
-        if (isNaN(quantity) || quantity <= 0) {
-          quantity = 1;
-        }
-        if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
-          showPopup(
-            "error",
-            myMintPluginSettings.maxQuantity + myMintPluginSettings.maxQuantity
-          );
-          return;
-        }
-        // Check if the terms checkbox is checked
-        if (!$(".terms-checkbox").is(":checked")) {
-          // Display the popup with the appropriate message
-          showPopup("error", myMintPluginSettings.popup.errorTermAndCondition);
+  crossMintConfig();
+
+  // Add event to mint button
+  try {
+    $(document).on(
+      "click",
+      myMintPluginSettings.mintButtonIdOrClass,
+      async function () {
+        if (
+          window.localStorage.getItem("wagmi.connected") === null ||
+          window.localStorage.getItem("wagmi.connected") === "false"
+        ) {
+          window.localStorage.setItem("TRIGGER_MINT", true);
+          await wagmiWeb3Modal.openModal();
         } else {
-          // Call the mint function
-          mint(quantity);
+          // Get the user's selected quantity from the input field
+          const quantity = parseInt(
+            $(myMintPluginSettings.mintQuantityIdOrClass).val()
+          );
+
+          // Set quantity to 1 if it's not a valid number or less than or equal to zero
+          if (isNaN(quantity) || quantity <= 0) {
+            quantity = 1;
+          }
+          if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
+            showPopup(
+              "error",
+              myMintPluginSettings.maxQuantity +
+                myMintPluginSettings.maxQuantity
+            );
+            return;
+          }
+          // Check if the terms checkbox is checked
+          if (!$(".terms-checkbox").is(":checked")) {
+            // Display the popup with the appropriate message
+            showPopup(
+              "error",
+              myMintPluginSettings.popup.errorTermAndCondition
+            );
+          } else {
+            // Call the mint function
+            const weiAmount = ethers.parseUnits(
+              (
+                quantity * Number.parseFloat(myMintPluginSettings.mintPrice)
+              ).toString(),
+              "ether"
+            );
+
+            mint(quantity, weiAmount, 3000000n, function (hash) {
+              const { chain } = getNetwork();
+              showPopup(
+                "success",
+                `
+              <div class="popup-content">
+                <p>${myMintPluginSettings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p>
+              </div>
+              `
+              );
+            });
+          }
         }
       }
-    }
-  );
+    );
+  } catch (error) {
+    window.localStorage.setItem("TRIGGER_MINT", false);
+    showPopup("error", error.shortMessage ? error.shortMessage : error.message);
+  }
 });
