@@ -37,7 +37,6 @@ try {
     fetchBalance,
   } = WagmiCore;
 
-  window.wagmiWeb3Modal = WagmiWeb3Modal;
   window.prepareWriteContract = prepareWriteContract;
   window.writeContract = writeContract;
   window.readContract = readContract;
@@ -59,12 +58,16 @@ try {
     publicClient,
   });
 
+  window.estimateContractGas = publicClient.estimateContractGas;
+
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
   const web3modal = new WagmiWeb3Modal(
     { projectId, walletConnectVersion: 2 },
     ethereumClient
   );
+
+  window.web3modal = web3modal;
 
   // Set default chain
   web3modal.setDefaultChain(polygonMumbai);
@@ -75,15 +78,29 @@ try {
       window.localStorage.getItem("TRIGGER_MINT") === "true"
     ) {
       window.localStorage.getItem("TRIGGER_MINT") === "false";
-      if ($(SCFlowPluginSettings.mintQuantityIdOrClass)) {
+      if (
+        SCFlowPluginSettings &&
+        document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass)
+      ) {
         let quantity = Number.parseInt(
-          $(SCFlowPluginSettings.mintQuantityIdOrClass).val()
+          document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass)
+            .value
         );
         // Set quantity to 1 if it's not a valid number or less than or equal to zero
         if (isNaN(quantity) || quantity <= 0) {
           quantity = 1;
         }
-        mint(quantity);
+        mint(quantity, function (hash) {
+          const { chain } = getNetwork();
+          showPopup(
+            "success",
+            `
+          <div class="popup-content">
+            <p>${SCFlowPluginSettings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p>
+          </div>
+          `
+          );
+        });
       }
     }
   }
@@ -102,7 +119,6 @@ try {
 
   web3modal.subscribeEvents((newState) => {
     const { name } = newState;
-    console.log(SCFlowPluginSettings.activeChain);
     const { chain } = getNetwork();
     switch (name) {
       case "ACCOUNT_CONNECTED":
@@ -113,7 +129,7 @@ try {
               chainId: 80001,
             })
               .then((chain) => {
-                triggerMint();
+                // triggerMint();
               })
               .catch((e) => {
                 console.log(e);
@@ -121,6 +137,7 @@ try {
           }
           // Get Account
           const account = getAccount();
+          window.localStorage.setItem("WALLET_ADDRESS", account.address);
           // fetch balance
           fetchBalance({
             address: account.address,
@@ -141,44 +158,11 @@ try {
       default:
         break;
     }
-
-    console.log(newState);
   });
-
-  // Automatically hide the popup after 3 seconds
-  // jQuery(document).ready(function () {
-  //   const desktopBtn = document.querySelector(
-  //     "#header-btn-col > div > div > w3m-core-button"
-  //   );
-  //   if (!desktopBtn || typeof desktopBtn === "undefined") {
-  //     return;
-  //   }
-  //   setTimeout(() => {
-  //     try {
-  //       const desktopBtn = document
-  //         .querySelector("#header-btn-col > div > div > w3m-core-button")
-  //         .shadowRoot.querySelector("w3m-connect-button")
-  //         .shadowRoot.querySelector("w3m-button-big")
-  //         .shadowRoot.querySelector("button");
-  //       if (desktopBtn) {
-  //         $(desktopBtn).addClass("w3m-custom-btn");
-  //       }
-  //       const mobileBtn = document
-  //         .querySelector(
-  //           "#mobile_menu1 > li.cstm-m-cnct-wlt > a > w3m-core-button"
-  //         )
-  //         .shadowRoot.querySelector("w3m-connect-button")
-  //         .shadowRoot.querySelector("w3m-button-big")
-  //         .shadowRoot.querySelector("button");
-  //       if (mobileBtn) {
-  //         $(mobileBtn).addClass("w3m-custom-btn-mobile");
-  //         $(mobileBtn).css("height", "60px");
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, 2000);
-  // });
+  if (wagmiConfig.storage["wagmi.connected"]) {
+    const account = getAccount();
+    window.localStorage.setItem("WALLET_ADDRESS", account.address);
+  }
 } catch (error) {
   console.log(error);
 }

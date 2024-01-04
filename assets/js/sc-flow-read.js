@@ -6,9 +6,8 @@ window.getMintPrice = async function getMintPrice(fn) {
     abi: SCFlowPluginSettings.contractABI,
     functionName: "mintPrice",
   });
-  console.log(data);
   const maticAmount = ethers.formatUnits(data, "ether");
-  fn(maticAmount)
+  fn(maticAmount);
 };
 
 window.getMaxQuantity = async function getMaxQuantity(fn) {
@@ -18,8 +17,7 @@ window.getMaxQuantity = async function getMaxQuantity(fn) {
     abi: SCFlowPluginSettings.contractABI,
     functionName: "maxQuantity",
   });
-  console.log(data);
-  fn(data)
+  fn(data);
 };
 
 window.getTotalSupply = async function getTotalSupply(fn) {
@@ -29,8 +27,7 @@ window.getTotalSupply = async function getTotalSupply(fn) {
     abi: SCFlowPluginSettings.contractABI,
     functionName: "totalSupply",
   });
-  console.log(data);
-  fn(data)
+  fn(data);
 };
 
 window.getMaxSupply = async function getMaxSupply(fn) {
@@ -38,23 +35,27 @@ window.getMaxSupply = async function getMaxSupply(fn) {
   const data = await readContract({
     address: SCFlowPluginSettings.contractAddress,
     abi: SCFlowPluginSettings.contractABI,
-    functionName: "MAX_SUPPLY",
+    functionName: "maxSupply",
   });
-  console.log(data);
-  fn(data)
+  fn(data);
 };
 
-
-window.mint = async function mint(quantity, value, gas, fn) {
+window.mint = async function mint(quantity, fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
+  const address = window.localStorage.getItem("WALLET_ADDRESS");
+  // Call the mint function
+  const value = ethers.parseUnits(
+    (quantity * Number.parseFloat(SCFlowPluginSettings.mintPrice)).toString(),
+    "ether"
+  );
   const { request } = await prepareWriteContract({
     address: SCFlowPluginSettings.contractAddress,
     abi: SCFlowPluginSettings.contractABI,
-    functionName: "mint",
-    args: [quantity],
-    // gas: gas,
+    functionName: "mintTo",
+    args: [quantity, address],
+    // gas: estimatedGas,
     value: value,
   });
   const { hash } = await writeContract(request);
-  fn(hash)
+  fn(hash);
 };

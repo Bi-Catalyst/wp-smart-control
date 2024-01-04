@@ -111,19 +111,20 @@ class SmartContract_Flow_Public
                 );
 
                 // Enqueue non owner write smart contract operatons
-                // wp_enqueue_script('sc-write-fe', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-helper', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
 
                 // Enqueue read smart contract operations
-                wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
 
                 // Enqueue js logic for mint ui component
-                wp_enqueue_script('sc-flow-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-frontend.js', array('jquery', 'ethers', 'sc-flow-read'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-frontend.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), '0.0.1', true);
 
                 // Enqueue crossmint script
-                wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
+                wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
 
                 // Localize the script with the plugin settings
-                wp_localize_script('sc-flow-plugin-settings', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
+                wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
+                wp_localize_script('sc-flow-frontend', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
                 // Enqueue your custom styles
                 wp_enqueue_style('sc-flow-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-frontend.css', array(), '0.0.1');

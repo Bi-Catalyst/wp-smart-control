@@ -21,22 +21,6 @@ let _contractInstance = null;
 // Wallet address
 let _address = null;
 
-
-async function getMaticPrice(currency) {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=${currency}`
-    );
-    const data = await response.json();
-    const maticPrice = data["matic-network"][currency];
-
-    return maticPrice;
-  } catch (error) {
-    console.log("Error fetching Matic price:", error);
-    return null;
-  }
-}
-
 let etherPovider;
 // Chosen wallet provider given by the dialog window
 let provider;

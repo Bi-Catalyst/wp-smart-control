@@ -2,10 +2,17 @@
   $(document).ready(async function () {
     // Check if wallet is connected already
     try {
-      if (
-        $(".toplevel_page_sc-flow-settings") &&
-        $(".toplevel_page_sc-flow-settings").length > 0
-      ) {
+      const pluginTopLevel =
+        ".toplevel_page_" + SCFlowPluginSettings.pluginName + "-settings";
+      if ($(pluginTopLevel) && $(pluginTopLevel).length > 0) {
+        if ($("#popup").length === 0) {
+          // Create the popup element
+          var popup = $(
+            '<div id="popup" class="popup" style="display: none;"><div class="icon__wrapper"><div id="popup-icon"></div></div><span id="popup-text"></span><button id="popup-button">OK</button></div>'
+          );
+          // Append the popup to the body
+          $("body").append(popup);
+        }
         // Add listener to connect button
         document.querySelectorAll(".connect-wallet-button").forEach((link) => {
           link.addEventListener("click", async (e) => {

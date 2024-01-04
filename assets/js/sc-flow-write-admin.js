@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
   $(".trigger-function").on("click", function (e) {
     e.preventDefault();
     const settingKey = $(this).data("setting-key");
-    var functionName = settingKey.replace("sc-flow-function_", "");
+    var functionName = settingKey.replace(SCFlowPluginSettings.pluginName +  "-function_", "");
 
     // Get the contract address and ABI from the SCFlowPluginSettings object
     var contractAddress = SCFlowPluginSettings.contractAddress;
@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
         let inputValue = $(this).val();
         const inputType = $(this).data("type");
         const name = $(this).attr("name");
-        if (name.includes('Price')) {
+        if (name.includes("Price")) {
           inputValue = ethers.parseUnits(inputValue, 18);
         }
         // Convert the input value based on the input type
@@ -109,29 +109,28 @@ jQuery(document).ready(function ($) {
                 }
 
                 if (explorerURL) {
-                  var popupHTML = `
-                    <div class="transaction-popup">
-                      <div class="transaction-popup-content">
-                        <p>Transaction submitted successfully.</p>
-                        <p>Check the status <a href="${explorerURL}" target="_blank">here</a>.</p>
-                      </div>
-                    </div>
-                  `;
-
-                  $("body").append(popupHTML);
-                  setTimeout(function () {
-                    $(".transaction-popup").fadeOut(500, function () {
-                      $(this).remove();
-                    });
-                  }, 3000);
+                  showPopup(
+                    "success",
+                    `
+                  <div class="popup-content">
+                    <p>${SCFlowPluginSettings.popup.sucessMint} <a href="${explorerURL}/tx/${hash}" target="_blank">here</a>.</p>
+                  </div>
+                  `
+                  );
                 }
               })
               .catch(function (error) {
-                console.log(error);
+                showPopup(
+                  "error",
+                  error.shortMessage ? error.shortMessage : error.message
+                );
               });
           })
           .catch(function (error) {
-            console.log(error);
+            showPopup(
+              "error",
+              error.shortMessage ? error.shortMessage : error.message
+            );
           });
         break;
 

@@ -117,18 +117,22 @@ class SC_Flow_Admin
                     'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'sc-flow'),
                 )
             );
+            // Enqueue non owner write smart contract operatons
+            wp_enqueue_script('sc-flow-helper', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-write', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-write', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
 
             // Enqueue read smart contract operations
-            wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-write'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), '0.0.1', true);
 
             // Enqueue js logic for mint ui component
-            wp_enqueue_script('mint-admin', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-admin', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
 
             // Localize the script with the plugin settings
-            wp_localize_script('sc-flow-plugin-settings', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
+            // Localize the script with the plugin settings
+            wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
+            wp_localize_script('sc-flow-admin', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
             // Enqueue your custom admin styles
             wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-admin.css', array(), '0.0.1');
