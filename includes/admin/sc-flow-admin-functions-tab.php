@@ -1,16 +1,19 @@
 <?php
-
-// mint-craft-admin-functions-tab.php
-
 /**
- * Mint Craft Admin functions settings tab
- * This tab will be responsible for calling smart contract functions that require the owner
+ * Admin setting the smart contract operations tab
+ * This tab will be automatically generated from the smart contract ABI 
+ *
+ * @link       https://bicatalyst.ch
+ * @since      0.0.1
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
+ * @subpackage {sc-flow-admin-functions-tab.php}
  */
 
 require_once dirname(__FILE__) . '/../constants.php';
 
 
-class Mint_Craft_Admin_Functions_Tab
+class SC_Flow_Admin_Functions_Tab
 {
     /**
      * Render the content of the admin functions tab.
@@ -23,7 +26,7 @@ class Mint_Craft_Admin_Functions_Tab
         $tab_groups = self::get_tab_groups();
         ?>
 
-        <div class="mint-craft">
+        <div class="sc-flow">
             <h2 class="nav-tab-wrapper">
                 <?php
                 // Render the tab navigation
@@ -150,15 +153,15 @@ class Mint_Craft_Admin_Functions_Tab
     {
         switch ($state) {
             case 'nonpayable':
-                return __('Non Payable Operations', 'mint-craft');
+                return __('Non Payable Operations', 'sc-flow');
             case 'payable':
-                return __('Payable Operations', 'mint-craft');
+                return __('Payable Operations', 'sc-flow');
             case 'view':
-                return __('View Operations','mint-craft');
+                return __('View Operations', 'sc-flow');
             case 'event':
-                return __('Events', 'mint-craft');
+                return __('Events', 'sc-flow');
             default:
-                return __('Other Operations', 'mint-craft');
+                return __('Other Operations', 'sc-flow');
         }
     }
 
@@ -203,7 +206,7 @@ class Mint_Craft_Admin_Functions_Tab
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
         } else {
-            echo '<p class="description">' . __('Invalid smart contract opeartion', 'mint-craft') . '</p>';
+            echo '<p class="description">' . __('Invalid smart contract opeartion', 'sc-flow') . '</p>';
         }
     }
 

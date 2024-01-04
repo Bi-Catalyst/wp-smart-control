@@ -3,11 +3,11 @@ jQuery(document).ready(function ($) {
   $(".trigger-function").on("click", function (e) {
     e.preventDefault();
     const settingKey = $(this).data("setting-key");
-    var functionName = settingKey.replace("mint-craft-function_", "");
+    var functionName = settingKey.replace("sc-flow-function_", "");
 
-    // Get the contract address and ABI from the myMintPluginSettings object
-    var contractAddress = myMintPluginSettings.contractAddress;
-    var contractABI = myMintPluginSettings.contractABI;
+    // Get the contract address and ABI from the SCFlowPluginSettings object
+    var contractAddress = SCFlowPluginSettings.contractAddress;
+    var contractABI = SCFlowPluginSettings.contractABI;
 
     // Get the state mutability from the data attribute
     var stateMutability = $(this).data("state-mutability");
@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
         let inputValue = $(this).val();
         const inputType = $(this).data("type");
         const name = $(this).attr("name");
-        if(name.includes('Price')){
+        if (name.includes('Price')) {
           inputValue = ethers.parseUnits(inputValue, 18);
         }
         // Convert the input value based on the input type
@@ -68,7 +68,7 @@ jQuery(document).ready(function ($) {
         if (stateMutability === "payable") {
           value = ethers.parseUnits(
             (
-              args[0] * Number.parseFloat(myMintPluginSettings.mintPrice)
+              args[0] * Number.parseFloat(SCFlowPluginSettings.mintPrice)
             ).toString(),
             "ether"
           );
@@ -102,9 +102,9 @@ jQuery(document).ready(function ($) {
 
                 // Example: Display the transaction hash in a popup
                 var explorerURL = "";
-                if (myMintPluginSettings.activeChain === "80001") {
+                if (SCFlowPluginSettings.activeChain === "80001") {
                   explorerURL = "https://mumbai.polygonscan.com/tx/" + hash;
-                } else if (myMintPluginSettings.activeChain === "137") {
+                } else if (SCFlowPluginSettings.activeChain === "137") {
                   explorerURL = "https://polygonscan.com/tx/" + hash;
                 }
 

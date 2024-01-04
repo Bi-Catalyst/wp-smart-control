@@ -1,12 +1,18 @@
 <?php
-// class-style-settings-tab.php
 /**
- * Admin style settings tab
+ * Admin setting the style tab
  * This tab will be having the style IDs or classes for buttons
+ *
+ * @link       https://bicatalyst.ch
+ * @since      0.0.1
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
+ * @subpackage {sc-flow-admin-style-tab.php}
  */
+
 require_once dirname(__FILE__) . '/../constants.php';
 
-class Mint_Craft_Admin_Style_Tab
+class SC_Flow_Admin_Style_Tab
 {
     /**
      * Render the content of the admin functions tab.
@@ -14,7 +20,7 @@ class Mint_Craft_Admin_Style_Tab
     public static function render()
     {
         ?>
-        <div class="mint-craft">
+        <div class="sc-flow">
             <form method="post" action="options.php">
 
                 <?php
@@ -34,7 +40,7 @@ class Mint_Craft_Admin_Style_Tab
         // Register a settings section.
         add_settings_section(
             MC_ADMIN_STYLE_SECTION_TITLE,
-            __('Admin Functions', 'mint-craft'),
+            __('Admin Functions', 'sc-flow'),
             array(__CLASS__, 'render_admin_style_section'),
             MC_ADMIN_STYLE_TAB
         );
@@ -42,7 +48,7 @@ class Mint_Craft_Admin_Style_Tab
         // Add a field for the Connect Button.
         add_settings_field(
             MC_PLUGIN_CONNECT_BUTTON,
-            __('Connect button', 'mint-craft'),
+            __('Connect button', 'sc-flow'),
             array(__CLASS__, 'render_connect_button_field'),
             MC_ADMIN_STYLE_TAB,
             MC_ADMIN_STYLE_SECTION_TITLE
@@ -51,7 +57,7 @@ class Mint_Craft_Admin_Style_Tab
         // Add a field for the mint button
         add_settings_field(
             MC_PLUGIN_MINT_BUTTON,
-            __('Mint Button', 'mint-craft'),
+            __('Mint Button', 'sc-flow'),
             array(__CLASS__, 'render_mint_button_field'),
             MC_ADMIN_STYLE_TAB,
             MC_ADMIN_STYLE_SECTION_TITLE
@@ -60,7 +66,7 @@ class Mint_Craft_Admin_Style_Tab
         // Add a field for the mint quantity
         add_settings_field(
             MC_PLUGIN_MINT_QUANTITY,
-            __('Mint Quantity', 'mint-craft'),
+            __('Mint Quantity', 'sc-flow'),
             array(__CLASS__, 'render_mint_quantity_field'),
             MC_ADMIN_STYLE_TAB,
             MC_ADMIN_STYLE_SECTION_TITLE
@@ -69,7 +75,7 @@ class Mint_Craft_Admin_Style_Tab
         // Add a field for the mint quantity
         add_settings_field(
             MC_PLUGIN_MINTER_COUNTER,
-            __('Minter Counter', 'mint-craft'),
+            __('Minter Counter', 'sc-flow'),
             array(__CLASS__, 'render_minter_counter_field'),
             MC_ADMIN_STYLE_TAB,
             MC_ADMIN_STYLE_SECTION_TITLE
@@ -88,7 +94,7 @@ class Mint_Craft_Admin_Style_Tab
      */
     public static function render_admin_style_section()
     {
-        echo '<p>' . esc_html__('This section allows you to configure fields classes which will linked to events', 'mint-craft') . '</p>';
+        echo '<p>' . esc_html__('This section allows you to configure fields classes which will linked to events', 'sc-flow') . '</p>';
     }
     /**
      * Render the connect button.
@@ -99,7 +105,7 @@ class Mint_Craft_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo MC_PLUGIN_CONNECT_BUTTON; ?>" value="<?php echo esc_attr($connect_button); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #connect-button or .connect-button)', 'mint-craft'); ?>
+            <?php __('Enter the mint button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -113,7 +119,7 @@ class Mint_Craft_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo MC_PLUGIN_MINT_BUTTON; ?>" value="<?php echo esc_attr($mint_button); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'mint-craft'); ?>
+            <?php __('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -126,7 +132,7 @@ class Mint_Craft_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo MC_PLUGIN_MINT_QUANTITY; ?>" value="<?php echo esc_attr($mint_quantity); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #mint-quantity or .mint-quantity)', 'mint-craft'); ?>
+            <?php __('Enter the mint button class or id (ex: #mint-quantity or .mint-quantity)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -139,7 +145,7 @@ class Mint_Craft_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo MC_PLUGIN_MINTER_COUNTER; ?>" value="<?php echo esc_attr($minter_counter); ?>">
         <p class="description">
-            <?php __('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'mint-craft'); ?>
+            <?php __('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
         </p>
         <?php
     }

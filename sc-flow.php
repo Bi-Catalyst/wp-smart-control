@@ -1,12 +1,15 @@
 <?php
 
 /**
- * Plugin Name: Mint Craft
- * Description: WordPress plugin to execute any smart contract function from the admin and mint NFTs on frontend
+ * Plugin Name: Smart Contract Flow
+ * Description: WordPress plugin to Seamlessly integrate EVM compatible smart contracts operations into WordPress
  * Version: 0.0.1
- * Author: Mohamed Habbat
+ * 
  *
- * @package Min_Craft
+ * @link       https://bicatalyst.ch
+ * @since      0.0.1
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
  */
 
 // Exit if accessed directly.
@@ -21,7 +24,7 @@ define('PLUGIN_ROOT_PATH', __FILE__);
 /**
  * The main class that initializes the plugin.
  */
-class Min_Craft
+class SmartContract_Flow
 {
     /**
      * Plugin text domain.
@@ -50,10 +53,11 @@ class Min_Craft
     private function load_dependencies()
     {
         // Include the admin functionality.
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/mint-craft-admin.php';
-
+        if (is_admin()) {
+            require_once plugin_dir_path(__FILE__) . 'includes/admin/sc-flow-admin.php';
+        }
         // Include the public functionality.
-        require_once plugin_dir_path(__FILE__) . 'includes/mint-craft-public.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/sc-flow-public.php';
     }
 
     /**
@@ -78,10 +82,10 @@ class Min_Craft
     {
         // Instantiate the admin class.
         if (is_admin()) {
-            $admin = new Mint_Craft_Admin();
+            $admin = new SC_Flow_Admin();
         }
     }
 }
 
 // Instantiate the main plugin class.
-new Min_Craft();
+new SmartContract_Flow();

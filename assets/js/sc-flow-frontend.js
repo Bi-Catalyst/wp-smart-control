@@ -65,17 +65,17 @@ async function getMaticPrice(currency) {
 
 function crossMintConfig() {
   const quantity = Number.parseInt(
-    document.querySelector(myMintPluginSettings.mintQuantityIdOrClass).value
+    document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass).value
   );
-  // if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
+  // if (quantity > Number.parseInt(SCFlowPluginSettings.maxQuantity)) {
   //   showPopup(
   //     "error",
-  //     "Maximum quantity allowed is " + myMintPluginSettings.maxQuantity
+  //     "Maximum quantity allowed is " + SCFlowPluginSettings.maxQuantity
   //   );
   //   return;
   // }
   const totalPrice = (
-    quantity * Number.parseFloat(myMintPluginSettings.mintPrice)
+    quantity * Number.parseFloat(SCFlowPluginSettings.mintPrice)
   ).toFixed(3);
   const type = "erc-721";
 
@@ -93,7 +93,7 @@ function crossMintConfig() {
 // Function to handle the "decrease" button click
 function decreaseQuantity() {
   var quantityInput = document.querySelector(
-    myMintPluginSettings.mintQuantityIdOrClass
+    SCFlowPluginSettings.mintQuantityIdOrClass
   );
   var currentValue = Number.parseInt(quantityInput.value);
 
@@ -106,15 +106,15 @@ function decreaseQuantity() {
 // Function to handle the "increase" button click
 function increaseQuantity() {
   var quantityInput = document.querySelector(
-    myMintPluginSettings.mintQuantityIdOrClass
+    SCFlowPluginSettings.mintQuantityIdOrClass
   );
   var currentValue = Number.parseInt(quantityInput.value);
-  if (currentValue + 1 > myMintPluginSettings.maxQuantity) {
+  if (currentValue + 1 > SCFlowPluginSettings.maxQuantity) {
     showPopup(
       "error",
-      myMintPluginSettings.pupup.errorQuantity +
-        " " +
-        myMintPluginSettings.maxQuantity
+      SCFlowPluginSettings.pupup.errorQuantity +
+      " " +
+      SCFlowPluginSettings.maxQuantity
     );
     return;
   } else {
@@ -125,16 +125,16 @@ function increaseQuantity() {
 
 jQuery(document).ready(async function ($) {
   if (
-    !document.querySelector(myMintPluginSettings.mintQuantityIdOrClass) ||
+    !document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass) ||
     typeof document.querySelector(
-      myMintPluginSettings.mintQuantityIdOrClass
+      SCFlowPluginSettings.mintQuantityIdOrClass
     ) === "undefined"
   )
     return;
   // Add popup
   document
-    .querySelector(myMintPluginSettings.mintQuantityIdOrClass)
-    .setAttribute("max", Number.parseInt(myMintPluginSettings.maxQuantity) + 1);
+    .querySelector(SCFlowPluginSettings.mintQuantityIdOrClass)
+    .setAttribute("max", Number.parseInt(SCFlowPluginSettings.maxQuantity) + 1);
 
   if ($("#popup").length === 0) {
     // Create the popup element
@@ -156,19 +156,19 @@ jQuery(document).ready(async function ($) {
   try {
     // Set mint price value
     jQuery(".final-nft-price-crypto").text(
-      myMintPluginSettings.mintPrice + " MATIC"
+      SCFlowPluginSettings.mintPrice + " MATIC"
     );
 
     // Total supply
-    jQuery(myMintPluginSettings.minterCounterIdOrClass).text(
-      myMintPluginSettings.totalSupply
+    jQuery(SCFlowPluginSettings.minterCounterIdOrClass).text(
+      SCFlowPluginSettings.totalSupply
     );
     await getTotalSupply(function (data) {
-      jQuery(myMintPluginSettings.minterCounterIdOrClass).text(data);
+      jQuery(SCFlowPluginSettings.minterCounterIdOrClass).text(data);
     });
 
     // Max Supply
-    jQuery("#total-nft-sup").text(myMintPluginSettings.maxSupply);
+    jQuery("#total-nft-sup").text(SCFlowPluginSettings.maxSupply);
     await getMaxSupply(function (data) {
       jQuery("#total-nft-sup").text(data);
     });
@@ -185,11 +185,11 @@ jQuery(document).ready(async function ($) {
         console.log(`Matic price in ${currency.toUpperCase()}: ${price}`);
         jQuery(".final-nft-price").text(
           "CHF " +
-            (
-              Number.parseFloat(myMintPluginSettings.mintPrice) *
-              Number.parseFloat(price)
-            ).toFixed(4) +
-            ".-"
+          (
+            Number.parseFloat(SCFlowPluginSettings.mintPrice) *
+            Number.parseFloat(price)
+          ).toFixed(4) +
+          ".-"
         );
       }
     })
@@ -203,7 +203,7 @@ jQuery(document).ready(async function ($) {
   try {
     $(document).on(
       "click",
-      myMintPluginSettings.mintButtonIdOrClass,
+      SCFlowPluginSettings.mintButtonIdOrClass,
       async function () {
         if (
           window.localStorage.getItem("wagmi.connected") === null ||
@@ -214,18 +214,18 @@ jQuery(document).ready(async function ($) {
         } else {
           // Get the user's selected quantity from the input field
           const quantity = parseInt(
-            $(myMintPluginSettings.mintQuantityIdOrClass).val()
+            $(SCFlowPluginSettings.mintQuantityIdOrClass).val()
           );
 
           // Set quantity to 1 if it's not a valid number or less than or equal to zero
           if (isNaN(quantity) || quantity <= 0) {
             quantity = 1;
           }
-          if (quantity > Number.parseInt(myMintPluginSettings.maxQuantity)) {
+          if (quantity > Number.parseInt(SCFlowPluginSettings.maxQuantity)) {
             showPopup(
               "error",
-              myMintPluginSettings.maxQuantity +
-                myMintPluginSettings.maxQuantity
+              SCFlowPluginSettings.maxQuantity +
+              SCFlowPluginSettings.maxQuantity
             );
             return;
           }
@@ -234,13 +234,13 @@ jQuery(document).ready(async function ($) {
             // Display the popup with the appropriate message
             showPopup(
               "error",
-              myMintPluginSettings.popup.errorTermAndCondition
+              SCFlowPluginSettings.popup.errorTermAndCondition
             );
           } else {
             // Call the mint function
             const weiAmount = ethers.parseUnits(
               (
-                quantity * Number.parseFloat(myMintPluginSettings.mintPrice)
+                quantity * Number.parseFloat(SCFlowPluginSettings.mintPrice)
               ).toString(),
               "ether"
             );
@@ -251,7 +251,7 @@ jQuery(document).ready(async function ($) {
                 "success",
                 `
               <div class="popup-content">
-                <p>${myMintPluginSettings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p>
+                <p>${SCFlowPluginSettings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p>
               </div>
               `
               );

@@ -75,9 +75,9 @@ try {
       window.localStorage.getItem("TRIGGER_MINT") === "true"
     ) {
       window.localStorage.getItem("TRIGGER_MINT") === "false";
-      if ($(myMintPluginSettings.mintQuantityIdOrClass)) {
+      if ($(SCFlowPluginSettings.mintQuantityIdOrClass)) {
         let quantity = Number.parseInt(
-          $(myMintPluginSettings.mintQuantityIdOrClass).val()
+          $(SCFlowPluginSettings.mintQuantityIdOrClass).val()
         );
         // Set quantity to 1 if it's not a valid number or less than or equal to zero
         if (isNaN(quantity) || quantity <= 0) {
@@ -102,13 +102,13 @@ try {
 
   web3modal.subscribeEvents((newState) => {
     const { name } = newState;
-    console.log(myMintPluginSettings.activeChain);
+    console.log(SCFlowPluginSettings.activeChain);
     const { chain } = getNetwork();
     switch (name) {
       case "ACCOUNT_CONNECTED":
         {
           // Handle chain ID
-          if (chain.id !== Number.parseInt(myMintPluginSettings.activeChain)) {
+          if (chain.id !== Number.parseInt(SCFlowPluginSettings.activeChain)) {
             switchNetwork({
               chainId: 80001,
             })

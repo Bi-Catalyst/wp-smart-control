@@ -3,8 +3,8 @@
     // Check if wallet is connected already
     try {
       if (
-        $(".toplevel_page_mint-craft-settings") &&
-        $(".toplevel_page_mint-craft-settings").length > 0
+        $(".toplevel_page_sc-flow-settings") &&
+        $(".toplevel_page_sc-flow-settings").length > 0
       ) {
         // Add listener to connect button
         document.querySelectorAll(".connect-wallet-button").forEach((link) => {

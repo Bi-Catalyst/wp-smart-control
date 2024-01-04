@@ -2,8 +2,8 @@
 window.getMintPrice = async function getMintPrice(fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
   const data = await readContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
+    address: SCFlowPluginSettings.contractAddress,
+    abi: SCFlowPluginSettings.contractABI,
     functionName: "mintPrice",
   });
   console.log(data);
@@ -14,8 +14,8 @@ window.getMintPrice = async function getMintPrice(fn) {
 window.getMaxQuantity = async function getMaxQuantity(fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
   const data = await readContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
+    address: SCFlowPluginSettings.contractAddress,
+    abi: SCFlowPluginSettings.contractABI,
     functionName: "maxQuantity",
   });
   console.log(data);
@@ -25,8 +25,8 @@ window.getMaxQuantity = async function getMaxQuantity(fn) {
 window.getTotalSupply = async function getTotalSupply(fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
   const data = await readContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
+    address: SCFlowPluginSettings.contractAddress,
+    abi: SCFlowPluginSettings.contractABI,
     functionName: "totalSupply",
   });
   console.log(data);
@@ -36,8 +36,8 @@ window.getTotalSupply = async function getTotalSupply(fn) {
 window.getMaxSupply = async function getMaxSupply(fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
   const data = await readContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
+    address: SCFlowPluginSettings.contractAddress,
+    abi: SCFlowPluginSettings.contractABI,
     functionName: "MAX_SUPPLY",
   });
   console.log(data);
@@ -45,11 +45,11 @@ window.getMaxSupply = async function getMaxSupply(fn) {
 };
 
 
-window.mint = async function mint(quantity,value,gas,fn) {
+window.mint = async function mint(quantity, value, gas, fn) {
   // Convert the price to wei (1 MATIC = 10^18 wei)
   const { request } = await prepareWriteContract({
-    address: myMintPluginSettings.contractAddress,
-    abi: myMintPluginSettings.contractABI,
+    address: SCFlowPluginSettings.contractAddress,
+    abi: SCFlowPluginSettings.contractABI,
     functionName: "mint",
     args: [quantity],
     // gas: gas,

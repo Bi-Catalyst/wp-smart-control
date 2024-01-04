@@ -1,9 +1,14 @@
 <?php
 
-// mint-craft-admin.php
-
 /**
- * Admin functionality for Mint Craft.
+ * Admin functionalities for Smart Contracts Flow.
+ * This tab will be containing the general setting for the smart contract
+ *
+ * @link       https://bicatalyst.ch
+ * @since      0.0.1
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
+ * @subpackage {sc-flow-admin.php}
  */
 
 if (!defined('ABSPATH')) {
@@ -12,11 +17,11 @@ if (!defined('ABSPATH')) {
 
 require_once dirname(__FILE__) . '/../constants.php';
 
-require_once 'mint-craft-general-settings-tab.php';
-require_once 'mint-craft-admin-functions-tab.php';
-require_once 'mint-craft-admin-style-tab.php';
+require_once 'sc-flow-general-settings-tab.php';
+require_once 'sc-flow-admin-functions-tab.php';
+require_once 'sc-flow-admin-style-tab.php';
 
-class Mint_Craft_Admin
+class SC_Flow_Admin
 {
     /**
      * Class constructor.
@@ -51,9 +56,9 @@ class Mint_Craft_Admin
             ?>
             <div class="notice notice-info is-dismissible">
                 <p>
-                    <strong>This plugin is developed and copyrighted by Bicatalyst.</strong><br>
-                    Unauthorized distribution or reproduction of this plugin is prohibited.
-                    For inquiries and licensing, contact us at info@bicatalyst.com .
+                    <strong>&copy; 2023 Bicatalyst. All rights reserved.</strong><br>
+                    Unauthorized distribution or reproduction of this plugin is strictly prohibited.
+                    For licensing and inquiries, please contact us at <a href="mailto:info@bicatalyst.com">info@bicatalyst.com</a>.
                 </p>
             </div>
             <?php
@@ -65,7 +70,7 @@ class Mint_Craft_Admin
      */
     public function enqueue_connect_wallet_script($hook)
     {
-        if (isset($_GET['page']) && $_GET['page'] === 'mint-craft-settings') {
+        if (isset($_GET['page']) && $_GET['page'] === 'sc-flow-settings') {
             echo '<script type="module" src="' . plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/connect-wallet-wagmi.js"/>';
         }
     }
@@ -75,16 +80,16 @@ class Mint_Craft_Admin
      */
     public function enqueue_scripts($hook)
     {
-        if ($hook == 'toplevel_page_mint-craft-settings') {
+        if ($hook == 'toplevel_page_sc-flow-settings') {
             // Enqueue ethers script from the CDN
             wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
 
             // Enqueue your custom admin script file
             // Define the data to be passed to the JavaScript file
             // Define the data to be passed to the JavaScript file
-            $my_mint_plugin_settings = array(
+            $sc_flow_plugin_settings = array(
                 'pluginName' => MC_PLUGIN_NAME,
-                // mint-craft-function_MAX_SUPPLY
+                // sc-flow-function_MAX_SUPPLY
                 'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MAX_SUPPLY'),
                 'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
                 'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
@@ -104,33 +109,30 @@ class Mint_Craft_Admin
                 'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
                 // 
                 'popup' => array(
-                    'errorQuantity' => __('Maximum quantity allowed is', 'mint-craft'),
-                    'errorChain' => __('Please switch to active chain', 'mint-craft'),
-                    'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'mint-craft'),
-                    'errorFunds' => __('Not enough funds in the wallet.', 'mint-craft'),
-                    'generalError' => __('An error occurred.', 'mint-craft'),
-                    'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'mint-craft'),
+                    'errorQuantity' => __('Maximum quantity allowed is', 'sc-flow'),
+                    'errorChain' => __('Please switch to active chain', 'sc-flow'),
+                    'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'sc-flow'),
+                    'errorFunds' => __('Not enough funds in the wallet.', 'sc-flow'),
+                    'generalError' => __('An error occurred.', 'sc-flow'),
+                    'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'sc-flow'),
                 )
             );
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-write', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-write-admin.js', array('jquery', 'ethers'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-write', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers'), '0.0.1', true);
 
             // Enqueue read smart contract operations
-            wp_enqueue_script('sc-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-read.js', array('jquery', 'ethers', 'sc-write'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-write'), '0.0.1', true);
 
             // Enqueue js logic for mint ui component
-            wp_enqueue_script('mint-admin', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/mint-craft-admin.js', array('jquery', 'ethers', 'sc-write', 'sc-read'), '0.0.1', true);
+            wp_enqueue_script('mint-admin', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
 
             // Localize the script with the plugin settings
-            wp_localize_script('sc-read', 'myMintPluginSettings', $my_mint_plugin_settings);
+            wp_localize_script('sc-flow-plugin-settings', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
             // Enqueue your custom admin styles
-            wp_enqueue_style('mint-craft-admin-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/mint-craft-admin.css', array(), '0.0.1');
+            wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-admin.css', array(), '0.0.1');
         }
-
-
-
     }
     /**
      * Add plugin settings link to the plugin list page.
@@ -173,8 +175,8 @@ class Mint_Craft_Admin
     public function add_menu_page()
     {
         add_menu_page(
-            __('SmartCtrl' . ' Settings', 'mint-craft'),
-            __('SmartCtrl', 'mint-craft'),
+            __('Smart Contract Flow' . ' Settings', 'sc-flow'),
+            __('Smart Contract Flow', 'sc-flow'),
             'manage_options',
             MC_ADMIN_MENU_SLUG,
             array($this, 'render_settings_page'),
@@ -189,9 +191,9 @@ class Mint_Craft_Admin
     public function render_settings_page()
     {
         ?>
-        <div class="mint-craft">
+        <div class="sc-flow">
             <h1>
-                <?php echo esc_html__('SmartCtrl', 'mint-craft'); ?>
+                <?php echo esc_html__('Smart Contract Flow', 'sc-flow'); ?>
 
             </h1>
             <?php
@@ -200,24 +202,24 @@ class Mint_Craft_Admin
             <h2 class="nav-tab-wrapper">
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>" class="nav-tab <?php if (!isset($_GET['tab']) || $_GET['tab'] === 'general')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('General Settings', 'mint-craft'); ?>
+                    <?php echo esc_html__('General Settings', 'sc-flow'); ?>
                 </a>
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=admin_functions" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Admin Operations', 'mint-craft'); ?>
+                    <?php echo esc_html__('Admin Operations', 'sc-flow'); ?>
                 </a>
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Buttons Style', 'mint-craft'); ?>
+                    <?php echo esc_html__('Buttons Style', 'sc-flow'); ?>
                 </a>
             </h2>
             <?php
             if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions') {
-                Mint_Craft_Admin_Functions_Tab::render();
+                SC_Flow_Admin_Functions_Tab::render();
             } else if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style') {
-                Mint_Craft_Admin_Style_Tab::render();
+                SC_Flow_Admin_Style_Tab::render();
             } else {
-                Mint_Craft_General_Settings_Tab::render();
+                SC_Flow_General_Settings_Tab::render();
             }
             ?>
         </div>
@@ -238,8 +240,8 @@ class Mint_Craft_Admin
      */
     public function register_settings()
     {
-        Mint_Craft_Admin_Functions_Tab::register_settings();
-        Mint_Craft_General_Settings_Tab::register_settings();
-        Mint_Craft_Admin_Style_Tab::register_settings();
+        SC_Flow_Admin_Functions_Tab::register_settings();
+        SC_Flow_General_Settings_Tab::register_settings();
+        SC_Flow_Admin_Style_Tab::register_settings();
     }
 }

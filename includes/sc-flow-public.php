@@ -2,16 +2,16 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://yourwebsite.com
+ * @link       https://bicatalyst.ch
  * @since      0.0.1
- *
- * @package    Min_Craft
- * @subpackage Min_Craft/public
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
+ * @subpackage {sc-flow-public.php}
  */
 
 require_once 'constants.php';
 
-class Min_Craft_Public
+class SmartContract_Flow_Public
 {
 
     /**
@@ -31,8 +31,6 @@ class Min_Craft_Public
         add_shortcode('connect_wallet', array($this, 'connect_wallet_shortcode'));
 
         add_shortcode('mint_button', array($this, 'mint_button_shortcode'));
-
-        add_shortcode('mint_box', array($this, 'mint_box_shortcode'));
 
         add_shortcode('crossmint_payment_button', array($this, 'crossmint_shortcode'));
     }
@@ -82,9 +80,9 @@ class Min_Craft_Public
                 wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
 
                 // Define the data to be passed to the JavaScript file
-                $my_mint_plugin_settings = array(
+                $sc_flow_plugin_settings = array(
                     'pluginName' => MC_PLUGIN_NAME,
-                    // mint-craft-function_MAX_SUPPLY
+                    // sc-flow-function_MAX_SUPPLY
                     'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MAX_SUPPLY'),
                     'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
                     'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
@@ -103,12 +101,12 @@ class Min_Craft_Public
                     'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
                     // 
                     'popup' => array(
-                        'errorQuantity' => __('Maximum quantity allowed is', 'mint-craft'),
-                        'errorChain' => __('Please switch to active chain', 'mint-craft'),
-                        'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'mint-craft'),
-                        'errorFunds' => __('Not enough funds in the wallet.', 'mint-craft'),
-                        'generalError' => __('An error occurred.', 'mint-craft'),
-                        'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'mint-craft'),
+                        'errorQuantity' => __('Maximum quantity allowed is', 'sc-flow'),
+                        'errorChain' => __('Please switch to active chain', 'sc-flow'),
+                        'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'sc-flow'),
+                        'errorFunds' => __('Not enough funds in the wallet.', 'sc-flow'),
+                        'generalError' => __('An error occurred.', 'sc-flow'),
+                        'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'sc-flow'),
                     )
                 );
 
@@ -116,19 +114,19 @@ class Min_Craft_Public
                 // wp_enqueue_script('sc-write-fe', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-write-frontend.js', array('jquery', 'ethers'), '0.0.1', true);
 
                 // Enqueue read smart contract operations
-                wp_enqueue_script('sc-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-read.js', array('jquery', 'ethers'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers'), '0.0.1', true);
 
                 // Enqueue js logic for mint ui component
-                wp_enqueue_script('mint-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/mint-craft-frontend.js', array('jquery', 'ethers', 'sc-read'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-frontend.js', array('jquery', 'ethers', 'sc-flow-read'), '0.0.1', true);
 
                 // Enqueue crossmint script
-                wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@0.1.0/lib/index.global.js', array('jquery', 'ethers', 'sc-read', 'mint-frontend'), '0.1.0', true);
+                wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
 
                 // Localize the script with the plugin settings
-                wp_localize_script('mint-frontend', 'myMintPluginSettings', $my_mint_plugin_settings);
+                wp_localize_script('sc-flow-plugin-settings', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
                 // Enqueue your custom styles
-                wp_enqueue_style('mint-craft-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/mint-craft-frontend.css', array(), '0.0.1');
+                wp_enqueue_style('sc-flow-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-frontend.css', array(), '0.0.1');
             }
         }
 
@@ -181,6 +179,7 @@ class Min_Craft_Public
         <?php
         return ob_get_clean();
     }
+
     /**
      * cross mint payment button
      *
@@ -191,66 +190,17 @@ class Min_Craft_Public
     {
         ob_start();
         ?>
-        <crossmint-pay-button class="xmint-btn" clientId="14bea3bf-c1dc-4f44-b847-93b8425f0989"
-            collectionId="41d23af9-b8c0-4930-8306-3471ce7b153b" projectId="d053727b-90ce-45fb-bb65-ba9c833009d0"
-            environment="staging" mintConfig='<?php echo json_encode([
+        <crossmint-pay-button class="xmint-btn" collectionId="095ec891-3c1f-4ec1-ae25-0387b38bd3ac"
+            projectId="d053727b-90ce-45fb-bb65-ba9c833009d0" environment="staging" mintConfig='<?php echo json_encode([
                 "type" => "erc-721",
                 "quantity" => "1",
                 "totalPrice" => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
             ]); ?>' />
         <?php
         return ob_get_clean();
-    }
 
-    /**
-     * Mint button shortcode.
-     *
-     * @return string The shortcode output.
-     */
-    public function mint_box_shortcode()
-    {
-        ob_start();
-        ?>
-        <div class="mint-form-wrapper">
-            <div class="inner-wrapper">
-                <span class="inner-label">Verkauft:</span>
-                <span class="supply-left-num" id="left-to-mint">5/3000</span>
-            </div>
-            <div class="inner-wrapper inner-wrapper-quantity ">
-                <p class="inner-label">Anzahl:</p>
-                <div class="quantity-input-section">
-                    <button type="button" class="decrease-btn">-</button>
-                    <input type="text" class="nft-quantity" value="1">
-                    <button type="button" class="increase-btn">+</button>
-                </div>
-            </div>
-            <div class="inner-wrapper">
-                <span class="inner-label">Preis:</span>
-                <span class="price-right-col"><span class="eth-price">0.1ETH</span>
-                    <span> ~ </span>
-                    <span class="fiat-price">120USD</span>
-                </span>
-            </div>
-            <div>
-                <p class="term-input-message"><input type="checkbox" checked="" name="terms" class="terms-checkbox">Mit dem Kauf
-                    bestätige ich die <a href="" class="terms-link-stl">AGB’s</a>, <a href=""
-                        class="terms-link-stl">Datenschutzbestimmungen </a>und dass ich das 18. Lebensjahr erreicht habe.
-                </p>
-            </div>
-            <div class="mint-form-btns">
-                <button type="button" class="mint-btn-one" id="wallet-mint-btn">
-                    KAUF MIT WALLET
-                </button>
-                <button type="button" class="mint-btn-two" id="cross-mint-btn">
-                    KAUF MIT KREDITKARTE
-                </button>
-            </div>
-        </div>
-        <?php
-        return ob_get_clean();
     }
-
 }
 
 // Instantiate the public class.
-new Min_Craft_Public();
+new SmartContract_Flow_Public();

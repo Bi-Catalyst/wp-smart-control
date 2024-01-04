@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <mohamed.habbat@bicatalyst.ch>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-04 12:23+0100\n"
+"PO-Revision-Date: 2024-01-04 13:40+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:156
+msgid "Non Payable Operations"
+msgstr "Nicht zahlbare Vorgänge"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:158
+msgid "Payable Operations"
+msgstr "Zahlungspflichtige Vorgänge"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:160
+msgid "View Operations"
+msgstr "Vorgänge anzeigen"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:162
+msgid "Events"
+msgstr "Vorgänge"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:164
+msgid "Other Operations"
+msgstr "Andere Vorgänge"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:204
+msgid "Trigger"
+msgstr "Auslöser"
+
+#: includes/admin/sc-flow-admin-functions-tab.php:209
+msgid "Invalid smart contract opeartion"
+msgstr "Ungültiger Smart-Contract-Vorgang"
+
+#: includes/admin/sc-flow-admin.php:112 includes/sc-flow-public.php:104
+msgid "Maximum quantity allowed is"
+msgstr "Die maximal zulässige Menge beträgt"
+
+#: includes/admin/sc-flow-admin.php:113 includes/sc-flow-public.php:105
+msgid "Please switch to active chain"
+msgstr "Bitte wechsle zur aktiven Blockchain"
+
+#: includes/admin/sc-flow-admin.php:114 includes/sc-flow-public.php:106
+msgid "Please accept the terms and conditions to buy NFT."
+msgstr "Bitte akzeptier die Allgemeinen Geschäftsbedingungen um den Kauf zu tätigen."
+
+#: includes/admin/sc-flow-admin.php:115 includes/sc-flow-public.php:107
+msgid "Not enough funds in the wallet."
+msgstr "Du hast nicht genügend Geld in deiner Wallet."
+
+#: includes/admin/sc-flow-admin.php:116 includes/sc-flow-public.php:108
+msgid "An error occurred."
+msgstr "Ein Fehler ist aufgetreten."
+
+#: includes/admin/sc-flow-admin.php:117 includes/sc-flow-public.php:109
+msgid "Mint transaction is submitted successfully, you can view it"
+msgstr "Der Kauf wurde erfolgreich übermittelt, du kannst die Transaktion einsehen"
+
+#: includes/admin/sc-flow-admin.php:145
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/admin/sc-flow-admin.php:178
+msgid "Smart Contract Flow Settings"
+msgstr "Einstellungen"
+
+#: includes/admin/sc-flow-admin.php:179
+msgid "Smart Contract Flow"
+msgstr "Smart Contract Flow"
+
+#: includes/admin/sc-flow-admin-style-tab.php:43
+msgid "Admin Functions"
+msgstr "Admin-Funktionen"
+
+#: includes/admin/sc-flow-admin-style-tab.php:51
+msgid "Connect button"
+msgstr "Connect button"
+
+#: includes/admin/sc-flow-admin-style-tab.php:60
+msgid "Mint Button"
+msgstr "Mint-Button"
+
+#: includes/admin/sc-flow-admin-style-tab.php:69
+msgid "Mint Quantity"
+msgstr "Mint Menge"
+
+#: includes/admin/sc-flow-admin-style-tab.php:78
+msgid "Minter Counter"
+msgstr "Mint-Zähler"
+
+#: includes/admin/sc-flow-admin-style-tab.php:108
+msgid "Enter the mint button class or id (ex: #connect-button or .connect-button)"
+msgstr "Geben Sie die Mint-Button-Klasse oder -ID ein (z. B. #connect-button oder .connect-button)."
+
+#: includes/admin/sc-flow-admin-style-tab.php:122
+msgid "Enter the mint button class or id (ex: #mint-button or .mint-button)"
+msgstr "Geben Sie die Mint-Button-Klasse oder -ID ein (z. B. #mint-button oder .mint-button)."
+
+#: includes/admin/sc-flow-admin-style-tab.php:135
+msgid "Enter the mint button class or id (ex: #mint-quantity or .mint-quantity)"
+msgstr "Geben Sie die Mint-Button-Klasse oder -ID ein (z. B. #mint-quantity oder .mint-quantity)."
+
+#: includes/admin/sc-flow-admin-style-tab.php:148
+msgid "Enter the minter counter class or id (ex: #minter-counter or .minter-counter)"
+msgstr "Geben Sie die Klasse oder ID des Minter-Zählers ein (z. B. #minter-counter oder .minter-counter)."
+
+#: includes/admin/sc-flow-general-settings-tab.php:45
+msgid "General Settings"
+msgstr "Allgemeine Einstellungen"
+
+#: includes/admin/sc-flow-general-settings-tab.php:93
+msgid "Contract Address"
+msgstr "Smart Contract adresse"
+
+#: includes/admin/sc-flow-general-settings-tab.php:101
+msgid "Page Slugs"
+msgstr "WP Page Slugs"
+
+#: includes/admin/sc-flow-general-settings-tab.php:109
+msgid "Smart Contract ABI"
+msgstr "Smart Contract ABI"
+
+#: includes/admin/sc-flow-general-settings-tab.php:119
+msgid "Active Chain"
+msgstr "Aktive Chain"
+
+#: includes/admin/sc-flow-general-settings-tab.php:128
+msgid "Wallet connect Project ID"
+msgstr "Gib die Vertragsadresse für die NFTs ein"
+
+#: includes/admin/sc-flow-general-settings-tab.php:137
+msgid "Alchemy provider project ID"
+msgstr ""
+
+#: includes/admin/sc-flow-general-settings-tab.php:164
+#: includes/admin/sc-flow-general-settings-tab.php:180
+msgid "Enter wallet connect project ID"
+msgstr ""
+
+#: includes/admin/sc-flow-general-settings-tab.php:194
+msgid "Enter the slugs like this ex: slug1, slug2, slug3,."
+msgstr "Geben Sie die Slugs wie folgt ein, z. B.: slug1, slug2, slug3,."
+
+#: includes/admin/sc-flow-general-settings-tab.php:208
+msgid "Enter the contract address for your NFTs."
+msgstr "Geben Sie die Smart Contract adresse für Ihre NFTs ein."
+
+#: includes/admin/sc-flow-general-settings-tab.php:255
+msgid "Select the active chain for your plugin."
+msgstr "Wählen Sie die aktive Chain für das Plugin aus."
+
+#: sc-flow.php:75
+msgid "Connect Wallet"
+msgstr "Wallet verbinden"
+
+#: sc-flow.php:76
+msgid "Mint"
+msgstr ""

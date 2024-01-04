@@ -1,13 +1,19 @@
 <?php
-// mint-craft-general-settings-tab.php
+
 /**
  * Admin General settings tab
  * This tab will be containing the general setting for the smart contract
+ *
+ * @link       https://bicatalyst.ch
+ * @since      0.0.1
+ * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
+ * @package    SmartContract_Flow
+ * @subpackage {sc-flow-general-settings-tab.php}
  */
 
 require_once dirname(__FILE__) . '/../constants.php';
 
-class Mint_Craft_General_Settings_Tab
+class SC_Flow_General_Settings_Tab
 {
     /**
      * Render the content of the general settings tab.
@@ -15,7 +21,7 @@ class Mint_Craft_General_Settings_Tab
     public static function render()
     {
         ?>
-        <div class="mint-craft">
+        <div class="sc-flow">
             <form method="post" action="options.php">
 
                 <?php
@@ -36,7 +42,7 @@ class Mint_Craft_General_Settings_Tab
         // Register a settings section.
         add_settings_section(
             MC_ADMIN_GENERAL_SECTION_TITLE,
-            __('General Settings', 'mint-craft'),
+            __('General Settings', 'sc-flow'),
             array(__CLASS__, 'render_general_settings_section'),
             MC_ADMIN_GENERAL_PAGE
         );
@@ -84,7 +90,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for contract address.
         add_settings_field(
             MC_ADMIN_CONTRACT_ADDRESS_FIELD,
-            __('Contract Address', 'mint-craft'),
+            __('Contract Address', 'sc-flow'),
             array(__CLASS__, 'render_contract_address_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -92,7 +98,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for Slugs
         add_settings_field(
             MC_ADMIN_SLUGS_FIELD,
-            __('Page Slugs', 'mint-craft'),
+            __('Page Slugs', 'sc-flow'),
             array(__CLASS__, 'render_slugs_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -100,7 +106,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for contract ABI.
         add_settings_field(
             MC_ADMIN_CONTRACT_ABI_FIELD,
-            __('Smart Contract ABI', 'mint-craft'),
+            __('Smart Contract ABI', 'sc-flow'),
             array(__CLASS__, 'render_contract_abi_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE,
@@ -110,7 +116,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for active chain selection.
         add_settings_field(
             MC_ADMIN_ACTIVE_CHAIN_FIELD,
-            __('Active Chain', 'mint-craft'),
+            __('Active Chain', 'sc-flow'),
             array(__CLASS__, 'render_active_chain_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -119,7 +125,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for Slugs
         add_settings_field(
             MC_ADMIN_WALLETCONNECT_FIELD,
-            __('Wallet connect Project ID ', 'mint-craft'),
+            __('Wallet connect Project ID', 'sc-flow'),
             array(__CLASS__, 'render_walletconnect_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -128,7 +134,7 @@ class Mint_Craft_General_Settings_Tab
         // Add a field for Slugs
         add_settings_field(
             MC_ADMIN_ALCHEMYPROVIDER_FIELD,
-            __('Alchemy provider project id ', 'mint-craft'),
+            __('Alchemy provider project ID', 'sc-flow'),
             array(__CLASS__, 'render_alchemyprovider_field'),
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
@@ -140,7 +146,7 @@ class Mint_Craft_General_Settings_Tab
      */
     public static function render_general_settings_section()
     {
-        echo '<p>' . esc_html__('Smart contract and network settings.', 'mint-craft') . '</p>';
+        echo '<p>' . esc_html__('Smart contract and network settings.', 'sc-flow') . '</p>';
     }
 
 
@@ -155,14 +161,14 @@ class Mint_Craft_General_Settings_Tab
         <input type="text" name="<?php echo MC_ADMIN_WALLETCONNECT_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter wallet connect project id', MC_PLUGIN_NAME); ?>
+            <?php __('Enter wallet connect project ID', MC_PLUGIN_NAME); ?>
         </p>
         <?php
     }
 
 
     /**
-     * Render alchemy provider project id field
+     * Render alchemy provider project ID field
      */
     public static function render_alchemyprovider_field()
     {
@@ -171,7 +177,7 @@ class Mint_Craft_General_Settings_Tab
         <input type="text" name="<?php echo MC_ADMIN_ALCHEMYPROVIDER_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter wallet connect project id', MC_PLUGIN_NAME); ?>
+            <?php __('Enter wallet connect project ID', MC_PLUGIN_NAME); ?>
         </p>
         <?php
     }

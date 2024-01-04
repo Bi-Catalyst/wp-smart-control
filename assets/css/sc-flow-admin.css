@@ -1,35 +1,35 @@
-.mint-craft {
+.sc-flow {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.mint-craft h1 {
+.sc-flow h1 {
   margin-bottom: 20px;
 }
 
-.mint-craft .form-field {
+.sc-flow .form-field {
   margin-bottom: 20px;
 }
 
-.mint-craft .form-field label {
+.sc-flow .form-field label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.mint-craft .form-field input[type="text"],
+.sc-flow .form-field input[type="text"],
 .form-field textarea {
   width: 100%;
 }
 
-.mint-craft .form-field .description {
+.sc-flow .form-field .description {
   margin-top: 5px;
   font-size: 12px;
   color: #666;
 }
 
-.mint-craft .submit-button {
+.sc-flow .submit-button {
   margin-top: 20px;
 }
 /* Styles for Mint button */
@@ -242,13 +242,13 @@
   margin-bottom: 20px;
 }
 
-.mint-craft .function-field label {
+.sc-flow .function-field label {
   display: block;
   margin-bottom: 5px;
 }
 
-.mint-craft .function-field input[type="text"],
-.mint-craft .function-field input[type="number"] {
+.sc-flow .function-field input[type="text"],
+.sc-flow .function-field input[type="number"] {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -256,7 +256,7 @@
   box-sizing: border-box;
 }
 
-.mint-craft .function-field .function-result {
+.sc-flow .function-field .function-result {
   margin-top: 10px;
   font-weight: bold;
   padding: 8px;
