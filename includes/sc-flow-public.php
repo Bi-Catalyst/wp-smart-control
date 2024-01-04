@@ -92,8 +92,10 @@ class SmartContract_Flow_Public
                     'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
                     // wallet connect
                     'wcProjectId' => get_option(MC_ADMIN_WALLETCONNECT_FIELD),
-                    // alchemy
+                    // Alchemy Provider
                     'alchemyProvider' => get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD),
+                    // Fiat currency 
+                    'fiatCurrency' => get_option(MC_ADMIN_FIAT_CURRENCY_FIELD),
                     // styles
                     'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
                     'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
@@ -191,12 +193,13 @@ class SmartContract_Flow_Public
     {
         ob_start();
         ?>
-        <crossmint-pay-button class="xmint-btn" collectionId="095ec891-3c1f-4ec1-ae25-0387b38bd3ac"
-            projectId="d053727b-90ce-45fb-bb65-ba9c833009d0" environment="staging" mintConfig='<?php echo json_encode([
-                "type" => "erc-721",
-                "quantity" => "1",
-                "totalPrice" => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
-            ]); ?>' />
+        <crossmint-pay-button class="xmint-btn" collectionId="<?php echo get_option(MC_PLUGIN_CROSSMINT_COLLECTION_ID); ?>"
+            projectId="<?php echo get_option(MC_PLUGIN_CROSSMINT_PROJECT_ID); ?>"
+            environment="<?php echo get_option(MC_PLUGIN_CROSSMINT_ENVIRONMENT); ?>" mintConfig='<?php echo json_encode([
+                   "type" => get_option(MC_PLUGIN_CROSSMINT_ERC_TYPE),
+                   "quantity" => "1",
+                   "totalPrice" => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
+               ]); ?>' />
         <?php
         return ob_get_clean();
 

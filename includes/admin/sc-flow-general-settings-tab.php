@@ -73,6 +73,13 @@ class SC_Flow_General_Settings_Tab
             MC_ADMIN_ALCHEMYPROVIDER_FIELD,
             'sanitize_text_field'
         );
+
+        // Register fiat currency symbol settings fields.
+        register_setting(
+            MC_ADMIN_GENERAL_FIELDS,
+            MC_ADMIN_FIAT_CURRENCY_FIELD,
+            'sanitize_text_field'
+        );
         // Register a settings field for contract ABI.
         register_setting(
             MC_ADMIN_GENERAL_FIELDS,
@@ -139,6 +146,15 @@ class SC_Flow_General_Settings_Tab
             MC_ADMIN_GENERAL_PAGE,
             MC_ADMIN_GENERAL_SECTION_TITLE
         );
+
+        // Add a field for currency
+        add_settings_field(
+            MC_ADMIN_FIAT_CURRENCY_FIELD,
+            __('Fiat Currency', 'sc-flow'),
+            array(__CLASS__, 'render_fiat_currency_field'),
+            MC_ADMIN_GENERAL_PAGE,
+            MC_ADMIN_GENERAL_SECTION_TITLE
+        );
     }
 
     /**
@@ -146,7 +162,7 @@ class SC_Flow_General_Settings_Tab
      */
     public static function render_general_settings_section()
     {
-        echo '<p>' . esc_html__('Smart contract and network settings.', 'sc-flow') . '</p>';
+        echo '<p>' . esc_html__('Smart contract settings', 'sc-flow') . '</p>';
     }
 
 
@@ -156,9 +172,9 @@ class SC_Flow_General_Settings_Tab
      */
     public static function render_walletconnect_field()
     {
-        $project_id = get_option(MC_ADMIN_WALLETCONNECT_FIELD);
+        $wallet_connect = get_option(MC_ADMIN_WALLETCONNECT_FIELD);
         ?>
-        <input type="text" name="<?php echo MC_ADMIN_WALLETCONNECT_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
+        <input type="text" name="<?php echo MC_ADMIN_WALLETCONNECT_FIELD; ?>" value="<?php echo esc_attr($wallet_connect); ?>"
             class="regular-text" />
         <p class="description">
             <?php __('Enter wallet connect project ID', MC_PLUGIN_NAME); ?>
@@ -170,14 +186,28 @@ class SC_Flow_General_Settings_Tab
     /**
      * Render alchemy provider project ID field
      */
-    public static function render_alchemyprovider_field()
+    public static function render_fiat_currency_field()
     {
-        $project_id = get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD);
+        $fiat_currency = get_option(MC_ADMIN_FIAT_CURRENCY_FIELD);
         ?>
-        <input type="text" name="<?php echo MC_ADMIN_ALCHEMYPROVIDER_FIELD; ?>" value="<?php echo esc_attr($project_id); ?>"
+        <input type="text" name="<?php echo MC_ADMIN_FIAT_CURRENCY_FIELD; ?>" value="<?php echo esc_attr($fiat_currency); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter wallet connect project ID', MC_PLUGIN_NAME); ?>
+            <?php __('Enter fiat currency symbol (ex: chf)', MC_PLUGIN_NAME); ?>
+        </p>
+        <?php
+    }
+    /**
+     * Render alchemy provider project ID field
+     */
+    public static function render_alchemyprovider_field()
+    {
+        $alchemy_provider = get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD);
+        ?>
+        <input type="text" name="<?php echo MC_ADMIN_ALCHEMYPROVIDER_FIELD; ?>" value="<?php echo esc_attr($alchemy_provider); ?>"
+            class="regular-text" />
+        <p class="description">
+            <?php __('Enter alchemy provider project ID', MC_PLUGIN_NAME); ?>
         </p>
         <?php
     }

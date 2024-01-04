@@ -20,6 +20,7 @@ require_once dirname(__FILE__) . '/../constants.php';
 require_once 'sc-flow-general-settings-tab.php';
 require_once 'sc-flow-admin-functions-tab.php';
 require_once 'sc-flow-admin-style-tab.php';
+require_once 'sc-flow-crossmint-tab.php';
 
 class SC_Flow_Admin
 {
@@ -100,8 +101,10 @@ class SC_Flow_Admin
 
                 // wallet connect
                 'wcProjectId' => get_option(MC_ADMIN_WALLETCONNECT_FIELD),
-                // alchemy
+                // Alchemy Provider
                 'alchemyProvider' => get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD),
+                // Fiat currency 
+                'fiatCurrency' => get_option(MC_ADMIN_FIAT_CURRENCY_FIELD),
                 // styles
                 'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
                 'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
@@ -157,19 +160,23 @@ class SC_Flow_Admin
         $mint_button = get_option(MC_PLUGIN_MINT_BUTTON);
         $mint_quantity = get_option(MC_PLUGIN_MINT_QUANTITY);
         $mint_counter = get_option(MC_PLUGIN_MINTER_COUNTER);
+        $fiat_currency = get_option(MC_ADMIN_FIAT_CURRENCY_FIELD);
 
         // If the options are not set, initialize them with default values
         if (empty($connect_button)) {
             update_option(MC_PLUGIN_CONNECT_BUTTON, '.connect-wallet-button');
         }
         if (empty($mint_button)) {
-            update_option(MC_PLUGIN_MINT_BUTTON, '.mint-button');
+            update_option(MC_PLUGIN_MINT_BUTTON, '.mint-btn-one');
         }
         if (empty($mint_quantity)) {
-            update_option(MC_PLUGIN_MINT_QUANTITY, '.mint-quantity');
+            update_option(MC_PLUGIN_MINT_QUANTITY, '.nft-quantity');
         }
         if (empty($mint_counter)) {
             update_option(MC_PLUGIN_MINTER_COUNTER, '#left-to-mint');
+        }
+        if (empty($fiat_currency)) {
+            update_option(MC_ADMIN_FIAT_CURRENCY_FIELD, 'chf');
         }
     }
 
@@ -212,16 +219,23 @@ class SC_Flow_Admin
                        echo 'nav-tab-active'; ?>">
                     <?php echo esc_html__('Admin Operations', 'sc-flow'); ?>
                 </a>
+                <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=crossmint_settings" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings')
+                       echo 'nav-tab-active'; ?>">
+                    <?php echo esc_html__('Crossmint configuration', 'sc-flow'); ?>
+                </a>
                 <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
                        echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Buttons Style', 'sc-flow'); ?>
+                    <?php echo esc_html__('Buttons attributes', 'sc-flow'); ?>
                 </a>
+
             </h2>
             <?php
             if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions') {
                 SC_Flow_Admin_Functions_Tab::render();
             } else if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style') {
                 SC_Flow_Admin_Style_Tab::render();
+            } else if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings') {
+                SC_Flow_Admin_Crossmint_Tab::render();
             } else {
                 SC_Flow_General_Settings_Tab::render();
             }
@@ -247,5 +261,7 @@ class SC_Flow_Admin
         SC_Flow_Admin_Functions_Tab::register_settings();
         SC_Flow_General_Settings_Tab::register_settings();
         SC_Flow_Admin_Style_Tab::register_settings();
+        SC_Flow_Admin_Crossmint_Tab::register_settings();
+
     }
 }

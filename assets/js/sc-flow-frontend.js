@@ -122,13 +122,14 @@ jQuery(document).ready(async function ($) {
   }
 
   // Matic value on fiat
-  const currency = "chf"; // or 'chf'
+  const currency = SCFlowPluginSettings.fiatCurrency.toLowerCase(); // or 'chf'
 
   getMaticPrice(currency)
     .then((price) => {
       if (price !== null) {
         jQuery(".final-nft-price").text(
-          "CHF " +
+          SCFlowPluginSettings.fiatCurrency.toUpperCase() +
+            " " +
             (
               Number.parseFloat(SCFlowPluginSettings.mintPrice) *
               Number.parseFloat(price)

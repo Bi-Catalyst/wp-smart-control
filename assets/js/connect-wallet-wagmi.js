@@ -5,8 +5,8 @@ import {
   WagmiCore,
   WagmiCoreChains,
   WagmiCoreProviders,
-  // WagmiCoreConnectors
   // alchemyProvider,
+  // WagmiCoreConnectors
   // infuraProvider
 } from "https://unpkg.com/@web3modal/ethereum";
 

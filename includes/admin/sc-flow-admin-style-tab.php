@@ -94,7 +94,7 @@ class SC_Flow_Admin_Style_Tab
      */
     public static function render_admin_style_section()
     {
-        echo '<p>' . esc_html__('This section allows you to configure fields classes which will linked to events', 'sc-flow') . '</p>';
+        echo '<p>' . esc_html__('Configure class and ID attribute for frontend operation (ex: mint - nft quantity)', 'sc-flow') . '</p>';
     }
     /**
      * Render the connect button.
