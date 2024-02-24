@@ -91,7 +91,7 @@ class SC_Flow_Admin
             $sc_flow_plugin_settings = array(
                 'pluginName' => MC_PLUGIN_NAME,
                 // sc-flow-function_MAX_SUPPLY
-                'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'MAX_SUPPLY'),
+                'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
                 'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
                 'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
                 'totalSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
