@@ -69,8 +69,13 @@ try {
 
   window.web3modal = web3modal;
 
+  // if (polygonMumbai.id !== Number.parseInt(SCFlowPluginSettings.activeChain)) {
+  //   web3modal.setDefaultChain(polygonMumbai);
+  // } else {
+  //   web3modal.setDefaultChain(polygon);
+  // }
+
   // Set default chain
-  web3modal.setDefaultChain(polygonMumbai);
 
   function triggerMint() {
     if (
@@ -124,9 +129,12 @@ try {
       case "ACCOUNT_CONNECTED":
         {
           // Handle chain ID
-          if (chain.id !== Number.parseInt(SCFlowPluginSettings.activeChain)) {
+          const activeChainId = Number.parseInt(
+            SCFlowPluginSettings.activeChain
+          );
+          if (chain.id !== activeChainId) {
             switchNetwork({
-              chainId: 80001,
+              chainId: activeChainId,
             })
               .then((chain) => {
                 // triggerMint();
