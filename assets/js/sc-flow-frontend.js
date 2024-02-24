@@ -59,6 +59,7 @@ function increaseQuantity() {
 }
 
 jQuery(document).ready(async function ($) {
+  console.log("I am here");
   if (
     !document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass) ||
     typeof document.querySelector(
@@ -100,6 +101,8 @@ jQuery(document).ready(async function ($) {
 
   try {
     // Set mint price value
+    console.log(SCFlowPluginSettings.mintPrice);
+
     jQuery(".final-nft-price-crypto").text(
       SCFlowPluginSettings.mintPrice + " MATIC"
     );
@@ -108,15 +111,21 @@ jQuery(document).ready(async function ($) {
     jQuery(SCFlowPluginSettings.minterCounterIdOrClass).text(
       SCFlowPluginSettings.totalSupply
     );
-    await getTotalSupply(function (data) {
-      jQuery(SCFlowPluginSettings.minterCounterIdOrClass).text(data);
-    });
-
     // Max Supply
     jQuery("#total-nft-sup").text(SCFlowPluginSettings.maxSupply);
-    await getMaxSupply(function (data) {
-      jQuery("#total-nft-sup").text(data);
-    });
+    console.log(SCFlowPluginSettings);
+    if (
+      localStorage.getItem("wagmi.connected") ||
+      localStorage.getItem("wagmi.connected") === "true"
+    ) {
+      await getTotalSupply(function (data) {
+        jQuery(SCFlowPluginSettings.minterCounterIdOrClass).text(data);
+      });
+
+      await getMaxSupply(function (data) {
+        jQuery("#total-nft-sup").text(data);
+      });
+    }
   } catch (error) {
     console.log(error);
   }
