@@ -5,36 +5,28 @@ import {
   WagmiCore,
   WagmiCoreChains,
   WagmiCoreProviders,
-  // alchemyProvider,
-  // WagmiCoreConnectors
-  // infuraProvider
-} from "https://unpkg.com/@web3modal/ethereum";
+} from "https://unpkg.com/@web3modal/ethereum@2.7.1/dist/cdn/bundle.js";
 
-import { Web3Modal as WagmiWeb3Modal } from "https://unpkg.com/@web3modal/html";
+import { Web3Modal as WagmiWeb3Modal } from "https://unpkg.com/@web3modal/html@2.7.1/dist/cdn/bundle.js";
+
+const settings = window.SCFlowPluginSettings;
 
 try {
-  window.localStorage.setItem("TRIGGER_MINT", false);
-  window.process = {
-    env: {
-      NODE_ENV: "production",
-    },
-  };
-  const projectId = "REDACTED_WALLETCONNECT_ID";
+  window.localStorage.setItem("TRIGGER_MINT", "false");
+  window.process = { env: { NODE_ENV: "production" } };
 
+  const projectId = settings.wcProjectId;
   const { polygon, polygonMumbai } = WagmiCoreChains;
-  const { publicProvider, jsonRpcProvider, alchemyProvider, infuraProvider } =
-    WagmiCoreProviders;
-
+  const { alchemyProvider } = WagmiCoreProviders;
   const {
     configureChains,
     createConfig,
-    prepareWriteContract: prepareWriteContract,
+    prepareWriteContract,
     writeContract,
     readContract,
     switchNetwork,
     getNetwork,
     getAccount,
-    fetchBalance,
   } = WagmiCore;
 
   window.prepareWriteContract = prepareWriteContract;
@@ -42,15 +34,12 @@ try {
   window.readContract = readContract;
   window.getNetwork = getNetwork;
 
-  // 1. Define chains
   const chains = [polygonMumbai, polygon];
-
-  const { publicClient } = configureChains(chains, [
-    // publicProvider(),
-    alchemyProvider({ apiKey: "REDACTED_ALCHEMY_KEY" }),
-    // infuraProvider({ apiKey: "REDACTED_INFURA_KEY" }),
-    w3mProvider({ projectId }),
-  ]);
+  const providers = [w3mProvider({ projectId })];
+  if (settings.alchemyProvider) {
+    providers.unshift(alchemyProvider({ apiKey: settings.alchemyProvider }));
+  }
+  const { publicClient } = configureChains(chains, providers);
 
   const wagmiConfig = createConfig({
     autoConnect: true,
@@ -58,119 +47,69 @@ try {
     publicClient,
   });
 
-  window.estimateContractGas = publicClient.estimateContractGas;
-
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
   const web3modal = new WagmiWeb3Modal(
     { projectId, walletConnectVersion: 2 },
     ethereumClient
   );
-
   window.web3modal = web3modal;
 
-  // if (polygonMumbai.id !== Number.parseInt(SCFlowPluginSettings.activeChain)) {
-  //   web3modal.setDefaultChain(polygonMumbai);
-  // } else {
-  //   web3modal.setDefaultChain(polygon);
-  // }
+  function readQuantity() {
+    const input = document.querySelector(settings.mintQuantityIdOrClass);
+    const quantity = input ? Number.parseInt(input.value) : NaN;
+    return isNaN(quantity) || quantity <= 0 ? 1 : quantity;
+  }
 
-  // Set default chain
+  function showMintSuccess(hash) {
+    const { chain } = getNetwork();
+    showPopup(
+      "success",
+      `<div class="popup-content"><p>${settings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p></div>`
+    );
+  }
 
-  function triggerMint() {
-    if (
-      window.localStorage.getItem("TRIGGER_MINT") !== null ||
-      window.localStorage.getItem("TRIGGER_MINT") === "true"
-    ) {
-      window.localStorage.getItem("TRIGGER_MINT") === "false";
-      if (
-        SCFlowPluginSettings &&
-        document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass)
-      ) {
-        let quantity = Number.parseInt(
-          document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass)
-            .value
-        );
-        // Set quantity to 1 if it's not a valid number or less than or equal to zero
-        if (isNaN(quantity) || quantity <= 0) {
-          quantity = 1;
-        }
-        mint(quantity, function (hash) {
-          const { chain } = getNetwork();
-          showPopup(
-            "success",
-            `
-          <div class="popup-content">
-            <p>${SCFlowPluginSettings.popup.sucessMint} <a href="${chain.blockExplorers.default.url}/tx/${hash}" target="_blank">here</a>.</p>
-          </div>
-          `
-          );
-        });
-      }
+  function triggerPendingMint() {
+    if (window.localStorage.getItem("TRIGGER_MINT") !== "true") {
+      return;
+    }
+    window.localStorage.setItem("TRIGGER_MINT", "false");
+    if (!document.querySelector(settings.mintQuantityIdOrClass)) {
+      return;
+    }
+    mint(readQuantity(), showMintSuccess);
+  }
+
+  function ensureActiveChain() {
+    const { chain } = getNetwork();
+    const activeChainId = Number.parseInt(settings.activeChain);
+    if (chain && chain.id !== activeChainId) {
+      switchNetwork({ chainId: activeChainId }).catch((error) =>
+        console.error(error)
+      );
     }
   }
 
-  web3modal.subscribeModal((newState) => {
-    const { open } = newState;
-    if (
-      open === false &&
-      window.localStorage.getItem("wagmi.connected") === null
-    ) {
-      window.localStorage.setItem("TRIGGER_MINT", false);
+  web3modal.subscribeModal(({ open }) => {
+    if (!open && window.localStorage.getItem("wagmi.connected") === null) {
+      window.localStorage.setItem("TRIGGER_MINT", "false");
     }
-    // check if modal close and window.localStorage.getItem("wagmi.connected") === "false"
-    // console.log(wagmiConfig.store.getStore());
   });
 
-  web3modal.subscribeEvents((newState) => {
-    const { name } = newState;
-    const { chain } = getNetwork();
-    switch (name) {
-      case "ACCOUNT_CONNECTED":
-        {
-          // Handle chain ID
-          const activeChainId = Number.parseInt(
-            SCFlowPluginSettings.activeChain
-          );
-          if (chain.id !== activeChainId) {
-            switchNetwork({
-              chainId: activeChainId,
-            })
-              .then((chain) => {
-                // triggerMint();
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }
-          // Get Account
-          const account = getAccount();
-          window.localStorage.setItem("WALLET_ADDRESS", account.address);
-          // fetch balance
-          fetchBalance({
-            address: account.address,
-          }).then((balance) => {
-            console.log(balance);
-          });
-          // Check if mint event should be triggered
-          if (window.localStorage.getItem("TRIGGER_MINT") === "true") {
-            triggerMint();
-          }
-        }
-        break;
-      case "ACCOUNT_DISCONNECTED": {
-        window.localStorage.setItem("WALLET_ADDRESS", "");
-        window.localStorage.setItem("TRIGGER_MINT", false);
-        // clean up
-      }
-      default:
-        break;
+  web3modal.subscribeEvents(({ name }) => {
+    if (name === "ACCOUNT_CONNECTED") {
+      ensureActiveChain();
+      window.localStorage.setItem("WALLET_ADDRESS", getAccount().address);
+      triggerPendingMint();
+    }
+    if (name === "ACCOUNT_DISCONNECTED") {
+      window.localStorage.setItem("WALLET_ADDRESS", "");
+      window.localStorage.setItem("TRIGGER_MINT", "false");
     }
   });
+
   if (wagmiConfig.storage["wagmi.connected"]) {
-    const account = getAccount();
-    window.localStorage.setItem("WALLET_ADDRESS", account.address);
+    window.localStorage.setItem("WALLET_ADDRESS", getAccount().address);
   }
 } catch (error) {
-  console.log(error);
+  console.error(error);
 }
