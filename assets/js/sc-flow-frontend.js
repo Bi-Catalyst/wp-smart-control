@@ -47,7 +47,7 @@ function increaseQuantity() {
   if (currentValue + 1 > SCFlowPluginSettings.maxQuantity) {
     showPopup(
       "error",
-      SCFlowPluginSettings.pupup.errorQuantity +
+      SCFlowPluginSettings.popup.errorQuantity +
         " " +
         SCFlowPluginSettings.maxQuantity
     );
@@ -59,7 +59,6 @@ function increaseQuantity() {
 }
 
 jQuery(document).ready(async function ($) {
-  console.log("I am here");
   if (
     !document.querySelector(SCFlowPluginSettings.mintQuantityIdOrClass) ||
     typeof document.querySelector(
@@ -101,7 +100,6 @@ jQuery(document).ready(async function ($) {
 
   try {
     // Set mint price value
-    console.log(SCFlowPluginSettings.mintPrice);
 
     jQuery(".final-nft-price-crypto").text(
       SCFlowPluginSettings.mintPrice + " MATIC"
@@ -113,7 +111,6 @@ jQuery(document).ready(async function ($) {
     );
     // Max Supply
     jQuery("#total-nft-sup").text(SCFlowPluginSettings.maxSupply);
-    console.log(SCFlowPluginSettings);
     if (
       localStorage.getItem("wagmi.connected") ||
       localStorage.getItem("wagmi.connected") === "true"
@@ -172,7 +169,7 @@ jQuery(document).ready(async function ($) {
           await web3modal.openModal();
         } else {
           // Get the user's selected quantity from the input field
-          const quantity = parseInt(
+          let quantity = parseInt(
             $(SCFlowPluginSettings.mintQuantityIdOrClass).val()
           );
 
@@ -183,7 +180,8 @@ jQuery(document).ready(async function ($) {
           if (quantity > Number.parseInt(SCFlowPluginSettings.maxQuantity)) {
             showPopup(
               "error",
-              SCFlowPluginSettings.maxQuantity +
+              SCFlowPluginSettings.popup.errorQuantity +
+                " " +
                 SCFlowPluginSettings.maxQuantity
             );
             return;
