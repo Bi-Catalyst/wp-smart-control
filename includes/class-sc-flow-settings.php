@@ -55,6 +55,21 @@ class SC_Flow_Settings
     }
 
     /**
+     * Seed selector and currency options on activation.
+     *
+     * add_option() is a no-op when the option already exists, so saved
+     * values survive reactivation.
+     */
+    public static function install_defaults()
+    {
+        add_option(SC_FLOW_PLUGIN_CONNECT_BUTTON, '.connect-wallet-button');
+        add_option(SC_FLOW_PLUGIN_MINT_BUTTON, '.mint-btn-one');
+        add_option(SC_FLOW_PLUGIN_MINT_QUANTITY, '.nft-quantity');
+        add_option(SC_FLOW_PLUGIN_MINTER_COUNTER, '#left-to-mint');
+        add_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD, 'chf');
+    }
+
+    /**
      * Read a credential from wp-config.php when defined, else from the option.
      *
      * Lets deployments keep API keys out of the database.

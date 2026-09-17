@@ -23,9 +23,6 @@ class SmartContract_Flow_Public
         // Enqueue necessary scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
-        // Add script tag type module on the footer
-        add_action('wp_footer', array($this, 'enqueue_connect_wallet_script'), 1);
-
         add_action('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 10, 2);
 
         // Register shortcodes
@@ -39,14 +36,6 @@ class SmartContract_Flow_Public
     {
         $items .= '<li class="cstm-m-cnct-wlt"><a title="' . esc_attr__('Connect Wallet', 'sc-flow') . '" href="#"><w3m-core-button icon="hide"></w3m-core-button></a></li>';
         return $items;
-    }
-
-    public function enqueue_connect_wallet_script()
-    {
-        if (!$this->is_enabled_page()) {
-            return;
-        }
-        echo '<script type="module" src="' . esc_url(plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/connect-wallet-wagmi.js') . '"></script>';
     }
 
     /**
@@ -74,13 +63,13 @@ class SmartContract_Flow_Public
 
 
         // Enqueue non owner write smart contract operatons
-        wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
+        wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), SC_FLOW_VERSION, true);
 
         // Enqueue read smart contract operations
-        wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
+        wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), SC_FLOW_VERSION, true);
 
         // Enqueue js logic for mint ui component
-        wp_enqueue_script('sc-flow-frontend', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-frontend.js?v=0.0.3', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), '0.0.1', true);
+        wp_enqueue_script('sc-flow-frontend', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-frontend.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), SC_FLOW_VERSION, true);
 
         // Enqueue crossmint script
         wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
@@ -92,7 +81,9 @@ class SmartContract_Flow_Public
 
 
         // Enqueue your custom styles
-        wp_enqueue_style('sc-flow-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-frontend.css', array(), '0.0.1');
+        wp_enqueue_style('sc-flow-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-frontend.css', array(), SC_FLOW_VERSION);
+
+        SmartContract_Flow::enqueue_wallet_module();
     }
 
     /**

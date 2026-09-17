@@ -42,40 +42,27 @@ class SC_Flow_Admin
         // Register plugin settings.
         add_action('admin_init', array($this, 'register_settings'));
 
-        // Add activation hook to set default values.
-        register_activation_hook(SC_FLOW_PLUGIN_FILE, array($this, 'activate_this_plugin'));
-
-        // Add script tag type module on the footer
-        add_action('admin_footer', array($this, 'enqueue_connect_wallet_script'));
-
-        add_action('admin_notices', array($this, 'your_plugin_show_copyright'));
+        add_action('admin_notices', array($this, 'show_copyright_notice'));
 
     }
-    public function your_plugin_show_copyright()
-    {
-        // Check if the current user has the capability to manage options (Administrator)
-        if (current_user_can('manage_options')) {
-            ?>
-            <div class="notice notice-info is-dismissible">
-                <p>
-                    <strong>&copy; 2023 Bicatalyst. All rights reserved.</strong><br>
-                    Unauthorized distribution or reproduction of this plugin is strictly prohibited.
-                    For licensing and inquiries, please contact us at <a href="mailto:info@bicatalyst.com">info@bicatalyst.com</a>.
-                </p>
-            </div>
-            <?php
-        }
-    }
-
     /**
-     * Enqueue the connect-wallet-wagmi.js file.
+     * Show the license notice on the plugin settings screen only.
      */
-    public function enqueue_connect_wallet_script($hook)
+    public function show_copyright_notice()
     {
         $screen = get_current_screen();
-        if ($screen && $screen->id === 'toplevel_page_' . SC_FLOW_ADMIN_MENU_SLUG) {
-            echo '<script type="module" src="' . plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/connect-wallet-wagmi.js"/>';
+        if (!$screen || $screen->id !== 'toplevel_page_' . SC_FLOW_ADMIN_MENU_SLUG) {
+            return;
         }
+        ?>
+        <div class="notice notice-info is-dismissible">
+            <p>
+                <strong>&copy; 2023 Bicatalyst. All rights reserved.</strong><br>
+                <?php esc_html_e('Unauthorized distribution or reproduction of this plugin is strictly prohibited. For licensing and inquiries, please contact us at', 'sc-flow'); ?>
+                <a href="mailto:info@bicatalyst.com">info@bicatalyst.com</a>.
+            </p>
+        </div>
+        <?php
     }
 
     /**
@@ -90,23 +77,25 @@ class SC_Flow_Admin
             $sc_flow_plugin_settings = SC_Flow_Settings::for_script();
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), SC_FLOW_VERSION, true);
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-write', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-write', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), SC_FLOW_VERSION, true);
 
             // Enqueue read smart contract operations
-            wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), SC_FLOW_VERSION, true);
 
             // Enqueue js logic for mint ui component
-            wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), SC_FLOW_VERSION, true);
 
             // Localize the script with the plugin settings
             wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
             wp_localize_script('sc-flow-admin', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
             // Enqueue your custom admin styles
-            wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-admin.css', array(), '0.0.1');
+            wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-admin.css', array(), SC_FLOW_VERSION);
+
+            SmartContract_Flow::enqueue_wallet_module();
         }
     }
     /**
@@ -121,34 +110,7 @@ class SC_Flow_Admin
         array_push($links, $settings_link);
         return $links;
     }
-    public function activate_this_plugin()
-    {
-        // Check if the options are already set
-        $connect_button = get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON);
-        $mint_button = get_option(SC_FLOW_PLUGIN_MINT_BUTTON);
-        $mint_quantity = get_option(SC_FLOW_PLUGIN_MINT_QUANTITY);
-        $mint_counter = get_option(SC_FLOW_PLUGIN_MINTER_COUNTER);
-        $fiat_currency = get_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD);
-
-        // If the options are not set, initialize them with default values
-        if (empty($connect_button)) {
-            update_option(SC_FLOW_PLUGIN_CONNECT_BUTTON, '.connect-wallet-button');
-        }
-        if (empty($mint_button)) {
-            update_option(SC_FLOW_PLUGIN_MINT_BUTTON, '.mint-btn-one');
-        }
-        if (empty($mint_quantity)) {
-            update_option(SC_FLOW_PLUGIN_MINT_QUANTITY, '.nft-quantity');
-        }
-        if (empty($mint_counter)) {
-            update_option(SC_FLOW_PLUGIN_MINTER_COUNTER, '#left-to-mint');
-        }
-        if (empty($fiat_currency)) {
-            update_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD, 'chf');
-        }
-    }
-
-    /** 
+    /**
      * Add menu page for plugin settings.
      */
     public function add_menu_page()
