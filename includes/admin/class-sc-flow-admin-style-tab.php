@@ -40,7 +40,7 @@ class SC_Flow_Admin_Style_Tab
         // Register a settings section.
         add_settings_section(
             SC_FLOW_ADMIN_STYLE_SECTION_TITLE,
-            __('Admin Functions', 'sc-flow'),
+            __('Buttons attributes', 'sc-flow'),
             array(__CLASS__, 'render_admin_style_section'),
             SC_FLOW_ADMIN_STYLE_TAB
         );
@@ -105,7 +105,7 @@ class SC_Flow_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_CONNECT_BUTTON; ?>" value="<?php echo esc_attr($connect_button); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the connect button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -119,7 +119,7 @@ class SC_Flow_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINT_BUTTON; ?>" value="<?php echo esc_attr($mint_button); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -132,7 +132,7 @@ class SC_Flow_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINT_QUANTITY; ?>" value="<?php echo esc_attr($mint_quantity); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #mint-quantity or .mint-quantity)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the mint quantity input class or id (ex: #mint-quantity or .mint-quantity)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -145,7 +145,7 @@ class SC_Flow_Admin_Style_Tab
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINTER_COUNTER; ?>" value="<?php echo esc_attr($minter_counter); ?>">
         <p class="description">
-            <?php __('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
         </p>
         <?php
     }

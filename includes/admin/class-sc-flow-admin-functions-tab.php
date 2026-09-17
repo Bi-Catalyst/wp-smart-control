@@ -201,7 +201,7 @@ class SC_Flow_Admin_Functions_Tab
                 echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id) . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
             }
 
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', SC_FLOW_PLUGIN_NAME) . '</button>';
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', 'sc-flow') . '</button>';
 
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field

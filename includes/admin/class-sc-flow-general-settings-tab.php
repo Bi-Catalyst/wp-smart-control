@@ -177,7 +177,7 @@ class SC_Flow_General_Settings_Tab
         <input type="text" name="<?php echo SC_FLOW_ADMIN_WALLETCONNECT_FIELD; ?>" value="<?php echo esc_attr($wallet_connect); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter wallet connect project ID', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Enter wallet connect project ID', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -193,7 +193,7 @@ class SC_Flow_General_Settings_Tab
         <input type="text" name="<?php echo SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD; ?>" value="<?php echo esc_attr($fiat_currency); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter fiat currency symbol (ex: chf)', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Enter fiat currency symbol (ex: chf)', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -207,7 +207,7 @@ class SC_Flow_General_Settings_Tab
         <input type="text" name="<?php echo SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD; ?>" value="<?php echo esc_attr($alchemy_provider); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter alchemy provider project ID', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Enter alchemy provider project ID', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -221,7 +221,7 @@ class SC_Flow_General_Settings_Tab
         <input type="text" name="<?php echo SC_FLOW_ADMIN_SLUGS_FIELD; ?>" value="<?php echo esc_attr($slugs); ?>"
             class="regular-text" />
         <p class="description">
-            <?php __('Enter the slugs like this ex: slug1, slug2, slug3,.', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Enter the slugs like this ex: slug1, slug2, slug3,.', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -235,7 +235,7 @@ class SC_Flow_General_Settings_Tab
         <input type="text" name="<?php echo SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD; ?>"
             value="<?php echo esc_attr($contract_address); ?>" class="regular-text" />
         <p class="description">
-            <?php __('Enter the contract address for your NFTs.', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Enter the contract address for your NFTs.', 'sc-flow'); ?>
         </p>
         <?php
     }
@@ -282,7 +282,7 @@ class SC_Flow_General_Settings_Tab
             <option value="137" <?php selected($active_chain, '137'); ?>>Polygon Mainnet</option>
         </select>
         <p class="description">
-            <?php __('Select the active chain for your plugin.', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Select the active chain for your plugin.', 'sc-flow'); ?>
         </p>
         <?php
     }

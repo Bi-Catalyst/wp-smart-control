@@ -2,9 +2,15 @@
 
 /**
  * Plugin Name: Smart Contract Flow
- * Description: WordPress plugin to Seamlessly integrate EVM compatible smart contracts operations into WordPress
- * Version: 0.0.1
- * 
+ * Plugin URI:  https://github.com/Bi-Catalyst/wp-smart-control
+ * Description: Connect a WordPress page to an EVM smart contract: wallet connect, NFT mint, and admin contract operations.
+ * Version:     0.0.1
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
+ * Author:      Mohamed Habbat
+ * Author URI:  https://bicatalyst.ch
+ * Text Domain: sc-flow
+ * Domain Path: /languages
  *
  * @link       https://bicatalyst.ch
  * @since      0.0.1
@@ -70,10 +76,6 @@ class SmartContract_Flow
 
         // Load the plugin translation file
         load_plugin_textdomain($this->plugin_text_domain, false, $languages_dir);
-
-        // Translatable strings wrapped in translation functions
-        __('Connect Wallet', $this->plugin_text_domain);
-        __('Mint', $this->plugin_text_domain);
     }
     /**
      * Initialize the plugin.

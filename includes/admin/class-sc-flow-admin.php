@@ -149,7 +149,7 @@ class SC_Flow_Admin
      */
     public function add_settings_link($links)
     {
-        $settings_link = '<a href="admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '">' . __('Settings', SC_FLOW_PLUGIN_NAME) . '</a>';
+        $settings_link = '<a href="admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '">' . __('Settings', 'sc-flow') . '</a>';
         array_push($links, $settings_link);
         return $links;
     }

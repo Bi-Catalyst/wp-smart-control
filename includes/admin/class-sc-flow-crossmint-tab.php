@@ -1,7 +1,7 @@
 <?php
 /**
- * Admin setting the style tab
- * This tab will be having the style IDs or classes for buttons
+ * Admin Crossmint settings tab
+ * Project, collection, environment and token type for the Crossmint pay button
  *
  * @link       https://bicatalyst.ch
  * @since      0.0.1
@@ -15,7 +15,7 @@ require_once dirname(__FILE__) . '/../constants.php';
 class SC_Flow_Admin_Crossmint_Tab
 {
     /**
-     * Render the content of the admin functions tab.
+     * Render the content of the Crossmint tab.
      */
     public static function render()
     {
@@ -97,36 +97,36 @@ class SC_Flow_Admin_Crossmint_Tab
         echo '<p>' . esc_html__('Crossmint configuration', 'sc-flow') . '</p>';
     }
     /**
-     * Render the connect button.
+     * Render the project ID field.
      */
     public static function render_crossmint_project_id()
     {
-        $connect_button = get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
+        $project_id = get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID; ?>"
-            value="<?php echo esc_attr($connect_button); ?>">
+            value="<?php echo esc_attr($project_id); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the Crossmint project ID', 'sc-flow'); ?>
         </p>
         <?php
     }
 
     /**
-     * Render the mint button field.
+     * Render the collection ID field.
      */
     public static function render_crossmint_collection_id()
     {
-        $mint_button = get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
+        $collection_id = get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
         ?>
         <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID; ?>"
-            value="<?php echo esc_attr($mint_button); ?>">
+            value="<?php echo esc_attr($collection_id); ?>">
         <p class="description">
-            <?php __('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the Crossmint collection ID', 'sc-flow'); ?>
         </p>
         <?php
     }
     /**
-     * Render the mint quantity field.
+     * Render the environment select.
      */
     public static function render_crossmint_collection_environment()
     {
@@ -137,20 +137,20 @@ class SC_Flow_Admin_Crossmint_Tab
             <option value="production" <?php selected($crossmint_env, 'production'); ?>>Production</option>
         </select>
         <p class="description">
-            <?php __('Select the environment (staging = test environment).', SC_FLOW_PLUGIN_NAME); ?>
+            <?php esc_html_e('Select the environment (staging = test environment).', 'sc-flow'); ?>
         </p>
         <?php
     }
     /**
-     * Render the mint quantity field.
+     * Render the token standard field.
      */
     public static function render_crossmint_erc_type()
     {
-        $minter_counter = get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
+        $erc_type = get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE; ?>" value="<?php echo esc_attr($minter_counter); ?>">
+        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE; ?>" value="<?php echo esc_attr($erc_type); ?>">
         <p class="description">
-            <?php __('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
+            <?php esc_html_e('Enter the token standard, for example erc-721', 'sc-flow'); ?>
         </p>
         <?php
     }
