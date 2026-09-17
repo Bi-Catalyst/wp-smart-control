@@ -7,7 +7,7 @@
  * @since      0.0.1
  * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
  * @package    SmartContract_Flow
- * @subpackage {sc-flow-admin-style-tab.php}
+ * @subpackage {class-sc-flow-admin-style-tab.php}
  */
 
 require_once dirname(__FILE__) . '/../constants.php';
@@ -25,9 +25,9 @@ class SC_Flow_Admin_Crossmint_Tab
 
                 <?php
                 // Output security fields.
-                settings_fields(MC_ADMIN_CROSSMINT_TAB); // Add this line
+                settings_fields(SC_FLOW_ADMIN_CROSSMINT_TAB); // Add this line
                 // Output setting sections.
-                do_settings_sections(MC_ADMIN_CROSSMINT_TAB);
+                do_settings_sections(SC_FLOW_ADMIN_CROSSMINT_TAB);
                 // Output submit button.
                 submit_button();
                 ?>
@@ -39,52 +39,52 @@ class SC_Flow_Admin_Crossmint_Tab
     {
         // Register a settings section.
         add_settings_section(
-            MC_ADMIN_CROSSMINT_SECTION_TITLE,
+            SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE,
             __('Crossmint settings', 'sc-flow'),
             array(__CLASS__, 'render_admin_crossmint_section'),
-            MC_ADMIN_CROSSMINT_TAB
+            SC_FLOW_ADMIN_CROSSMINT_TAB
         );
 
         // Add a field for the Connect Button.
         add_settings_field(
-            MC_PLUGIN_CROSSMINT_PROJECT_ID,
+            SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID,
             __('Project ID', 'sc-flow'),
             array(__CLASS__, 'render_crossmint_project_id'),
-            MC_ADMIN_CROSSMINT_TAB,
-            MC_ADMIN_CROSSMINT_SECTION_TITLE
+            SC_FLOW_ADMIN_CROSSMINT_TAB,
+            SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
 
         // Add a field for the mint button
         add_settings_field(
-            MC_PLUGIN_CROSSMINT_COLLECTION_ID,
+            SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID,
             __('Collection ID', 'sc-flow'),
             array(__CLASS__, 'render_crossmint_collection_id'),
-            MC_ADMIN_CROSSMINT_TAB,
-            MC_ADMIN_CROSSMINT_SECTION_TITLE
+            SC_FLOW_ADMIN_CROSSMINT_TAB,
+            SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
 
         // Add a field for the mint quantity
         add_settings_field(
-            MC_PLUGIN_CROSSMINT_ENVIRONMENT,
+            SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT,
             __('Environment', 'sc-flow'),
             array(__CLASS__, 'render_crossmint_collection_environment'),
-            MC_ADMIN_CROSSMINT_TAB,
-            MC_ADMIN_CROSSMINT_SECTION_TITLE
+            SC_FLOW_ADMIN_CROSSMINT_TAB,
+            SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
 
         // Add a field for the mint quantity
         add_settings_field(
-            MC_PLUGIN_CROSSMINT_ERC_TYPE,
+            SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE,
             __('ERC Type', 'sc-flow'),
             array(__CLASS__, 'render_crossmint_erc_type'),
-            MC_ADMIN_CROSSMINT_TAB,
-            MC_ADMIN_CROSSMINT_SECTION_TITLE
+            SC_FLOW_ADMIN_CROSSMINT_TAB,
+            SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
         // Register settings to be stored.
-        register_setting(MC_ADMIN_CROSSMINT_TAB, MC_PLUGIN_CROSSMINT_PROJECT_ID);
-        register_setting(MC_ADMIN_CROSSMINT_TAB, MC_PLUGIN_CROSSMINT_COLLECTION_ID);
-        register_setting(MC_ADMIN_CROSSMINT_TAB, MC_PLUGIN_CROSSMINT_ENVIRONMENT);
-        register_setting(MC_ADMIN_CROSSMINT_TAB, MC_PLUGIN_CROSSMINT_ERC_TYPE);
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT);
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
 
     }
 
@@ -101,9 +101,9 @@ class SC_Flow_Admin_Crossmint_Tab
      */
     public static function render_crossmint_project_id()
     {
-        $connect_button = get_option(MC_PLUGIN_CROSSMINT_PROJECT_ID);
+        $connect_button = get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
         ?>
-        <input type="text" name="<?php echo MC_PLUGIN_CROSSMINT_PROJECT_ID; ?>"
+        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID; ?>"
             value="<?php echo esc_attr($connect_button); ?>">
         <p class="description">
             <?php __('Enter the mint button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
@@ -116,9 +116,9 @@ class SC_Flow_Admin_Crossmint_Tab
      */
     public static function render_crossmint_collection_id()
     {
-        $mint_button = get_option(MC_PLUGIN_CROSSMINT_COLLECTION_ID);
+        $mint_button = get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
         ?>
-        <input type="text" name="<?php echo MC_PLUGIN_CROSSMINT_COLLECTION_ID; ?>"
+        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID; ?>"
             value="<?php echo esc_attr($mint_button); ?>">
         <p class="description">
             <?php __('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
@@ -130,14 +130,14 @@ class SC_Flow_Admin_Crossmint_Tab
      */
     public static function render_crossmint_collection_environment()
     {
-        $crossmint_env = get_option(MC_PLUGIN_CROSSMINT_ENVIRONMENT);
+        $crossmint_env = get_option(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT);
         ?>
-        <select name="<?php echo MC_PLUGIN_CROSSMINT_ENVIRONMENT; ?>">
+        <select name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT; ?>">
             <option value="staging" <?php selected($crossmint_env, 'staging'); ?>>Staging</option>
             <option value="production" <?php selected($crossmint_env, 'production'); ?>>Production</option>
         </select>
         <p class="description">
-            <?php __('Select the environment (staging = test environment).', MC_PLUGIN_NAME); ?>
+            <?php __('Select the environment (staging = test environment).', SC_FLOW_PLUGIN_NAME); ?>
         </p>
         <?php
     }
@@ -146,9 +146,9 @@ class SC_Flow_Admin_Crossmint_Tab
      */
     public static function render_crossmint_erc_type()
     {
-        $minter_counter = get_option(MC_PLUGIN_CROSSMINT_ERC_TYPE);
+        $minter_counter = get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
         ?>
-        <input type="text" name="<?php echo MC_PLUGIN_CROSSMINT_ERC_TYPE; ?>" value="<?php echo esc_attr($minter_counter); ?>">
+        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE; ?>" value="<?php echo esc_attr($minter_counter); ?>">
         <p class="description">
             <?php __('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
         </p>

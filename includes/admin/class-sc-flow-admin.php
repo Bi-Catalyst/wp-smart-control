@@ -8,7 +8,7 @@
  * @since      0.0.1
  * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
  * @package    SmartContract_Flow
- * @subpackage {sc-flow-admin.php}
+ * @subpackage {class-sc-flow-admin.php}
  */
 
 if (!defined('ABSPATH')) {
@@ -17,10 +17,10 @@ if (!defined('ABSPATH')) {
 
 require_once dirname(__FILE__) . '/../constants.php';
 
-require_once 'sc-flow-general-settings-tab.php';
-require_once 'sc-flow-admin-functions-tab.php';
-require_once 'sc-flow-admin-style-tab.php';
-require_once 'sc-flow-crossmint-tab.php';
+require_once 'class-sc-flow-general-settings-tab.php';
+require_once 'class-sc-flow-admin-functions-tab.php';
+require_once 'class-sc-flow-admin-style-tab.php';
+require_once 'class-sc-flow-crossmint-tab.php';
 
 class SC_Flow_Admin
 {
@@ -30,7 +30,7 @@ class SC_Flow_Admin
     public function __construct()
     {
         // Add plugin settings link to the plugin list page.
-        add_filter('plugin_action_links_' . plugin_basename(PLUGIN_ROOT_PATH), array($this, 'add_settings_link'));
+        add_filter('plugin_action_links_' . plugin_basename(SC_FLOW_PLUGIN_FILE), array($this, 'add_settings_link'));
 
         // Register and enqueue admin scripts and styles.
         add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
@@ -42,7 +42,7 @@ class SC_Flow_Admin
         add_action('admin_init', array($this, 'register_settings'));
 
         // Add activation hook to set default values.
-        register_activation_hook(PLUGIN_ROOT_PATH, array($this, 'activate_this_plugin'));
+        register_activation_hook(SC_FLOW_PLUGIN_FILE, array($this, 'activate_this_plugin'));
 
         // Add script tag type module on the footer
         add_action('admin_footer', array($this, 'enqueue_connect_wallet_script'));
@@ -72,7 +72,7 @@ class SC_Flow_Admin
     public function enqueue_connect_wallet_script($hook)
     {
         if (isset($_GET['page']) && $_GET['page'] === 'sc-flow-settings') {
-            echo '<script type="module" src="' . plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/connect-wallet-wagmi.js"/>';
+            echo '<script type="module" src="' . plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/connect-wallet-wagmi.js"/>';
         }
     }
 
@@ -89,27 +89,27 @@ class SC_Flow_Admin
             // Define the data to be passed to the JavaScript file
             // Define the data to be passed to the JavaScript file
             $sc_flow_plugin_settings = array(
-                'pluginName' => MC_PLUGIN_NAME,
+                'pluginName' => SC_FLOW_PLUGIN_NAME,
                 // sc-flow-function_MAX_SUPPLY
-                'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
-                'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
-                'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
-                'totalSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
-                'contractAddress' => get_option(MC_ADMIN_CONTRACT_ADDRESS_FIELD),
-                'contractABI' => get_option(MC_ADMIN_CONTRACT_ABI_FIELD),
-                'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
+                'maxSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
+                'mintPrice' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+                'maxQuantity' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
+                'totalSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
+                'contractAddress' => get_option(SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD),
+                'contractABI' => get_option(SC_FLOW_ADMIN_CONTRACT_ABI_FIELD),
+                'activeChain' => get_option(SC_FLOW_ADMIN_ACTIVE_CHAIN_FIELD),
 
                 // wallet connect
-                'wcProjectId' => get_option(MC_ADMIN_WALLETCONNECT_FIELD),
+                'wcProjectId' => get_option(SC_FLOW_ADMIN_WALLETCONNECT_FIELD),
                 // Alchemy Provider
-                'alchemyProvider' => get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD),
+                'alchemyProvider' => get_option(SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD),
                 // Fiat currency 
-                'fiatCurrency' => get_option(MC_ADMIN_FIAT_CURRENCY_FIELD),
+                'fiatCurrency' => get_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD),
                 // styles
-                'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
-                'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
-                'mintButtonIdOrClass' => get_option(MC_PLUGIN_MINT_BUTTON),
-                'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
+                'minterCounterIdOrClass' => get_option(SC_FLOW_PLUGIN_MINTER_COUNTER),
+                'connectButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON),
+                'mintButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_BUTTON),
+                'mintQuantityIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_QUANTITY),
                 // 
                 'popup' => array(
                     'errorQuantity' => __('Maximum quantity allowed is', 'sc-flow'),
@@ -121,16 +121,16 @@ class SC_Flow_Admin
                 )
             );
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-helper', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-write', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-write', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
 
             // Enqueue read smart contract operations
-            wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), '0.0.1', true);
 
             // Enqueue js logic for mint ui component
-            wp_enqueue_script('sc-flow-admin', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
+            wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
 
             // Localize the script with the plugin settings
             // Localize the script with the plugin settings
@@ -138,7 +138,7 @@ class SC_Flow_Admin
             wp_localize_script('sc-flow-admin', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
 
             // Enqueue your custom admin styles
-            wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-admin.css', array(), '0.0.1');
+            wp_enqueue_style('sc-flow-admin-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-admin.css', array(), '0.0.1');
         }
     }
     /**
@@ -149,34 +149,34 @@ class SC_Flow_Admin
      */
     public function add_settings_link($links)
     {
-        $settings_link = '<a href="admin.php?page=' . MC_ADMIN_MENU_SLUG . '">' . __('Settings', MC_PLUGIN_NAME) . '</a>';
+        $settings_link = '<a href="admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '">' . __('Settings', SC_FLOW_PLUGIN_NAME) . '</a>';
         array_push($links, $settings_link);
         return $links;
     }
     public function activate_this_plugin()
     {
         // Check if the options are already set
-        $connect_button = get_option(MC_PLUGIN_CONNECT_BUTTON);
-        $mint_button = get_option(MC_PLUGIN_MINT_BUTTON);
-        $mint_quantity = get_option(MC_PLUGIN_MINT_QUANTITY);
-        $mint_counter = get_option(MC_PLUGIN_MINTER_COUNTER);
-        $fiat_currency = get_option(MC_ADMIN_FIAT_CURRENCY_FIELD);
+        $connect_button = get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON);
+        $mint_button = get_option(SC_FLOW_PLUGIN_MINT_BUTTON);
+        $mint_quantity = get_option(SC_FLOW_PLUGIN_MINT_QUANTITY);
+        $mint_counter = get_option(SC_FLOW_PLUGIN_MINTER_COUNTER);
+        $fiat_currency = get_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD);
 
         // If the options are not set, initialize them with default values
         if (empty($connect_button)) {
-            update_option(MC_PLUGIN_CONNECT_BUTTON, '.connect-wallet-button');
+            update_option(SC_FLOW_PLUGIN_CONNECT_BUTTON, '.connect-wallet-button');
         }
         if (empty($mint_button)) {
-            update_option(MC_PLUGIN_MINT_BUTTON, '.mint-btn-one');
+            update_option(SC_FLOW_PLUGIN_MINT_BUTTON, '.mint-btn-one');
         }
         if (empty($mint_quantity)) {
-            update_option(MC_PLUGIN_MINT_QUANTITY, '.nft-quantity');
+            update_option(SC_FLOW_PLUGIN_MINT_QUANTITY, '.nft-quantity');
         }
         if (empty($mint_counter)) {
-            update_option(MC_PLUGIN_MINTER_COUNTER, '#left-to-mint');
+            update_option(SC_FLOW_PLUGIN_MINTER_COUNTER, '#left-to-mint');
         }
         if (empty($fiat_currency)) {
-            update_option(MC_ADMIN_FIAT_CURRENCY_FIELD, 'chf');
+            update_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD, 'chf');
         }
     }
 
@@ -189,7 +189,7 @@ class SC_Flow_Admin
             __('Smart Contract Flow' . ' Settings', 'sc-flow'),
             __('Smart Contract Flow', 'sc-flow'),
             'manage_options',
-            MC_ADMIN_MENU_SLUG,
+            SC_FLOW_ADMIN_MENU_SLUG,
             array($this, 'render_settings_page'),
             'dashicons-admin-plugins',
             99
@@ -211,19 +211,19 @@ class SC_Flow_Admin
             $this->render_wallet_connect_button();
             ?>
             <h2 class="nav-tab-wrapper">
-                <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>" class="nav-tab <?php if (!isset($_GET['tab']) || $_GET['tab'] === 'general')
+                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>" class="nav-tab <?php if (!isset($_GET['tab']) || $_GET['tab'] === 'general')
                        echo 'nav-tab-active'; ?>">
                     <?php echo esc_html__('General Settings', 'sc-flow'); ?>
                 </a>
-                <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=admin_functions" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions')
+                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=admin_functions" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions')
                        echo 'nav-tab-active'; ?>">
                     <?php echo esc_html__('Admin Operations', 'sc-flow'); ?>
                 </a>
-                <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=crossmint_settings" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings')
+                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=crossmint_settings" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings')
                        echo 'nav-tab-active'; ?>">
                     <?php echo esc_html__('Crossmint configuration', 'sc-flow'); ?>
                 </a>
-                <a href="?page=<?php echo MC_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
+                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
                        echo 'nav-tab-active'; ?>">
                     <?php echo esc_html__('Buttons attributes', 'sc-flow'); ?>
                 </a>

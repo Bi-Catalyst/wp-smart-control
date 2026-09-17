@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 
 require_once dirname(__FILE__) . '/includes/constants.php';
 
-define('PLUGIN_ROOT_PATH', __FILE__);
+define('SC_FLOW_PLUGIN_FILE', __FILE__);
 
 /**
  * The main class that initializes the plugin.
@@ -38,7 +38,7 @@ class SmartContract_Flow
      */
     public function __construct()
     {
-        $this->plugin_text_domain = MC_PLUGIN_NAME;
+        $this->plugin_text_domain = SC_FLOW_PLUGIN_NAME;
 
         // Load plugin text domain for translations.
         add_action('init', array($this, 'load_plugin_textdomain'));
@@ -54,10 +54,10 @@ class SmartContract_Flow
     {
         // Include the admin functionality.
         if (is_admin()) {
-            require_once plugin_dir_path(__FILE__) . 'includes/admin/sc-flow-admin.php';
+            require_once plugin_dir_path(__FILE__) . 'includes/admin/class-sc-flow-admin.php';
         }
         // Include the public functionality.
-        require_once plugin_dir_path(__FILE__) . 'includes/sc-flow-public.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-sc-flow-public.php';
     }
 
     /**

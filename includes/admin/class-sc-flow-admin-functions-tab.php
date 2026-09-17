@@ -7,7 +7,7 @@
  * @since      0.0.1
  * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
  * @package    SmartContract_Flow
- * @subpackage {sc-flow-admin-functions-tab.php}
+ * @subpackage {class-sc-flow-admin-functions-tab.php}
  */
 
 require_once dirname(__FILE__) . '/../constants.php';
@@ -20,7 +20,7 @@ class SC_Flow_Admin_Functions_Tab
      */
     public static function render()
     {
-        $default_sub_tab = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
+        $default_sub_tab = SC_FLOW_ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
 
         $active_sub_tab = isset($_GET['sub_tab']) ? $_GET['sub_tab'] : $default_sub_tab;
         $tab_groups = self::get_tab_groups();
@@ -32,7 +32,7 @@ class SC_Flow_Admin_Functions_Tab
                 // Render the tab navigation
                 foreach ($tab_groups as $group) {
                     $active_class = ($group['id'] === $active_sub_tab) ? 'nav-tab-active' : '';
-                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . MC_ADMIN_MENU_SLUG . '&tab=admin_functions'));
+                    $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '&tab=admin_functions'));
                     echo '<a href="' . esc_url($url) . '" class="nav-tab ' . $active_class . '">' . $group['label'] . '</a>';
                 }
                 ?>
@@ -76,7 +76,7 @@ class SC_Flow_Admin_Functions_Tab
         }
 
         // Retrieve the contract ABI
-        $contract_abi = get_option(MC_ADMIN_CONTRACT_ABI_FIELD);
+        $contract_abi = get_option(SC_FLOW_ADMIN_CONTRACT_ABI_FIELD);
         if (!empty($contract_abi)) {
             // Group the functions based on stateMutability
             $functions_by_state = array(
@@ -110,7 +110,7 @@ class SC_Flow_Admin_Functions_Tab
                 }
 
                 // Add the group title
-                $group_id = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
+                $group_id = SC_FLOW_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_title = self::get_state_mutability_title($state);
 
                 // Loop through the functions and add the fields
@@ -119,7 +119,7 @@ class SC_Flow_Admin_Functions_Tab
                     if (!isset($function['name'])) {
                         continue;
                     }
-                    $field_id = MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
+                    $field_id = SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
                     $readable_function_name = self::get_readable_function_name($function['name']);
 
                     // Add a field for the function
@@ -175,7 +175,7 @@ class SC_Flow_Admin_Functions_Tab
         $function = $args['function'];
 
         if (isset($function['name'])) {
-            $field_id = MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
+            $field_id = SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . $function['name'];
             $field_value = get_option($field_id);
             $has_inputs = !empty($function['inputs']);
             $has_outputs = !empty($function['outputs']);
@@ -201,7 +201,7 @@ class SC_Flow_Admin_Functions_Tab
                 echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id) . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
             }
 
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', MC_PLUGIN_NAME) . '</button>';
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', SC_FLOW_PLUGIN_NAME) . '</button>';
 
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
@@ -228,7 +228,7 @@ class SC_Flow_Admin_Functions_Tab
      */
     private static function get_tab_groups()
     {
-        $contract_abi = get_option(MC_ADMIN_CONTRACT_ABI_FIELD);
+        $contract_abi = get_option(SC_FLOW_ADMIN_CONTRACT_ABI_FIELD);
         $tab_groups = array();
 
         if (!empty($contract_abi)) {
@@ -243,7 +243,7 @@ class SC_Flow_Admin_Functions_Tab
                 if ($state === '') {
                     $state = 'event';
                 }
-                $group_id = MC_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
+                $group_id = SC_FLOW_ADMIN_FUNCTIONS_SECTION_PREFIX . $state;
                 $group_label = self::get_state_mutability_title($state);
                 $active = ($state === 'nonpayable'); // Set the first tab as active
 

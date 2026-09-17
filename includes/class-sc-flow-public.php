@@ -6,7 +6,7 @@
  * @since      0.0.1
  * @author Mohamed Habbat <mohamed.habbat@bicatalyst.ch>
  * @package    SmartContract_Flow
- * @subpackage {sc-flow-public.php}
+ * @subpackage {class-sc-flow-public.php}
  */
 
 require_once 'constants.php';
@@ -44,7 +44,7 @@ class SmartContract_Flow_Public
     {
         // This will work on browsers that support newer Javascript syntax
         // Get the saved slugs option.
-        $slugs_option = get_option(MC_ADMIN_SLUGS_FIELD);
+        $slugs_option = get_option(SC_FLOW_ADMIN_SLUGS_FIELD);
         // Check if we have saved slugs.
         if (!empty($slugs_option)) {
             // Convert the comma-separated slugs into an array.
@@ -60,7 +60,7 @@ class SmartContract_Flow_Public
                 $inline_script = 'window.SCFlowPluginSettings = ' . json_encode($sc_flow_plugin_settings) . ';';
                 wp_add_inline_script('placeholder-for-inline-script', $inline_script, 'before');
     
-                echo '<script type="module" src="' . plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/connect-wallet-wagmi.js"></script>';
+                echo '<script type="module" src="' . plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/connect-wallet-wagmi.js"></script>';
             }
         }
     }
@@ -70,7 +70,7 @@ class SmartContract_Flow_Public
 
 
         // Get the saved slugs option.
-        $slugs_option = get_option(MC_ADMIN_SLUGS_FIELD);
+        $slugs_option = get_option(SC_FLOW_ADMIN_SLUGS_FIELD);
 
         // Check if we have saved slugs.
         if (!empty($slugs_option)) {
@@ -88,13 +88,13 @@ class SmartContract_Flow_Public
 
 
                 // Enqueue non owner write smart contract operatons
-                wp_enqueue_script('sc-flow-helper', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
 
                 // Enqueue read smart contract operations
-                wp_enqueue_script('sc-flow-read', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), '0.0.1', true);
 
                 // Enqueue js logic for mint ui component
-                wp_enqueue_script('sc-flow-frontend', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/js/sc-flow-frontend.js?v=0.0.3', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), '0.0.1', true);
+                wp_enqueue_script('sc-flow-frontend', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-frontend.js?v=0.0.3', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), '0.0.1', true);
 
                 // Enqueue crossmint script
                 wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
@@ -106,7 +106,7 @@ class SmartContract_Flow_Public
 
 
                 // Enqueue your custom styles
-                wp_enqueue_style('sc-flow-style', plugin_dir_url(PLUGIN_ROOT_PATH) . 'assets/css/sc-flow-frontend.css', array(), '0.0.1');
+                wp_enqueue_style('sc-flow-style', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/css/sc-flow-frontend.css', array(), '0.0.1');
             }
         }
 
@@ -116,26 +116,26 @@ class SmartContract_Flow_Public
     {
         // Define the data to be passed to the JavaScript file
         $sc_flow_plugin_settings = array(
-            'pluginName' => MC_PLUGIN_NAME,
+            'pluginName' => SC_FLOW_PLUGIN_NAME,
             // sc-flow-function_MAX_SUPPLY
-            'maxSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
-            'mintPrice' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
-            'maxQuantity' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
-            'totalSupply' => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
-            'contractAddress' => get_option(MC_ADMIN_CONTRACT_ADDRESS_FIELD),
-            'contractABI' => get_option(MC_ADMIN_CONTRACT_ABI_FIELD),
-            'activeChain' => get_option(MC_ADMIN_ACTIVE_CHAIN_FIELD),
+            'maxSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
+            'mintPrice' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+            'maxQuantity' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
+            'totalSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
+            'contractAddress' => get_option(SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD),
+            'contractABI' => get_option(SC_FLOW_ADMIN_CONTRACT_ABI_FIELD),
+            'activeChain' => get_option(SC_FLOW_ADMIN_ACTIVE_CHAIN_FIELD),
             // wallet connect
-            'wcProjectId' => get_option(MC_ADMIN_WALLETCONNECT_FIELD),
+            'wcProjectId' => get_option(SC_FLOW_ADMIN_WALLETCONNECT_FIELD),
             // Alchemy Provider
-            'alchemyProvider' => get_option(MC_ADMIN_ALCHEMYPROVIDER_FIELD),
+            'alchemyProvider' => get_option(SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD),
             // Fiat currency 
-            'fiatCurrency' => get_option(MC_ADMIN_FIAT_CURRENCY_FIELD),
+            'fiatCurrency' => get_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD),
             // styles
-            'minterCounterIdOrClass' => get_option(MC_PLUGIN_MINTER_COUNTER),
-            'connectButtonIdOrClass' => get_option(MC_PLUGIN_CONNECT_BUTTON),
-            'mintButtonIdOrClass' => get_option(MC_PLUGIN_MINT_BUTTON),
-            'mintQuantityIdOrClass' => get_option(MC_PLUGIN_MINT_QUANTITY),
+            'minterCounterIdOrClass' => get_option(SC_FLOW_PLUGIN_MINTER_COUNTER),
+            'connectButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON),
+            'mintButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_BUTTON),
+            'mintQuantityIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_QUANTITY),
             // 
             'popup' => array(
                 'errorQuantity' => __('Maximum quantity allowed is', 'sc-flow'),
@@ -208,12 +208,12 @@ class SmartContract_Flow_Public
     {
         ob_start();
         ?>
-        <crossmint-pay-button class="xmint-btn" collectionId="<?php echo get_option(MC_PLUGIN_CROSSMINT_COLLECTION_ID); ?>"
-            projectId="<?php echo get_option(MC_PLUGIN_CROSSMINT_PROJECT_ID); ?>"
-            environment="<?php echo get_option(MC_PLUGIN_CROSSMINT_ENVIRONMENT); ?>" mintConfig='<?php echo json_encode([
-                   "type" => get_option(MC_PLUGIN_CROSSMINT_ERC_TYPE),
+        <crossmint-pay-button class="xmint-btn" collectionId="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID); ?>"
+            projectId="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID); ?>"
+            environment="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT); ?>" mintConfig='<?php echo json_encode([
+                   "type" => get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE),
                    "quantity" => "1",
-                   "totalPrice" => get_option(MC_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
+                   "totalPrice" => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
                ]); ?>' />
         <?php
         return ob_get_clean();
