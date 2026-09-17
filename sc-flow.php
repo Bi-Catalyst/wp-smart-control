@@ -23,13 +23,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once dirname(__FILE__) . '/includes/constants.php';
-require_once dirname(__FILE__) . '/includes/class-sc-flow-settings.php';
+require_once __DIR__ . '/includes/constants.php';
+require_once __DIR__ . '/includes/class-sc-flow-settings.php';
 
 define('SC_FLOW_PLUGIN_FILE', __FILE__);
 define('SC_FLOW_VERSION', '0.0.1');
 
-register_activation_hook(SC_FLOW_PLUGIN_FILE, array('SC_Flow_Settings', 'install_defaults'));
+register_activation_hook(SC_FLOW_PLUGIN_FILE, array( 'SC_Flow_Settings', 'install_defaults' ));
 
 /**
  * The main class that initializes the plugin.
@@ -51,7 +51,7 @@ class SmartContract_Flow
         $this->plugin_text_domain = SC_FLOW_PLUGIN_NAME;
 
         // Load plugin text domain for translations.
-        add_action('init', array($this, 'load_plugin_textdomain'));
+        add_action('init', array( $this, 'load_plugin_textdomain' ));
 
         $this->load_dependencies();
         $this->initialize();
@@ -94,8 +94,8 @@ class SmartContract_Flow
             wp_enqueue_script_module('sc-flow-wallet', $src, array(), SC_FLOW_VERSION);
             return;
         }
-        wp_enqueue_script('sc-flow-wallet', $src, array('sc-flow-helper'), SC_FLOW_VERSION, true);
-        add_filter('script_loader_tag', array(__CLASS__, 'mark_wallet_script_as_module'), 10, 2);
+        wp_enqueue_script('sc-flow-wallet', $src, array( 'sc-flow-helper' ), SC_FLOW_VERSION, true);
+        add_filter('script_loader_tag', array( __CLASS__, 'mark_wallet_script_as_module' ), 10, 2);
     }
 
     /**
@@ -105,7 +105,7 @@ class SmartContract_Flow
      * @param string $handle Script handle.
      * @return string
      */
-    public static function mark_wallet_script_as_module($tag, $handle)
+    public static function mark_wallet_script_as_module( $tag, $handle )
     {
         if ('sc-flow-wallet' !== $handle) {
             return $tag;

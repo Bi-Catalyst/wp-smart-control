@@ -10,7 +10,7 @@
  * @subpackage {class-sc-flow-admin-style-tab.php}
  */
 
-require_once dirname(__FILE__) . '/../constants.php';
+require_once __DIR__ . '/../constants.php';
 
 class SC_Flow_Admin_Crossmint_Tab
 {
@@ -41,7 +41,7 @@ class SC_Flow_Admin_Crossmint_Tab
         add_settings_section(
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE,
             __('Crossmint settings', 'sc-flow'),
-            array(__CLASS__, 'render_admin_crossmint_section'),
+            array( __CLASS__, 'render_admin_crossmint_section' ),
             SC_FLOW_ADMIN_CROSSMINT_TAB
         );
 
@@ -49,7 +49,7 @@ class SC_Flow_Admin_Crossmint_Tab
         add_settings_field(
             SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID,
             __('Project ID', 'sc-flow'),
-            array(__CLASS__, 'render_crossmint_project_id'),
+            array( __CLASS__, 'render_crossmint_project_id' ),
             SC_FLOW_ADMIN_CROSSMINT_TAB,
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
@@ -58,7 +58,7 @@ class SC_Flow_Admin_Crossmint_Tab
         add_settings_field(
             SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID,
             __('Collection ID', 'sc-flow'),
-            array(__CLASS__, 'render_crossmint_collection_id'),
+            array( __CLASS__, 'render_crossmint_collection_id' ),
             SC_FLOW_ADMIN_CROSSMINT_TAB,
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
@@ -67,7 +67,7 @@ class SC_Flow_Admin_Crossmint_Tab
         add_settings_field(
             SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT,
             __('Environment', 'sc-flow'),
-            array(__CLASS__, 'render_crossmint_collection_environment'),
+            array( __CLASS__, 'render_crossmint_collection_environment' ),
             SC_FLOW_ADMIN_CROSSMINT_TAB,
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
@@ -76,16 +76,15 @@ class SC_Flow_Admin_Crossmint_Tab
         add_settings_field(
             SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE,
             __('ERC Type', 'sc-flow'),
-            array(__CLASS__, 'render_crossmint_erc_type'),
+            array( __CLASS__, 'render_crossmint_erc_type' ),
             SC_FLOW_ADMIN_CROSSMINT_TAB,
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
         // Register settings to be stored.
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID, array('sanitize_callback' => 'sanitize_text_field'));
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID, array('sanitize_callback' => 'sanitize_text_field'));
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT, array('sanitize_callback' => 'sanitize_text_field'));
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE, array('sanitize_callback' => 'sanitize_text_field'));
-
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID, array( 'sanitize_callback' => 'sanitize_text_field' ));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID, array( 'sanitize_callback' => 'sanitize_text_field' ));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT, array( 'sanitize_callback' => 'sanitize_text_field' ));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE, array( 'sanitize_callback' => 'sanitize_text_field' ));
     }
 
 

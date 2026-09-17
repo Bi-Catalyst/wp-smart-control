@@ -15,8 +15,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-require_once dirname(__FILE__) . '/../constants.php';
-require_once dirname(__FILE__) . '/../class-sc-flow-settings.php';
+require_once __DIR__ . '/../constants.php';
+require_once __DIR__ . '/../class-sc-flow-settings.php';
 
 require_once 'class-sc-flow-general-settings-tab.php';
 require_once 'class-sc-flow-admin-functions-tab.php';
@@ -31,19 +31,18 @@ class SC_Flow_Admin
     public function __construct()
     {
         // Add plugin settings link to the plugin list page.
-        add_filter('plugin_action_links_' . plugin_basename(SC_FLOW_PLUGIN_FILE), array($this, 'add_settings_link'));
+        add_filter('plugin_action_links_' . plugin_basename(SC_FLOW_PLUGIN_FILE), array( $this, 'add_settings_link' ));
 
         // Register and enqueue admin scripts and styles.
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
 
         // Add menu page for plugin settings.
-        add_action('admin_menu', array($this, 'add_menu_page'));
+        add_action('admin_menu', array( $this, 'add_menu_page' ));
 
         // Register plugin settings.
-        add_action('admin_init', array($this, 'register_settings'));
+        add_action('admin_init', array( $this, 'register_settings' ));
 
-        add_action('admin_notices', array($this, 'show_copyright_notice'));
-
+        add_action('admin_notices', array( $this, 'show_copyright_notice' ));
     }
     /**
      * Show the license notice on the plugin settings screen only.
@@ -68,25 +67,25 @@ class SC_Flow_Admin
     /**
      * Enqueue admin scripts and styles.
      */
-    public function enqueue_scripts($hook)
+    public function enqueue_scripts( $hook )
     {
-        if ($hook == 'toplevel_page_sc-flow-settings') {
+        if ($hook === 'toplevel_page_' . SC_FLOW_ADMIN_MENU_SLUG) {
             // Enqueue ethers script from the CDN
             wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
 
             $sc_flow_plugin_settings = SC_Flow_Settings::for_script();
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), SC_FLOW_VERSION, true);
+            wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array( 'jquery', 'ethers' ), SC_FLOW_VERSION, true);
 
             // Enqueue non owner write smart contract operatons
-            wp_enqueue_script('sc-flow-write', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-write-admin.js', array('jquery', 'ethers', 'sc-flow-helper'), SC_FLOW_VERSION, true);
+            wp_enqueue_script('sc-flow-write', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-write-admin.js', array( 'jquery', 'ethers', 'sc-flow-helper' ), SC_FLOW_VERSION, true);
 
             // Enqueue read smart contract operations
-            wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write'), SC_FLOW_VERSION, true);
+            wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array( 'jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write' ), SC_FLOW_VERSION, true);
 
             // Enqueue js logic for mint ui component
-            wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), SC_FLOW_VERSION, true);
+            wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array( 'jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read' ), SC_FLOW_VERSION, true);
 
             // Localize the script with the plugin settings
             wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
@@ -104,7 +103,7 @@ class SC_Flow_Admin
      * @param array $links Array of plugin action links.
      * @return array Modified array of plugin action links.
      */
-    public function add_settings_link($links)
+    public function add_settings_link( $links )
     {
         $settings_link = '<a href="admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '">' . __('Settings', 'sc-flow') . '</a>';
         array_push($links, $settings_link);
@@ -116,11 +115,11 @@ class SC_Flow_Admin
     public function add_menu_page()
     {
         add_menu_page(
-            __('Smart Contract Flow' . ' Settings', 'sc-flow'),
+            __('Smart Contract Flow Settings', 'sc-flow'),
             __('Smart Contract Flow', 'sc-flow'),
             'manage_options',
             SC_FLOW_ADMIN_MENU_SLUG,
-            array($this, 'render_settings_page'),
+            array( $this, 'render_settings_page' ),
             'dashicons-admin-plugins',
             99
         );
@@ -165,7 +164,7 @@ class SC_Flow_Admin
             <?php $this->render_wallet_connect_button(); ?>
             <h2 class="nav-tab-wrapper">
                 <?php foreach ($this->tabs() as $slug => $label) : ?>
-                    <a href="<?php echo esc_url(add_query_arg(array('page' => SC_FLOW_ADMIN_MENU_SLUG, 'tab' => $slug), admin_url('admin.php'))); ?>"
+                    <a href="<?php echo esc_url(add_query_arg(array( 'page' => SC_FLOW_ADMIN_MENU_SLUG, 'tab' => $slug ), admin_url('admin.php'))); ?>"
                        class="nav-tab <?php echo $slug === $current ? 'nav-tab-active' : ''; ?>">
                         <?php echo esc_html($label); ?>
                     </a>
@@ -181,7 +180,7 @@ class SC_Flow_Admin
      *
      * @param string $tab Tab slug.
      */
-    private function render_tab($tab)
+    private function render_tab( $tab )
     {
         switch ($tab) {
             case 'admin_functions':
@@ -216,6 +215,5 @@ class SC_Flow_Admin
         SC_Flow_General_Settings_Tab::register_settings();
         SC_Flow_Admin_Style_Tab::register_settings();
         SC_Flow_Admin_Crossmint_Tab::register_settings();
-
     }
 }

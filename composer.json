@@ -1,0 +1,19 @@
+{
+    "name": "bicatalyst/sc-flow",
+    "description": "WordPress plugin: wallet connect, NFT mint, and admin smart contract operations.",
+    "type": "wordpress-plugin",
+    "license": "proprietary",
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

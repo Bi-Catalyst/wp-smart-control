@@ -55,4 +55,3 @@ define('SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX', 'sc-flow-function_');
 
 
 // Add other constants as needed
-?>

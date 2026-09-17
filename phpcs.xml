@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<ruleset name="Smart Contract Flow">
+    <description>WordPress coding standards for the sc-flow plugin.</description>
+    <file>sc-flow.php</file>
+    <file>includes</file>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/index.php</exclude-pattern>
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+    <rule ref="WordPress-Extra">
+        <!-- The codebase uses PSR-2 style braces and camelCase JS keys; keep phpcs on security and i18n. -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+        <exclude name="WordPress.Files.FileName"/>
+        <exclude name="Generic.Classes.OpeningBraceSameLine"/>
+        <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+        <exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="WordPress.WhiteSpace"/>
+        <exclude name="Generic.WhiteSpace"/>
+        <exclude name="Squiz.WhiteSpace"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="Generic.Formatting"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Squiz.Commenting"/>
+        <exclude name="Generic.Commenting"/>
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="WordPress.Arrays"/>
+        <exclude name="Universal.WhiteSpace"/>
+        <exclude name="PSR2.ControlStructures"/>
+        <exclude name="Squiz.ControlStructures"/>
+        <exclude name="Universal.ControlStructures"/>
+        <exclude name="Squiz.PHP.EmbeddedPhp"/>
+    </rule>
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array"><element value="sc-flow"/></property>
+        </properties>
+    </rule>
+    <config name="minimum_wp_version" value="6.0"/>
+</ruleset>

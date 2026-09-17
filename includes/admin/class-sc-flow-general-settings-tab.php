@@ -11,7 +11,7 @@
  * @subpackage {class-sc-flow-general-settings-tab.php}
  */
 
-require_once dirname(__FILE__) . '/../constants.php';
+require_once __DIR__ . '/../constants.php';
 
 class SC_Flow_General_Settings_Tab
 {
@@ -43,7 +43,7 @@ class SC_Flow_General_Settings_Tab
         add_settings_section(
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE,
             __('General Settings', 'sc-flow'),
-            array(__CLASS__, 'render_general_settings_section'),
+            array( __CLASS__, 'render_general_settings_section' ),
             SC_FLOW_ADMIN_GENERAL_PAGE
         );
 
@@ -51,54 +51,54 @@ class SC_Flow_General_Settings_Tab
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
         // Register slug settings fields.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_SLUGS_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
 
         // Register walletconnect settings fields.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_WALLETCONNECT_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
 
         // Register alchemyprovider settings fields.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
 
         // Register fiat currency symbol settings fields.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
         // Register a settings field for contract ABI.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_CONTRACT_ABI_FIELD,
-            array('sanitize_callback' => array(__CLASS__, 'sanitize_contract_abi_field'))
+            array( 'sanitize_callback' => array( __CLASS__, 'sanitize_contract_abi_field' ) )
         );
 
         // Register a settings field for active chain.
         register_setting(
             SC_FLOW_ADMIN_GENERAL_FIELDS,
             SC_FLOW_ADMIN_ACTIVE_CHAIN_FIELD,
-            array('sanitize_callback' => 'sanitize_text_field')
+            array( 'sanitize_callback' => 'sanitize_text_field' )
         );
 
         // Add a field for contract address.
         add_settings_field(
             SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD,
             __('Contract Address', 'sc-flow'),
-            array(__CLASS__, 'render_contract_address_field'),
+            array( __CLASS__, 'render_contract_address_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -106,7 +106,7 @@ class SC_Flow_General_Settings_Tab
         add_settings_field(
             SC_FLOW_ADMIN_SLUGS_FIELD,
             __('Page Slugs', 'sc-flow'),
-            array(__CLASS__, 'render_slugs_field'),
+            array( __CLASS__, 'render_slugs_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -114,17 +114,17 @@ class SC_Flow_General_Settings_Tab
         add_settings_field(
             SC_FLOW_ADMIN_CONTRACT_ABI_FIELD,
             __('Smart Contract ABI', 'sc-flow'),
-            array(__CLASS__, 'render_contract_abi_field'),
+            array( __CLASS__, 'render_contract_abi_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE,
-            array('label_for' => SC_FLOW_ADMIN_CONTRACT_ABI_FIELD)
+            array( 'label_for' => SC_FLOW_ADMIN_CONTRACT_ABI_FIELD )
         );
 
         // Add a field for active chain selection.
         add_settings_field(
             SC_FLOW_ADMIN_ACTIVE_CHAIN_FIELD,
             __('Active Chain', 'sc-flow'),
-            array(__CLASS__, 'render_active_chain_field'),
+            array( __CLASS__, 'render_active_chain_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -133,7 +133,7 @@ class SC_Flow_General_Settings_Tab
         add_settings_field(
             SC_FLOW_ADMIN_WALLETCONNECT_FIELD,
             __('Wallet connect Project ID', 'sc-flow'),
-            array(__CLASS__, 'render_walletconnect_field'),
+            array( __CLASS__, 'render_walletconnect_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -142,7 +142,7 @@ class SC_Flow_General_Settings_Tab
         add_settings_field(
             SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD,
             __('Alchemy provider project ID', 'sc-flow'),
-            array(__CLASS__, 'render_alchemyprovider_field'),
+            array( __CLASS__, 'render_alchemyprovider_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -151,7 +151,7 @@ class SC_Flow_General_Settings_Tab
         add_settings_field(
             SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD,
             __('Fiat Currency', 'sc-flow'),
-            array(__CLASS__, 'render_fiat_currency_field'),
+            array( __CLASS__, 'render_fiat_currency_field' ),
             SC_FLOW_ADMIN_GENERAL_PAGE,
             SC_FLOW_ADMIN_GENERAL_SECTION_TITLE
         );
@@ -245,7 +245,7 @@ class SC_Flow_General_Settings_Tab
      *
      * @param array $args The field arguments.
      */
-    public static function render_contract_abi_field($args)
+    public static function render_contract_abi_field( $args )
     {
         $field_id = $args['label_for'];
         $field_value = get_option($field_id);
@@ -260,7 +260,7 @@ class SC_Flow_General_Settings_Tab
      * @param mixed $input The input value to sanitize.
      * @return array The sanitized smart contract ABI array.
      */
-    public static function sanitize_contract_abi_field($input)
+    public static function sanitize_contract_abi_field( $input )
     {
         $contract_abi = is_array($input) ? $input : json_decode($input, true);
         if (!is_array($contract_abi)) {
@@ -285,7 +285,6 @@ class SC_Flow_General_Settings_Tab
         </p>
         <?php
     }
-
 }
 
 ?>

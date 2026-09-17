@@ -21,18 +21,18 @@ class SmartContract_Flow_Public
     public function __construct()
     {
         // Enqueue necessary scripts and styles
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('wp_enqueue_scripts', array( $this, 'enqueue_scripts' ));
 
-        add_action('wp_nav_menu_items', array($this, 'add_logo_nav_menu'), 10, 2);
+        add_action('wp_nav_menu_items', array( $this, 'add_logo_nav_menu' ));
 
         // Register shortcodes
-        add_shortcode('connect_wallet', array($this, 'connect_wallet_shortcode'));
+        add_shortcode('connect_wallet', array( $this, 'connect_wallet_shortcode' ));
 
-        add_shortcode('mint_button', array($this, 'mint_button_shortcode'));
+        add_shortcode('mint_button', array( $this, 'mint_button_shortcode' ));
 
-        add_shortcode('crossmint_payment_button', array($this, 'crossmint_shortcode'));
+        add_shortcode('crossmint_payment_button', array( $this, 'crossmint_shortcode' ));
     }
-    public function add_logo_nav_menu($items, $args)
+    public function add_logo_nav_menu( $items )
     {
         $items .= '<li class="cstm-m-cnct-wlt"><a title="' . esc_attr__('Connect Wallet', 'sc-flow') . '" href="#"><w3m-core-button icon="hide"></w3m-core-button></a></li>';
         return $items;
@@ -63,16 +63,16 @@ class SmartContract_Flow_Public
 
 
         // Enqueue non owner write smart contract operatons
-        wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), SC_FLOW_VERSION, true);
+        wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array( 'jquery', 'ethers' ), SC_FLOW_VERSION, true);
 
         // Enqueue read smart contract operations
-        wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array('jquery', 'ethers', 'sc-flow-helper'), SC_FLOW_VERSION, true);
+        wp_enqueue_script('sc-flow-read', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-read.js', array( 'jquery', 'ethers', 'sc-flow-helper' ), SC_FLOW_VERSION, true);
 
         // Enqueue js logic for mint ui component
-        wp_enqueue_script('sc-flow-frontend', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-frontend.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read'), SC_FLOW_VERSION, true);
+        wp_enqueue_script('sc-flow-frontend', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-frontend.js', array( 'jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read' ), SC_FLOW_VERSION, true);
 
         // Enqueue crossmint script
-        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read', 'sc-flow-frontend'), '0.1.0', true);
+        wp_enqueue_script('crossmint', 'https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js', array( 'jquery', 'ethers', 'sc-flow-helper', 'sc-flow-read', 'sc-flow-frontend' ), '0.1.0', true);
 
         // Localize the script with the plugin settings
         wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
@@ -91,7 +91,7 @@ class SmartContract_Flow_Public
      *
      * @return string The shortcode output.
      */
-    public function connect_wallet_shortcode($atts)
+    public function connect_wallet_shortcode( $atts )
     {
         $atts = shortcode_atts(
             array(
@@ -109,7 +109,7 @@ class SmartContract_Flow_Public
      *
      * @return string The shortcode output.
      */
-    public function mint_button_shortcode($atts)
+    public function mint_button_shortcode( $atts )
     {
         // Parse the attributes and provide default values
         $a = shortcode_atts(

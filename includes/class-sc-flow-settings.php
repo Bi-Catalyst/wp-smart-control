@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once dirname(__FILE__) . '/constants.php';
+require_once __DIR__ . '/constants.php';
 
 class SC_Flow_Settings
 {
@@ -78,7 +78,7 @@ class SC_Flow_Settings
      * @param string $option_name   Fallback option name.
      * @return string
      */
-    private static function secret($constant_name, $option_name)
+    private static function secret( $constant_name, $option_name )
     {
         if (defined($constant_name)) {
             return (string) constant($constant_name);

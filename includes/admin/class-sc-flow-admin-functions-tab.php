@@ -10,7 +10,7 @@
  * @subpackage {class-sc-flow-admin-functions-tab.php}
  */
 
-require_once dirname(__FILE__) . '/../constants.php';
+require_once __DIR__ . '/../constants.php';
 
 
 class SC_Flow_Admin_Functions_Tab
@@ -85,7 +85,7 @@ class SC_Flow_Admin_Functions_Tab
                 'nonpayable' => array(),
                 'payable' => array(),
                 'view' => array(),
-                'event' => array()
+                'event' => array(),
             );
 
             foreach ($contract_abi as $function) {
@@ -128,17 +128,17 @@ class SC_Flow_Admin_Functions_Tab
                     add_settings_field(
                         $field_id,
                         '<div class="function-header"><h4>' . esc_html($readable_function_name) . '</h4></div>',
-                        array(__CLASS__, 'render_function_field'),
+                        array( __CLASS__, 'render_function_field' ),
                         $group_id,
                         $group_id,
-                        array('function' => $function)
+                        array( 'function' => $function )
                     );
 
                     // Register the settings for the function
                     register_setting(
                         $group_id,
                         $field_id,
-                        array('sanitize_callback' => 'sanitize_text_field')
+                        array( 'sanitize_callback' => 'sanitize_text_field' )
                     );
                 }
             }
@@ -151,7 +151,7 @@ class SC_Flow_Admin_Functions_Tab
      * @param string $state The stateMutability value.
      * @return string The group title.
      */
-    private static function get_state_mutability_title($state)
+    private static function get_state_mutability_title( $state )
     {
         switch ($state) {
             case 'nonpayable':
@@ -172,7 +172,7 @@ class SC_Flow_Admin_Functions_Tab
      *
      * @param array $args The field arguments.
      */
-    public static function render_function_field($args)
+    public static function render_function_field( $args )
     {
         $function = $args['function'];
 
@@ -183,10 +183,6 @@ class SC_Flow_Admin_Functions_Tab
             $has_outputs = !empty($function['outputs']);
 
             echo '<div class="function-field">';
-            // echo '<div class="function-header">';
-            // echo '<h3>' . self::get_readable_function_name($function['name']) . '</h3>';
-            // echo '</div>'; // close function-header
-
             echo '<div class="function-actions">';
 
             if ($has_inputs) {
@@ -251,21 +247,21 @@ class SC_Flow_Admin_Functions_Tab
     /**
      * Get the user-readable function name.
      *
-     * @param string $functionName The raw function name.
+     * @param string $function_name The raw function name.
      * @return string The user-readable function name.
      */
-    private static function get_readable_function_name($functionName)
+    private static function get_readable_function_name( $function_name )
     {
         // Split the function name based on camel case, Pascal case, or underscore
-        $words = preg_split('/(?<=[a-z])(?=[A-Z])|_/', $functionName);
+        $words = preg_split('/(?<=[a-z])(?=[A-Z])|_/', $function_name);
 
         // Capitalize the first letter of each word
         $words = array_map('ucfirst', $words);
 
         // Join the words with spaces to form the readable function name
-        $readableName = implode(' ', $words);
+        $readable_name = implode(' ', $words);
 
-        return $readableName;
+        return $readable_name;
     }
 }
 
