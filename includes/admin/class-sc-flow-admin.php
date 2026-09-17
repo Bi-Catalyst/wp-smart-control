@@ -16,6 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once dirname(__FILE__) . '/../constants.php';
+require_once dirname(__FILE__) . '/../class-sc-flow-settings.php';
 
 require_once 'class-sc-flow-general-settings-tab.php';
 require_once 'class-sc-flow-admin-functions-tab.php';
@@ -86,41 +87,8 @@ class SC_Flow_Admin
             // Enqueue ethers script from the CDN
             wp_enqueue_script('ethers', 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.5.1/ethers.umd.min.js', array(), '6.5.1', true);
 
-            // Enqueue your custom admin script file
-            // Define the data to be passed to the JavaScript file
-            // Define the data to be passed to the JavaScript file
-            $sc_flow_plugin_settings = array(
-                'pluginName' => SC_FLOW_PLUGIN_NAME,
-                // sc-flow-function_MAX_SUPPLY
-                'maxSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxSupply'),
-                'mintPrice' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
-                'maxQuantity' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'maxQuantity'),
-                'totalSupply' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'totalSupply'),
-                'contractAddress' => get_option(SC_FLOW_ADMIN_CONTRACT_ADDRESS_FIELD),
-                'contractABI' => get_option(SC_FLOW_ADMIN_CONTRACT_ABI_FIELD),
-                'activeChain' => get_option(SC_FLOW_ADMIN_ACTIVE_CHAIN_FIELD),
+            $sc_flow_plugin_settings = SC_Flow_Settings::for_script();
 
-                // wallet connect
-                'wcProjectId' => get_option(SC_FLOW_ADMIN_WALLETCONNECT_FIELD),
-                // Alchemy Provider
-                'alchemyProvider' => get_option(SC_FLOW_ADMIN_ALCHEMYPROVIDER_FIELD),
-                // Fiat currency 
-                'fiatCurrency' => get_option(SC_FLOW_ADMIN_FIAT_CURRENCY_FIELD),
-                // styles
-                'minterCounterIdOrClass' => get_option(SC_FLOW_PLUGIN_MINTER_COUNTER),
-                'connectButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON),
-                'mintButtonIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_BUTTON),
-                'mintQuantityIdOrClass' => get_option(SC_FLOW_PLUGIN_MINT_QUANTITY),
-                // 
-                'popup' => array(
-                    'errorQuantity' => __('Maximum quantity allowed is', 'sc-flow'),
-                    'errorChain' => __('Please switch to active chain', 'sc-flow'),
-                    'errorTermAndCondition' => __('Please accept the terms and conditions to buy NFT.', 'sc-flow'),
-                    'errorFunds' => __('Not enough funds in the wallet.', 'sc-flow'),
-                    'generalError' => __('An error occurred.', 'sc-flow'),
-                    'sucessMint' => __('Mint transaction is submitted successfully, you can view it', 'sc-flow'),
-                )
-            );
             // Enqueue non owner write smart contract operatons
             wp_enqueue_script('sc-flow-helper', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-helpers.js', array('jquery', 'ethers'), '0.0.1', true);
 
@@ -133,7 +101,6 @@ class SC_Flow_Admin
             // Enqueue js logic for mint ui component
             wp_enqueue_script('sc-flow-admin', plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/sc-flow-admin.js', array('jquery', 'ethers', 'sc-flow-helper', 'sc-flow-write', 'sc-flow-read'), '0.0.1', true);
 
-            // Localize the script with the plugin settings
             // Localize the script with the plugin settings
             wp_localize_script('sc-flow-read', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
             wp_localize_script('sc-flow-admin', 'SCFlowPluginSettings', $sc_flow_plugin_settings);
