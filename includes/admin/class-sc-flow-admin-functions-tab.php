@@ -22,8 +22,10 @@ class SC_Flow_Admin_Functions_Tab
     {
         $default_sub_tab = SC_FLOW_ADMIN_FUNCTIONS_SECTION_PREFIX . 'nonpayable';
 
-        $active_sub_tab = isset($_GET['sub_tab']) ? $_GET['sub_tab'] : $default_sub_tab;
         $tab_groups = self::get_tab_groups();
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab selection.
+        $requested_sub_tab = isset($_GET['sub_tab']) ? sanitize_key(wp_unslash($_GET['sub_tab'])) : $default_sub_tab;
+        $active_sub_tab = in_array($requested_sub_tab, array_column($tab_groups, 'id'), true) ? $requested_sub_tab : $default_sub_tab;
         ?>
 
         <div class="sc-flow">
@@ -33,7 +35,7 @@ class SC_Flow_Admin_Functions_Tab
                 foreach ($tab_groups as $group) {
                     $active_class = ($group['id'] === $active_sub_tab) ? 'nav-tab-active' : '';
                     $url = add_query_arg('sub_tab', $group['id'], admin_url('admin.php?page=' . SC_FLOW_ADMIN_MENU_SLUG . '&tab=admin_functions'));
-                    echo '<a href="' . esc_url($url) . '" class="nav-tab ' . $active_class . '">' . $group['label'] . '</a>';
+                    echo '<a href="' . esc_url($url) . '" class="nav-tab ' . esc_attr($active_class) . '">' . esc_html($group['label']) . '</a>';
                 }
                 ?>
             </h2>
@@ -47,7 +49,7 @@ class SC_Flow_Admin_Functions_Tab
                     // Render the tab content and settings fields
                     foreach ($tab_groups as $group) {
                         $active_class = ($group['id'] === $active_sub_tab) ? ' active' : '';
-                        echo '<div id="' . $group['id'] . '" class="tab-content' . $active_class . '">';
+                        echo '<div id="' . esc_attr($group['id']) . '" class="tab-content' . esc_attr($active_class) . '">';
                         if ($group['id'] === $active_sub_tab) {
                             do_settings_sections($group['id']);
                         }
@@ -125,7 +127,7 @@ class SC_Flow_Admin_Functions_Tab
                     // Add a field for the function
                     add_settings_field(
                         $field_id,
-                        '<div class="function-header"><h4>' . $readable_function_name . '</h4></div>',
+                        '<div class="function-header"><h4>' . esc_html($readable_function_name) . '</h4></div>',
                         array(__CLASS__, 'render_function_field'),
                         $group_id,
                         $group_id,
@@ -136,7 +138,7 @@ class SC_Flow_Admin_Functions_Tab
                     register_setting(
                         $group_id,
                         $field_id,
-                        array(__CLASS__, 'sanitize_function_field')
+                        array('sanitize_callback' => 'sanitize_text_field')
                     );
                 }
             }
@@ -190,35 +192,24 @@ class SC_Flow_Admin_Functions_Tab
             if ($has_inputs) {
                 echo '<div class="function-inputs">';
                 foreach ($function['inputs'] as $input) {
-                    echo '<div><label for="' . esc_attr($field_id) . '_' . $input['name'] . '">' . self::get_readable_function_name($input['name']) . '</label>';
-                    echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id) . '_' . $input['name'] . '" name="' . esc_attr($field_id) . '" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
+                    echo '<div><label for="' . esc_attr($field_id . '_' . $input['name']) . '">' . esc_html(self::get_readable_function_name($input['name'])) . '</label>';
+                    echo '<input type="text" data-input-type="' . esc_attr($input['type']) . '" id="' . esc_attr($field_id . '_' . $input['name']) . '" name="' . esc_attr($field_id) . '" class="regular-text" data-type="' . esc_attr($input['type']) . '" /></div>';
                 }
                 echo '</div>'; // close function-inputs
             }
 
-            $f_r = empty($field_value) ? 'no value' : esc_attr($field_value);
             if ($has_outputs) {
-                echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id) . '" value="' . $f_r . '" id="' . esc_attr($field_id) . '_result" /></div>';
+                $result_value = empty($field_value) ? __('no value', 'sc-flow') : $field_value;
+                echo '<div class="function-result"><input type="text" name="' . esc_attr($field_id) . '" value="' . esc_attr($result_value) . '" id="' . esc_attr($field_id . '_result') . '" /></div>';
             }
 
-            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . __('Trigger', 'sc-flow') . '</button>';
+            echo '<button class="button button-primary trigger-function" data-setting-key="' . esc_attr($field_id) . '" data-state-mutability="' . esc_attr($function['stateMutability']) . '">' . esc_html__('Trigger', 'sc-flow') . '</button>';
 
             echo '</div>'; // close function-actions
             echo '</div>'; // close function-field
         } else {
-            echo '<p class="description">' . __('Invalid smart contract opeartion', 'sc-flow') . '</p>';
+            echo '<p class="description">' . esc_html__('Invalid smart contract operation', 'sc-flow') . '</p>';
         }
-    }
-
-    /**
-     * Sanitize the field value for a smart contract function.
-     *
-     * @param mixed $input The input value to sanitize.
-     * @return mixed The sanitized field value.
-     */
-    public static function sanitize_function_field($input)
-    {
-        return sanitize_text_field($input);
     }
 
     /**

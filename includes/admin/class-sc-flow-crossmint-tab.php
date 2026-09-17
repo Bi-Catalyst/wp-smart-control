@@ -81,10 +81,10 @@ class SC_Flow_Admin_Crossmint_Tab
             SC_FLOW_ADMIN_CROSSMINT_SECTION_TITLE
         );
         // Register settings to be stored.
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT);
-        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_CROSSMINT_TAB, SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE, array('sanitize_callback' => 'sanitize_text_field'));
 
     }
 
@@ -103,7 +103,7 @@ class SC_Flow_Admin_Crossmint_Tab
     {
         $project_id = get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID; ?>"
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID); ?>"
             value="<?php echo esc_attr($project_id); ?>">
         <p class="description">
             <?php esc_html_e('Enter the Crossmint project ID', 'sc-flow'); ?>
@@ -118,7 +118,7 @@ class SC_Flow_Admin_Crossmint_Tab
     {
         $collection_id = get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID; ?>"
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID); ?>"
             value="<?php echo esc_attr($collection_id); ?>">
         <p class="description">
             <?php esc_html_e('Enter the Crossmint collection ID', 'sc-flow'); ?>
@@ -132,7 +132,7 @@ class SC_Flow_Admin_Crossmint_Tab
     {
         $crossmint_env = get_option(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT);
         ?>
-        <select name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT; ?>">
+        <select name="<?php echo esc_attr(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT); ?>">
             <option value="staging" <?php selected($crossmint_env, 'staging'); ?>>Staging</option>
             <option value="production" <?php selected($crossmint_env, 'production'); ?>>Production</option>
         </select>
@@ -148,7 +148,7 @@ class SC_Flow_Admin_Crossmint_Tab
     {
         $erc_type = get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE; ?>" value="<?php echo esc_attr($erc_type); ?>">
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE); ?>" value="<?php echo esc_attr($erc_type); ?>">
         <p class="description">
             <?php esc_html_e('Enter the token standard, for example erc-721', 'sc-flow'); ?>
         </p>

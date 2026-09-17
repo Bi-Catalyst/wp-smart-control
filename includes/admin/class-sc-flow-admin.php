@@ -71,7 +71,8 @@ class SC_Flow_Admin
      */
     public function enqueue_connect_wallet_script($hook)
     {
-        if (isset($_GET['page']) && $_GET['page'] === 'sc-flow-settings') {
+        $screen = get_current_screen();
+        if ($screen && $screen->id === 'toplevel_page_' . SC_FLOW_ADMIN_MENU_SLUG) {
             echo '<script type="module" src="' . plugin_dir_url(SC_FLOW_PLUGIN_FILE) . 'assets/js/connect-wallet-wagmi.js"/>';
         }
     }
@@ -197,51 +198,75 @@ class SC_Flow_Admin
     }
 
     /**
+     * Tab slugs and their labels, in display order.
+     *
+     * @return array<string,string>
+     */
+    private function tabs()
+    {
+        return array(
+            'general'            => __('General Settings', 'sc-flow'),
+            'admin_functions'    => __('Admin Operations', 'sc-flow'),
+            'crossmint_settings' => __('Crossmint configuration', 'sc-flow'),
+            'buttons_style'      => __('Buttons attributes', 'sc-flow'),
+        );
+    }
+
+    /**
+     * Current tab from the query string, restricted to known tabs.
+     *
+     * @return string
+     */
+    private function current_tab()
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab selection.
+        $requested = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'general';
+        return array_key_exists($requested, $this->tabs()) ? $requested : 'general';
+    }
+
+    /**
      * Render the content of the plugin settings page.
      */
     public function render_settings_page()
     {
+        $current = $this->current_tab();
         ?>
         <div class="sc-flow">
-            <h1>
-                <?php echo esc_html__('Smart Contract Flow', 'sc-flow'); ?>
-
-            </h1>
-            <?php
-            $this->render_wallet_connect_button();
-            ?>
+            <h1><?php esc_html_e('Smart Contract Flow', 'sc-flow'); ?></h1>
+            <?php $this->render_wallet_connect_button(); ?>
             <h2 class="nav-tab-wrapper">
-                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>" class="nav-tab <?php if (!isset($_GET['tab']) || $_GET['tab'] === 'general')
-                       echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('General Settings', 'sc-flow'); ?>
-                </a>
-                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=admin_functions" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions')
-                       echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Admin Operations', 'sc-flow'); ?>
-                </a>
-                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=crossmint_settings" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings')
-                       echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Crossmint configuration', 'sc-flow'); ?>
-                </a>
-                <a href="?page=<?php echo SC_FLOW_ADMIN_MENU_SLUG; ?>&tab=buttons_style" class="nav-tab <?php if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style')
-                       echo 'nav-tab-active'; ?>">
-                    <?php echo esc_html__('Buttons attributes', 'sc-flow'); ?>
-                </a>
-
+                <?php foreach ($this->tabs() as $slug => $label) : ?>
+                    <a href="<?php echo esc_url(add_query_arg(array('page' => SC_FLOW_ADMIN_MENU_SLUG, 'tab' => $slug), admin_url('admin.php'))); ?>"
+                       class="nav-tab <?php echo $slug === $current ? 'nav-tab-active' : ''; ?>">
+                        <?php echo esc_html($label); ?>
+                    </a>
+                <?php endforeach; ?>
             </h2>
-            <?php
-            if (isset($_GET['tab']) && $_GET['tab'] === 'admin_functions') {
-                SC_Flow_Admin_Functions_Tab::render();
-            } else if (isset($_GET['tab']) && $_GET['tab'] === 'buttons_style') {
-                SC_Flow_Admin_Style_Tab::render();
-            } else if (isset($_GET['tab']) && $_GET['tab'] === 'crossmint_settings') {
-                SC_Flow_Admin_Crossmint_Tab::render();
-            } else {
-                SC_Flow_General_Settings_Tab::render();
-            }
-            ?>
+            <?php $this->render_tab($current); ?>
         </div>
         <?php
+    }
+
+    /**
+     * Render the body of one settings tab.
+     *
+     * @param string $tab Tab slug.
+     */
+    private function render_tab($tab)
+    {
+        switch ($tab) {
+            case 'admin_functions':
+                SC_Flow_Admin_Functions_Tab::render();
+                break;
+            case 'buttons_style':
+                SC_Flow_Admin_Style_Tab::render();
+                break;
+            case 'crossmint_settings':
+                SC_Flow_Admin_Crossmint_Tab::render();
+                break;
+            default:
+                SC_Flow_General_Settings_Tab::render();
+        }
     }
 
     /**

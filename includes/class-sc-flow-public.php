@@ -36,7 +36,7 @@ class SmartContract_Flow_Public
     }
     public function add_logo_nav_menu($items, $args)
     {
-        $items .= '<li class="cstm-m-cnct-wlt"><a title="Connect Wallet" href="#" ><w3m-core-button icon="hide"></w3m-core-button></a></li>';
+        $items .= '<li class="cstm-m-cnct-wlt"><a title="' . esc_attr__('Connect Wallet', 'sc-flow') . '" href="#"><w3m-core-button icon="hide"></w3m-core-button></a></li>';
         return $items;
     }
 
@@ -164,15 +164,7 @@ class SmartContract_Flow_Public
             $atts
         );
 
-        $id = esc_attr($atts['id']);
-        $class = esc_attr($atts['class']);
-
-        ob_start();
-        ?>
-        <!-- <div class="wallet-dropdown" style="display: none;"></div> -->
-        <w3m-core-button icon='hide'></w3m-core-button>
-        <?php
-        return ob_get_clean();
+        return '<w3m-core-button icon="hide" id="' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '"></w3m-core-button>';
     }
 
     /**
@@ -191,11 +183,7 @@ class SmartContract_Flow_Public
             $atts
         );
 
-        ob_start();
-        ?>
-        <button class="<?php echo esc_attr($a['class']); ?>" id="<?php echo esc_attr($a['id']); ?>">KAUF MIT WALLET</button>
-        <?php
-        return ob_get_clean();
+        return '<button class="' . esc_attr($a['class']) . '" id="' . esc_attr($a['id']) . '">' . esc_html__('Buy with wallet', 'sc-flow') . '</button>';
     }
 
     /**
@@ -206,18 +194,18 @@ class SmartContract_Flow_Public
 
     public function crossmint_shortcode()
     {
-        ob_start();
-        ?>
-        <crossmint-pay-button class="xmint-btn" collectionId="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID); ?>"
-            projectId="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID); ?>"
-            environment="<?php echo get_option(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT); ?>" mintConfig='<?php echo json_encode([
-                   "type" => get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE),
-                   "quantity" => "1",
-                   "totalPrice" => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . "mintPrice"),
-               ]); ?>' />
-        <?php
-        return ob_get_clean();
-
+        $mint_config = array(
+            'type'       => get_option(SC_FLOW_PLUGIN_CROSSMINT_ERC_TYPE),
+            'quantity'   => '1',
+            'totalPrice' => get_option(SC_FLOW_ADMIN_FUNCTIONS_FIELDS_PREFIX . 'mintPrice'),
+        );
+        return sprintf(
+            '<crossmint-pay-button class="xmint-btn" collectionId="%s" projectId="%s" environment="%s" mintConfig="%s"></crossmint-pay-button>',
+            esc_attr(get_option(SC_FLOW_PLUGIN_CROSSMINT_COLLECTION_ID)),
+            esc_attr(get_option(SC_FLOW_PLUGIN_CROSSMINT_PROJECT_ID)),
+            esc_attr(get_option(SC_FLOW_PLUGIN_CROSSMINT_ENVIRONMENT)),
+            esc_attr(wp_json_encode($mint_config))
+        );
     }
 }
 

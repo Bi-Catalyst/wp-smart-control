@@ -81,10 +81,10 @@ class SC_Flow_Admin_Style_Tab
             SC_FLOW_ADMIN_STYLE_SECTION_TITLE
         );
         // Register settings to be stored.
-        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_CONNECT_BUTTON);
-        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINT_BUTTON);
-        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINT_QUANTITY);
-        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINTER_COUNTER);
+        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_CONNECT_BUTTON, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINT_BUTTON, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINT_QUANTITY, array('sanitize_callback' => 'sanitize_text_field'));
+        register_setting(SC_FLOW_ADMIN_STYLE_TAB, SC_FLOW_PLUGIN_MINTER_COUNTER, array('sanitize_callback' => 'sanitize_text_field'));
 
     }
 
@@ -103,7 +103,7 @@ class SC_Flow_Admin_Style_Tab
     {
         $connect_button = get_option(SC_FLOW_PLUGIN_CONNECT_BUTTON);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_CONNECT_BUTTON; ?>" value="<?php echo esc_attr($connect_button); ?>">
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_CONNECT_BUTTON); ?>" value="<?php echo esc_attr($connect_button); ?>">
         <p class="description">
             <?php esc_html_e('Enter the connect button class or id (ex: #connect-button or .connect-button)', 'sc-flow'); ?>
         </p>
@@ -117,7 +117,7 @@ class SC_Flow_Admin_Style_Tab
     {
         $mint_button = get_option(SC_FLOW_PLUGIN_MINT_BUTTON);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINT_BUTTON; ?>" value="<?php echo esc_attr($mint_button); ?>">
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_MINT_BUTTON); ?>" value="<?php echo esc_attr($mint_button); ?>">
         <p class="description">
             <?php esc_html_e('Enter the mint button class or id (ex: #mint-button or .mint-button)', 'sc-flow'); ?>
         </p>
@@ -130,7 +130,7 @@ class SC_Flow_Admin_Style_Tab
     {
         $mint_quantity = get_option(SC_FLOW_PLUGIN_MINT_QUANTITY);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINT_QUANTITY; ?>" value="<?php echo esc_attr($mint_quantity); ?>">
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_MINT_QUANTITY); ?>" value="<?php echo esc_attr($mint_quantity); ?>">
         <p class="description">
             <?php esc_html_e('Enter the mint quantity input class or id (ex: #mint-quantity or .mint-quantity)', 'sc-flow'); ?>
         </p>
@@ -143,7 +143,7 @@ class SC_Flow_Admin_Style_Tab
     {
         $minter_counter = get_option(SC_FLOW_PLUGIN_MINTER_COUNTER);
         ?>
-        <input type="text" name="<?php echo SC_FLOW_PLUGIN_MINTER_COUNTER; ?>" value="<?php echo esc_attr($minter_counter); ?>">
+        <input type="text" name="<?php echo esc_attr(SC_FLOW_PLUGIN_MINTER_COUNTER); ?>" value="<?php echo esc_attr($minter_counter); ?>">
         <p class="description">
             <?php esc_html_e('Enter the minter counter class or id (ex: #minter-counter or .minter-counter)', 'sc-flow'); ?>
         </p>
