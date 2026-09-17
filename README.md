@@ -43,6 +43,13 @@ The settings page has four tabs.
 | Alchemy provider project ID | From alchemy.com. |
 | Fiat Currency | ISO code for price display, default `chf`. |
 
+To keep API keys out of the database, define them in `wp-config.php` instead. A defined constant wins over the saved option.
+
+```php
+define('SC_FLOW_WALLETCONNECT_PROJECT_ID', '...');
+define('SC_FLOW_ALCHEMY_API_KEY', '...');
+```
+
 **Admin Operations**
 
 Lists every function from the ABI grouped by state mutability. Connect the owner wallet with the button at the top, fill in inputs, and click **Trigger**. Read results are saved as options and passed to the frontend as `maxSupply`, `mintPrice`, `maxQuantity`, and `totalSupply`.
@@ -82,23 +89,31 @@ The mint flow also expects these elements on the page:
 ## Project layout
 
 ```
-sc-flow.php                     Plugin entry, loads admin and public classes
-includes/constants.php          Option names and slugs
-includes/sc-flow-public.php     Frontend enqueue and shortcodes
-includes/admin/                 Settings page and its four tabs
+sc-flow.php                         Plugin entry, activation hook, wallet module enqueue
+includes/constants.php              Option names and slugs
+includes/class-sc-flow-settings.php Settings payload passed to JavaScript
+includes/class-sc-flow-public.php   Frontend enqueue and shortcodes
+includes/admin/                     Settings page and its four tabs
 assets/js/connect-wallet-wagmi.js   Web3Modal + wagmi setup (ES module)
-assets/js/sc-flow-read.js       Contract read and mint calls
-assets/js/sc-flow-frontend.js   Mint UI logic
+assets/js/sc-flow-read.js           Contract read and mint calls
+assets/js/sc-flow-frontend.js       Mint UI logic
 assets/js/sc-flow-write-admin.js    Admin Operations trigger logic
-assets/css/                     Admin and frontend styles
-languages/                      .po and .mo translation files
+assets/css/                         Admin and frontend styles
+languages/                          .po and .mo translation files
 ```
 
 ## Development
 
 No build step. Edit files in place and reload the page.
 
-External scripts load from CDNs at runtime: ethers 6.5.1, `@web3modal/ethereum`, `@web3modal/html`, and `@crossmint/client-sdk-vanilla-ui`.
+Lint PHP against the WordPress coding standards:
+
+```
+composer install
+composer lint
+```
+
+External scripts load from CDNs at runtime: ethers 6.5.1, `@web3modal/ethereum` 2.7.1, `@web3modal/html` 2.7.1, and `@crossmint/client-sdk-vanilla-ui` 1.0.1-alpha.6. WordPress.org does not allow this for hosted plugins; bundle them under `assets/vendor/` before submitting there.
 
 ## License
 
