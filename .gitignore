@@ -1,0 +1,4 @@
+.omc/
+vendor/
+node_modules/
+.phpcs-cache
