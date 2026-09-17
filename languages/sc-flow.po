@@ -169,3 +169,7 @@ msgstr ""
 #: sc-flow.php:76
 msgid "Mint"
 msgstr ""
+
+#: includes/class-sc-flow-public.php
+msgid "Buy with wallet"
+msgstr ""
